@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.6"
@@ -8,8 +6,12 @@ plugins {
     kotlin("plugin.jpa") version "1.9.24"
 }
 
+val javaVersion = JavaVersion.VERSION_21
+java.sourceCompatibility = javaVersion
+java.targetCompatibility = javaVersion
+
 allprojects {
-    group = "org.example"
+    group = "org.depromeet"
     version = "1.0-SNAPSHOT"
 
     repositories {
@@ -34,19 +36,19 @@ subprojects {
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     }
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
+    java.sourceCompatibility = javaVersion
+    java.targetCompatibility = javaVersion
 
-    tasks.withType<JavaCompile> {
-        sourceCompatibility = "21"
-        targetCompatibility = "21"
-    }
+    tasks {
+        compileKotlin {
+            kotlinOptions {
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+                jvmTarget = javaVersion.toString()
+            }
+        }
 
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "21"
+        test {
+            useJUnitPlatform()
         }
     }
 }
