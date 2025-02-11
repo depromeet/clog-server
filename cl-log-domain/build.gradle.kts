@@ -1,6 +1,6 @@
 dependencies {
-    implementation(project(":global-utils"))
-    implementation(project(":infrastructure"))
+    implementation(project(":cl-log-global-utils"))
+    implementation(project(":cl-log-infrastructure"))
 }
 
 tasks {

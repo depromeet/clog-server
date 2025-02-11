@@ -1,6 +1,6 @@
 dependencies {
-    implementation(project(":global-utils"))
-    implementation(project(":domain"))
+    implementation(project(":cl-log-global-utils"))
+    implementation(project(":cl-log-domain"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 }
