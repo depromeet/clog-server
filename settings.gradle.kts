@@ -1,2 +1,8 @@
-rootProject.name = "16th-team5-BE"
-include("climbinglog-api", "climbinglog-domain", "climbinglog-global-utils", "climbinglog-infra")
+rootProject.name = "cl-log-server"
+
+include(
+    "cl-log-api",
+    "cl-log-domain",
+    "cl-log-global-utils",
+    "cl-log-infrastructure",
+)
