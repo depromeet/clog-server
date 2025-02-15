@@ -1,6 +1,13 @@
 ## 🙌 Hello
 - **클로그 Server 팀**은 편리한 클라이밍 기록 아카이빙 서비스, **클로그**의 서버를 개발 및 운영합니다.
 
+## Project Setting
+### detekt
+```bash
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-commit
+```
+
 ## 🏛️ System Architecture
 - TODO
 

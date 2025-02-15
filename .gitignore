@@ -39,6 +39,7 @@ out/
 ### ETC ###
 temp
 spy.log
+.DS_Store
 
 ### Qclass ###
 */src/main/generated/
