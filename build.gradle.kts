@@ -50,6 +50,7 @@ subprojects {
         config.setFrom(
             files("$rootDir/config/detekt.yml")
         )
+        autoCorrect = true
         buildUponDefaultConfig = true
         debug = true
         reports.sarif.required.set(true)

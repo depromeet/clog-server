@@ -19,3 +19,7 @@ complexity:
 performance:
   SpreadOperator:
     active: false
+
+style:
+  MagicNumber:
+    active: false
