@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.6"
@@ -7,6 +9,7 @@ plugins {
     kotlin("plugin.jpa") version "2.0.10"
 
     id("io.gitlab.arturbosch.detekt") version "1.23.7"
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
 }
 
 val javaVersion = JavaVersion.VERSION_21
@@ -34,6 +37,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "org.jetbrains.kotlinx.kover")
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -45,6 +49,7 @@ subprojects {
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
         detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
+        kover(project(project.path))
     }
 
     detekt {
@@ -54,7 +59,25 @@ subprojects {
         autoCorrect = true
         buildUponDefaultConfig = true
         debug = true
-        reports.sarif.required.set(true)
+        tasks.withType<Detekt>().configureEach {
+            reports {
+                html.required.set(true)
+                sarif.required.set(true)
+            }
+        }
+    }
+
+    kover {
+        reports {
+            total {
+                xml {
+                    onCheck = true
+                }
+                html {
+                    onCheck = true
+                }
+            }
+        }
     }
 
     java.sourceCompatibility = javaVersion
