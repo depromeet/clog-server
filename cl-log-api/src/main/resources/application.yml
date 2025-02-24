@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: cl-log-api
+  config:
+    import: "optional:file:.env"
+
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 50
+    show-sql: false
+    open-in-view: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-name: KAKAO
+            client-id: ${KAKAO_CLIENT_ID}
+            redirect-uri: "https://your-ios-app.com/oauth/callback/kakao"
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+
+          apple:
+            client-name: APPLE
+            client-id: ${APPLE_CLIENT_ID}
+            client-secret: ${APPLE_CLIENT_SECRET}
+            redirect-uri: "https://your-ios-app.com/oauth/callback/apple"
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize
+            token-uri: https://appleid.apple.com/auth/token
+            user-info-uri: https://appleid.apple.com/auth/userinfo
+            user-name-attribute: sub
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+jwt:
+  secret: ${JWT_SECRET}
+
+  access:
+    expirationHours: 12
+  refresh:
+    expirationDays: 30
