@@ -6,6 +6,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import org.depromeet.cllog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.cllog.server.domain.auth.application.dto.LoginDetails
+import org.depromeet.cllog.server.domain.auth.presentation.exception.AuthErrorCode
+import org.depromeet.cllog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.cllog.server.domain.user.domain.Provider
 import org.depromeet.cllog.server.domain.user.domain.User
 import org.depromeet.cllog.server.domain.user.infrastructure.UserRepository
@@ -46,7 +48,7 @@ class TokenService(
                 refreshToken = refreshToken
             )
         } catch (e: Exception) {
-            throw RuntimeException("JWT 생성 실패", e)
+            throw AuthException(AuthErrorCode.AUTHENTICATION_FAILED, e)
         }
     }
 
@@ -75,18 +77,18 @@ class TokenService(
                 .verify(token.removePrefix("Bearer "))
             val userId = decodedJWT.getClaim("id").asLong()
             val providerString = decodedJWT.getClaim("provider").asString()
-                ?: throw RuntimeException("Provider 정보가 JWT에 포함되지 않음")
+                ?: throw AuthException(AuthErrorCode.TOKEN_INVALID)
             val provider = Provider.valueOf(providerString)
             return LoginDetails(
                 loginId = userId.toString(),
                 provider = provider
             )
         } catch (e: TokenExpiredException) {
-            throw RuntimeException("JWT 토큰이 만료되었습니다.", e)
+            throw AuthException(AuthErrorCode.TOKEN_EXPIRED, e)
         } catch (e: JWTVerificationException) {
-            throw RuntimeException("JWT 검증 실패: 유효하지 않은 토큰입니다.", e)
+            throw AuthException(AuthErrorCode.TOKEN_INVALID, e)
         } catch (e: IllegalArgumentException) {
-            throw RuntimeException("JWT 파싱 오류 발생", e)
+            throw AuthException(AuthErrorCode.TOKEN_INVALID, e)
         }
     }
 }

@@ -1,5 +1,7 @@
 package org.depromeet.cllog.server.domain.auth.application
 
+import org.depromeet.cllog.server.domain.auth.presentation.exception.AuthErrorCode
+import org.depromeet.cllog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.cllog.server.domain.user.domain.Provider
 import org.depromeet.cllog.server.domain.user.domain.User
 import org.depromeet.cllog.server.domain.user.infrastructure.UserRepository
@@ -16,7 +18,8 @@ class CustomOAuth2UserService(
 
     override fun loadUser(userRequest: OidcUserRequest): OidcUser {
         val oidcUser = super.loadUser(userRequest)
-        val kakaoId = oidcUser.attributes["sub"]?.toString() ?: throw RuntimeException("카카오 ID 누락")
+        val kakaoId = oidcUser.attributes["sub"]?.toString()
+            ?: throw AuthException(AuthErrorCode.AUTHENTICATION_FAILED)
         val nickname = (oidcUser.attributes["nickname"] as? String) ?: "카카오 유저"
 
         val user = userRepository.findByLoginIdAndProvider(kakaoId, Provider.KAKAO)

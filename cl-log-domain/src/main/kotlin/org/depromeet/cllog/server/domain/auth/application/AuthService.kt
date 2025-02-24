@@ -8,6 +8,8 @@ import org.depromeet.cllog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.cllog.server.domain.auth.application.dto.KakaoAccount
 import org.depromeet.cllog.server.domain.auth.application.dto.KakaoProfile
 import org.depromeet.cllog.server.domain.auth.application.dto.KakaoUserInfo
+import org.depromeet.cllog.server.domain.auth.presentation.exception.AuthErrorCode
+import org.depromeet.cllog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.cllog.server.domain.user.domain.Provider
 import org.depromeet.cllog.server.domain.user.domain.User
 import org.depromeet.cllog.server.domain.user.infrastructure.UserRepository
@@ -21,6 +23,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 import java.net.URL
 import java.security.interfaces.RSAPublicKey
+import java.util.concurrent.TimeUnit
 
 @Service
 class AuthService(
@@ -36,7 +39,7 @@ class AuthService(
     fun kakaoLoginWithCode(authorizationCode: String, codeVerifier: String): AuthResponseDto {
         val tokenResponse = requestAccessToken(authorizationCode, codeVerifier)
         val idToken = tokenResponse["id_token"] as? String
-            ?: throw RuntimeException("카카오 토큰 응답에 id_token 누락")
+            ?: throw AuthException(AuthErrorCode.ID_TOKEN_MISSING)
 
         val kakaoUser = validateAndParseIdToken(idToken)
 
@@ -70,7 +73,7 @@ class AuthService(
             requestEntity,
             object : ParameterizedTypeReference<Map<String, Any>>() {}
         )
-        return responseEntity.body ?: throw RuntimeException("카카오 토큰 응답 없음")
+        return responseEntity.body ?: throw AuthException(AuthErrorCode.TOKEN_INVALID)
     }
 
     /**
@@ -79,16 +82,15 @@ class AuthService(
      */
     private fun validateAndParseIdToken(idToken: String): KakaoUserInfo {
         try {
-            // JWKS 엔드포인트를 통한 공개키 제공자 생성
             val jwksUrl = URL("https://kauth.kakao.com/.well-known/jwks.json")
             val jwkProvider = JwkProviderBuilder(jwksUrl)
-                .cached(10, 24, java.util.concurrent.TimeUnit.HOURS)
-                .rateLimited(10, 1, java.util.concurrent.TimeUnit.MINUTES)
+                .cached(10, 24, TimeUnit.HOURS)
+                .rateLimited(10, 1, TimeUnit.MINUTES)
                 .build()
 
             val decodedJWT = JWT.decode(idToken)
-            val keyId = decodedJWT.keyId ?: throw RuntimeException("id_token에 key id가 없습니다.")
-
+            val keyId =
+                decodedJWT.keyId ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val jwk = jwkProvider.get(keyId)
             val publicKey = jwk.publicKey as RSAPublicKey
 
@@ -102,7 +104,7 @@ class AuthService(
             val verifiedJWT = verifier.verify(idToken)
 
             val subject =
-                verifiedJWT.subject ?: throw RuntimeException("id_token에 sub(claim)이 없습니다.")
+                verifiedJWT.subject ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val nickname = verifiedJWT.getClaim("nickname").asString() ?: "카카오 유저"
 
             return KakaoUserInfo(
@@ -112,7 +114,7 @@ class AuthService(
                 )
             )
         } catch (e: Exception) {
-            throw RuntimeException("id_token 검증 실패", e)
+            throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED, e)
         }
     }
 

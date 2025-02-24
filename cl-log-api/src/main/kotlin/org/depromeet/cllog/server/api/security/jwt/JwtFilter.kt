@@ -7,7 +7,7 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.depromeet.cllog.server.domain.auth.application.TokenService
-import org.depromeet.cllog.server.domain.auth.presentation.exception.TokenNotFoundException
+import org.depromeet.cllog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.cllog.server.domain.user.infrastructure.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -53,12 +53,12 @@ class JwtFilter(
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
                 SecurityContextHolder.getContext().authentication = authentication
             }
+        } catch (e: AuthException) {
+            logger.error("Auth exception 발생: ${e.message}", e)
         } catch (e: TokenExpiredException) {
             logger.error("JWT Token expired: ${e.message}", e)
         } catch (e: JWTVerificationException) {
             logger.error("JWT Verification failed: ${e.message}", e)
-        } catch (e: TokenNotFoundException) {
-            logger.error("JWT Token not found: ${e.message}", e)
         }
 
         filterChain.doFilter(request, response)
