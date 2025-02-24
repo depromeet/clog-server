@@ -6,10 +6,9 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.depromeet.cllog.server.domain.auth.application.PrincipalDetailService
 import org.depromeet.cllog.server.domain.auth.application.TokenService
-import org.depromeet.cllog.server.domain.auth.domain.PrincipalDetails
 import org.depromeet.cllog.server.domain.auth.presentation.exception.TokenNotFoundException
+import org.depromeet.cllog.server.domain.user.infrastructure.UserRepository
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -21,7 +20,7 @@ import java.io.IOException
 @Component
 class JwtFilter(
     private val tokenService: TokenService,
-    private val principalDetailsService: PrincipalDetailService
+    private val userRepository: UserRepository
 ) : OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)
@@ -35,7 +34,7 @@ class JwtFilter(
         try {
             val parsedToken = tokenService.parseAccessToken(rawToken) ?: throw TokenNotFoundException()
             tokenService.verifyToken(parsedToken)
-            saveUserDetails(parsedToken, request)
+            authenticateUser(parsedToken, request)
         } catch (e: TokenNotFoundException) {
             logger.error("JWT Token not found: ${e.message}")
         } catch (e: TokenExpiredException) {
@@ -47,13 +46,12 @@ class JwtFilter(
         filterChain.doFilter(request, response)
     }
 
-    private fun saveUserDetails(parsedToken: String, request: HttpServletRequest) {
+    private fun authenticateUser(parsedToken: String, request: HttpServletRequest) {
         val loginDetails = tokenService.extractLoginDetails(parsedToken)
-        val userDetails = principalDetailsService.loadUserByUsername(loginDetails) as PrincipalDetails
-        val user = userDetails.getUser()
+        val user = userRepository.findById(loginDetails.id).orElse(null) ?: return
 
-        if (loginDetails.id == user.id && loginDetails.provider == user.provider.toString()) {
-            val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+        if (loginDetails.provider == user.provider.toString()) {
+            val authentication = UsernamePasswordAuthenticationToken(user, null, emptyList())
             authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
             SecurityContextHolder.getContext().authentication = authentication
         }

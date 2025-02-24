@@ -14,6 +14,7 @@ spring:
   jpa:
     properties:
       hibernate:
+        ddl-auto: create
         default_batch_fetch_size: 50
     show-sql: false
     open-in-view: false
@@ -24,16 +25,16 @@ spring:
         registration:
           kakao:
             client-name: KAKAO
-            client-id: ${KAKAO_CLIENT_ID}
-            redirect-uri: "https://your-ios-app.com/oauth/callback/kakao"
+            client-id:
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
 
           apple:
             client-name: APPLE
-            client-id: ${APPLE_CLIENT_ID}
-            client-secret: ${APPLE_CLIENT_SECRET}
+            client-id:
+            client-secret:
             redirect-uri: "https://your-ios-app.com/oauth/callback/apple"
             authorization-grant-type: authorization_code
             scope:
@@ -56,8 +57,7 @@ decorator:
       enable-logging: true
 
 jwt:
-  secret: ${JWT_SECRET}
-
+  secret:
   access:
     expirationHours: 12
   refresh:

@@ -1,11 +1,7 @@
 package org.depromeet.cllog.server.api.security
 
-import jakarta.servlet.http.HttpServletResponse
 import org.depromeet.cllog.server.api.security.jwt.JwtFilter
-import org.depromeet.cllog.server.domain.auth.application.CustomOAuth2UserService
-import org.depromeet.cllog.server.domain.auth.application.PrincipalDetailService
 import org.depromeet.cllog.server.domain.auth.application.TokenService
-import org.depromeet.cllog.server.domain.auth.presentation.exception.InvalidLoginException
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -13,16 +9,11 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
-/**
- *  OAuth2 로그인 성공 후 OAuth2LoginSuccessHandler 실행
- *  JwtFilter를 사용하여 JWT 인증 처리
- */
 @Configuration
 class SecurityConfig(
-    private val userDetailsService: PrincipalDetailService,
-    private val customOAuth2UserService: CustomOAuth2UserService,
-    private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler,
-    private val tokenService: TokenService
+    private val tokenService: TokenService,
+    private val principalDetailsService: PrincipalDetailService, // 추가
+    private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler // Bean 주입
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -30,27 +21,12 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                it.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/api/auth/oauth2/**").permitAll()
                     .anyRequest().authenticated()
             }
-            .addFilterBefore(
-                JwtFilter(tokenService, userDetailsService),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
-            .exceptionHandling {
-                it.authenticationEntryPoint { _, response, _ ->
-                    response.status = HttpServletResponse.SC_UNAUTHORIZED
-                    response.writer.write("Unauthorized")
-                }
-                it.accessDeniedHandler { _, response, _ ->
-                    response.status = HttpServletResponse.SC_FORBIDDEN
-                    response.writer.write("Forbidden")
-                }
-            }
+            .addFilterBefore(JwtFilter(tokenService, principalDetailsService), UsernamePasswordAuthenticationFilter::class.java) // principalDetailsService 추가
             .oauth2Login {
-                it.userInfoEndpoint { it.userService(customOAuth2UserService) }
-                    .successHandler(oAuth2LoginSuccessHandler)
-                    .failureHandler { _, _, _ -> throw InvalidLoginException() }
+                it.successHandler(oAuth2LoginSuccessHandler) // Bean을 주입받아 사용
             }
 
         return http.build()

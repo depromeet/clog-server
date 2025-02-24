@@ -6,71 +6,64 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import org.depromeet.cllog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.cllog.server.domain.auth.application.dto.LoginDetails
-import org.depromeet.cllog.server.domain.auth.presentation.exception.InvalidLoginException
 import org.depromeet.cllog.server.domain.user.domain.User
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
 
-/**
- * 📌 JWT 발급 및 검증을 담당
- * 📌 refreshToken을 DB에 저장하여 관리
- */
 @Service
-class TokenService {
+class TokenService(
+    @Value("\${jwt.secret}") private val secret: String,
+    @Value("\${jwt.access.expirationHours}") private val accessTokenExpirationHours: Long,
+    @Value("\${jwt.refresh.expirationDays}") private val refreshTokenExpirationDays: Long
+) {
+    private val algorithm: Algorithm = Algorithm.HMAC512(secret)
 
-    // ✅ 값을 고정 (환경 변수 없이 사용 가능)
-    private val secret: String =
-        "4AWdJqOBz6xpsN95hz1XtKGLOuwTRFbXTFgKIJAnUlFzUY75Ae4qwoYRX6zOXxQYUi-IZc3H0ArhiAwkTDIL_g"
-    private val accessTokenExpirationHours: Long = 12
-    private val refreshTokenExpirationDays: Long = 30
-
+    /**
+     * ✅ JWT 액세스 & 리프레시 토큰 생성
+     */
     fun generateTokens(user: User): AuthResponseDto {
-        val accessToken = generateAccessToken(user.loginId, user.id, user.provider.toString())
-        val refreshToken = generateRefreshToken()
-
-        return AuthResponseDto.of(
+        return AuthResponseDto(
             provider = user.provider.toString(),
             id = user.id,
             loginId = user.loginId,
-            accessToken = accessToken,
-            refreshToken = refreshToken
+            accessToken = createToken(user.id, user.provider.toString(), accessTokenExpirationHours * 60 * 60 * 1000),
+            refreshToken = createToken(user.id, user.provider.toString(), refreshTokenExpirationDays * 24 * 60 * 60 * 1000)
         )
     }
 
-    private fun generateAccessToken(loginId: String, id: Long, provider: String): String {
+    /**
+     * ✅ 액세스 토큰만 생성 (OAuth2 로그인 성공 시 사용)
+     */
+    fun generateAccessToken(user: User): String {
+        return createToken(user.id, user.provider.toString(), accessTokenExpirationHours * 60 * 60 * 1000)
+    }
+
+    /**
+     * ✅ 공통적인 토큰 생성 메서드
+     */
+    private fun createToken(id: Long, provider: String, expirationMillis: Long): String {
         return "Bearer " + JWT.create()
-            .withClaim("loginId", loginId)
             .withClaim("id", id)
             .withClaim("provider", provider)
-            .withExpiresAt(Date(System.currentTimeMillis() + accessTokenExpirationHours * 1000 * 60 * 60))
-            .sign(Algorithm.HMAC512(secret))
+            .withExpiresAt(Date(System.currentTimeMillis() + expirationMillis))
+            .sign(algorithm)
     }
 
-    private fun generateRefreshToken(): String {
-        return "Bearer " + JWT.create()
-            .withExpiresAt(Date(System.currentTimeMillis() + refreshTokenExpirationDays * 1000 * 60 * 60 * 24))
-            .sign(Algorithm.HMAC512(secret))
-    }
-
-    fun parseAccessToken(accessToken: String?): String? {
-        return accessToken?.removePrefix("Bearer ")
-    }
-
+    /**
+     * ✅ JWT 토큰 검증 및 복호화
+     */
     fun extractLoginDetails(token: String): LoginDetails {
-        val decodedJWT = JWT.decode(token)
-        val loginId = decodedJWT.getClaim("loginId").asString()
-        val id = decodedJWT.getClaim("id").asLong()
-        val provider = decodedJWT.getClaim("provider").asString()
-        return LoginDetails(loginId, id, provider)
-    }
-
-    fun verifyToken(token: String) {
         try {
-            JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
+            val decodedJWT = JWT.require(algorithm).build().verify(token.removePrefix("Bearer "))
+            return LoginDetails(
+                id = decodedJWT.getClaim("id").asLong(),
+                provider = decodedJWT.getClaim("provider").asString()
+            )
         } catch (e: TokenExpiredException) {
-            throw InvalidLoginException()
+            throw RuntimeException("JWT 토큰이 만료되었습니다.")
         } catch (e: JWTVerificationException) {
-            throw JWTVerificationException("JWT verification failed")
+            throw RuntimeException("JWT 검증 실패: 유효하지 않은 토큰입니다.")
         }
     }
 }
