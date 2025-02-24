@@ -58,6 +58,8 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-oauth2-client") // OAuth2 클라이언트
         implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server") // OAuth2 리소스 서버 (JWT 지원)
         implementation("com.auth0:java-jwt:4.4.0")
+        implementation ("com.auth0:jwks-rsa:0.20.0")
+
 
         //  Swagger (API 문서화)
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
