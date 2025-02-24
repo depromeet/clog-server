@@ -1,7 +1,3 @@
-import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
-
 plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.6"
@@ -42,49 +38,50 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlinx.kover")
 
     dependencies {
-        //  기본 의존성
+
+        // 기본
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-        //  DB 관련 (H2 추가)
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-        implementation("com.h2database:h2") // H2 Database 추가
-        runtimeOnly("com.h2database:h2") // 런타임 전용
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa") // ✅ JPA 추가
+        // 웹 및 데이터
         implementation("org.springframework.boot:spring-boot-starter-web")
-        //  Spring Security & OAuth2
-        implementation("org.springframework.boot:spring-boot-starter-security") // Spring Security
-        implementation("org.springframework.boot:spring-boot-starter-oauth2-client") // OAuth2 클라이언트
-        implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server") // OAuth2 리소스 서버 (JWT 지원)
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+        // Database
+        implementation("com.h2database:h2")
+        runtimeOnly("com.h2database:h2")
+
+        // Spring Security 및 OAuth2
+        implementation("org.springframework.boot:spring-boot-starter-security")
+        implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+        implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
         implementation("com.auth0:java-jwt:4.4.0")
-        implementation ("com.auth0:jwks-rsa:0.20.0")
+        implementation("com.auth0:jwks-rsa:0.20.0")
 
-
-        //  Swagger (API 문서화)
+        // Swagger
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
-        //  테스트 관련
+        // 유효성 검증
+        implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+        implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
+        // 테스트
         testImplementation(kotlin("test"))
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
-        implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
-        implementation("jakarta.validation:jakarta.validation-api:3.0.2")
-
-
-        //  코드 품질 도구
+        // 코드 품질 도구
         detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
         kover(project(project.path))
     }
 
-    // ✅ Detekt 코드 정적 분석 설정
     detekt {
         config.setFrom(files("$rootDir/config/detekt.yml"))
         autoCorrect = true
         buildUponDefaultConfig = true
         debug = true
-        tasks.withType<Detekt>().configureEach {
+        tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
             reports {
                 html.required.set(true)
                 sarif.required.set(true)
@@ -92,7 +89,6 @@ subprojects {
         }
     }
 
-    // ✅ 코드 커버리지(Kover) 설정
     kover {
         reports {
             total {
@@ -105,21 +101,18 @@ subprojects {
     java.sourceCompatibility = javaVersion
     java.targetCompatibility = javaVersion
 
-    // ✅ Kotlin 컴파일러 설정 (Deprecated된 `kotlinOptions` -> `compilerOptions` 사용)
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         compilerOptions {
             freeCompilerArgs.set(listOf("-Xjsr305=strict"))
-            jvmTarget.set(JvmTarget.fromTarget(javaVersion.toString()))
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(javaVersion.toString()))
         }
     }
 
-    // ✅ JUnit 설정
     tasks.test {
         useJUnitPlatform()
     }
 
-    // ✅ Detekt 리포트 병합 설정
-    tasks.withType<Detekt>().configureEach {
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         finalizedBy(reportMerge)
     }
 
