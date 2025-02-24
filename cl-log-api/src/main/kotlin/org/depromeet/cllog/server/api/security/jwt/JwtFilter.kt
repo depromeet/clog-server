@@ -29,31 +29,30 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val rawToken = request.getHeader(HttpHeaders.AUTHORIZATION)
+        val rawToken = request.getHeader(HttpHeaders.AUTHORIZATION)?.removePrefix("Bearer ")
+
+        if (rawToken.isNullOrEmpty()) {
+            filterChain.doFilter(request, response)
+            return
+        }
 
         try {
-            val parsedToken = tokenService.parseAccessToken(rawToken) ?: throw TokenNotFoundException()
-            tokenService.verifyToken(parsedToken)
-            authenticateUser(parsedToken, request)
-        } catch (e: TokenNotFoundException) {
-            logger.error("JWT Token not found: ${e.message}")
+            val loginDetails = tokenService.extractLoginDetails(rawToken)
+            val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId,loginDetails.provider).orElse(null) ?: return
+
+            if (loginDetails.provider == user.provider) {
+                val authentication = UsernamePasswordAuthenticationToken(user, null, emptyList())
+                authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+                SecurityContextHolder.getContext().authentication = authentication
+            }
         } catch (e: TokenExpiredException) {
             logger.error("JWT Token expired: ${e.message}")
         } catch (e: JWTVerificationException) {
             logger.error("JWT Verification failed: ${e.message}")
+        } catch (e: TokenNotFoundException) {
+            logger.error("JWT Token not found: ${e.message}")
         }
 
         filterChain.doFilter(request, response)
-    }
-
-    private fun authenticateUser(parsedToken: String, request: HttpServletRequest) {
-        val loginDetails = tokenService.extractLoginDetails(parsedToken)
-        val user = userRepository.findById(loginDetails.id).orElse(null) ?: return
-
-        if (loginDetails.provider == user.provider.toString()) {
-            val authentication = UsernamePasswordAuthenticationToken(user, null, emptyList())
-            authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
-            SecurityContextHolder.getContext().authentication = authentication
-        }
     }
 }

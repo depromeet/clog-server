@@ -8,5 +8,5 @@ import java.util.*
 
 @Repository
 interface RefreshTokenRepository : JpaRepository<RefreshToken, String> {
-    fun findByEmailAndProvider(email: String, provider: Provider): Optional<RefreshToken>
+    fun findByLoginIdAndProvider(loginId: String, provider: Provider): Optional<RefreshToken>
 }

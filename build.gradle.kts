@@ -42,32 +42,36 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlinx.kover")
 
     dependencies {
-        // ✅ 기본 의존성
+        //  기본 의존성
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-        // ✅ DB 관련 (H2 추가)
+        //  DB 관련 (H2 추가)
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("com.h2database:h2") // H2 Database 추가
         runtimeOnly("com.h2database:h2") // 런타임 전용
         implementation("org.springframework.boot:spring-boot-starter-data-jpa") // ✅ JPA 추가
         implementation("org.springframework.boot:spring-boot-starter-web")
-        // ✅ Spring Security & OAuth2
+        //  Spring Security & OAuth2
         implementation("org.springframework.boot:spring-boot-starter-security") // Spring Security
         implementation("org.springframework.boot:spring-boot-starter-oauth2-client") // OAuth2 클라이언트
         implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server") // OAuth2 리소스 서버 (JWT 지원)
         implementation("com.auth0:java-jwt:4.4.0")
 
-        // ✅ Swagger (API 문서화)
+        //  Swagger (API 문서화)
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
-        // ✅ 테스트 관련
+        //  테스트 관련
         testImplementation(kotlin("test"))
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
-        // ✅ 코드 품질 도구
+        implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+        implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
+
+        //  코드 품질 도구
         detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
         kover(project(project.path))
     }

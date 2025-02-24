@@ -1,21 +1,26 @@
 package org.depromeet.cllog.server.api.auth.controller
 
-import org.depromeet.cllog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.cllog.server.domain.auth.application.AuthService
 import org.depromeet.cllog.server.domain.auth.application.dto.AuthResponseDto
-import org.depromeet.cllog.server.domain.auth.application.dto.OAuth2LoginRequest
-import org.depromeet.cllog.server.domain.common.ApiResponse
-import org.springframework.web.bind.annotation.*
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("$API_BASE_PATH_V1/auth")
+@RequestMapping("/auth")
 class AuthController(
     private val authService: AuthService
 ) {
-
     @PostMapping("/kakao")
-    fun kakaoLogin(@RequestBody request: OAuth2LoginRequest): ApiResponse<AuthResponseDto> {
-        val response = authService.kakaoLogin(request.authorizationCode)
-        return ApiResponse.success(response)
+    fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ResponseEntity<AuthResponseDto> {
+        val authResponse = authService.kakaoLoginWithToken(request.accessToken)
+        return ResponseEntity.ok(authResponse)
     }
 }
+
+data class KakaoLoginRequest(
+    val accessToken: String // ✅ iOS에서 받은 accessToken을 요청 본문으로 받음
+)
+

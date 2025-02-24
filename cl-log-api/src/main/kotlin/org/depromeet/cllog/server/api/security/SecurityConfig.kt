@@ -1,7 +1,8 @@
 package org.depromeet.cllog.server.api.security
 
+import org.depromeet.cllog.server.api.security.OAuth2LoginSuccessHandler
 import org.depromeet.cllog.server.api.security.jwt.JwtFilter
-import org.depromeet.cllog.server.domain.auth.application.TokenService
+import org.depromeet.cllog.server.domain.auth.application.CustomOAuth2UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -11,24 +12,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig(
-    private val tokenService: TokenService,
-    private val principalDetailsService: PrincipalDetailService, // 추가
-    private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler // Bean 주입
+    private val jwtFilter: JwtFilter
 ) {
+
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .authorizeHttpRequests {
-                it.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/api/auth/oauth2/**").permitAll()
-                    .anyRequest().authenticated()
+            .authorizeHttpRequests { auth ->
+                auth.requestMatchers("/auth/**").permitAll() // ✅ 인증 없이 접근 가능하도록 설정
+                auth.anyRequest().authenticated() // ✅ 그 외 요청은 인증 필요
             }
-            .addFilterBefore(JwtFilter(tokenService, principalDetailsService), UsernamePasswordAuthenticationFilter::class.java) // principalDetailsService 추가
-            .oauth2Login {
-                it.successHandler(oAuth2LoginSuccessHandler) // Bean을 주입받아 사용
-            }
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
 
-        return http.build()
+        return http.build() // ✅ `SecurityFilterChain` Bean으로 반환
     }
 }

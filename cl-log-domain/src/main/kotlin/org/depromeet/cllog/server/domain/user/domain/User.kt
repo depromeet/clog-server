@@ -3,6 +3,7 @@ package org.depromeet.cllog.server.domain.user.domain
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "users")
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +20,4 @@ class User(
 
     @Column(nullable = false)
     var isDeleted: Boolean = false
-) {
-    fun isActive(): Boolean {
-        return !isDeleted
-    }
-}
+)
