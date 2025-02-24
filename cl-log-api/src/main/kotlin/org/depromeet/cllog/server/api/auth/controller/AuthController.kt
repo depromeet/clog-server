@@ -1,27 +1,27 @@
 package org.depromeet.cllog.server.api.auth.controller
 
+import org.depromeet.cllog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.cllog.server.domain.auth.application.AuthService
 import org.depromeet.cllog.server.domain.auth.application.dto.AuthResponseDto
-import org.springframework.http.ResponseEntity
+import org.depromeet.cllog.server.domain.common.ApiResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("$API_BASE_PATH_V1/auth")
 class AuthController(
     private val authService: AuthService
 ) {
     @PostMapping("/kakao")
-    fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ResponseEntity<AuthResponseDto> {
-        // PKCE 방식: authorization code와 codeVerifier를 이용하여 토큰 교환 후 로그인 수행
+    fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.kakaoLoginWithCode(request.code, request.codeVerifier)
-        return ResponseEntity.ok(authResponse)
+        return ApiResponse.success(authResponse)
     }
 }
 
 data class KakaoLoginRequest(
-    val code: String,        // iOS에서 받은 authorization code
-    val codeVerifier: String // iOS에서 생성한 code verifier (PKCE용)
+    val code: String,
+    val codeVerifier: String
 )
