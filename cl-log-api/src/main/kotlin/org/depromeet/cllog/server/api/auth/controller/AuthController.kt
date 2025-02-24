@@ -15,12 +15,13 @@ class AuthController(
 ) {
     @PostMapping("/kakao")
     fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ResponseEntity<AuthResponseDto> {
-        val authResponse = authService.kakaoLoginWithToken(request.accessToken)
+        // PKCE 방식: authorization code와 codeVerifier를 이용하여 토큰 교환 후 로그인 수행
+        val authResponse = authService.kakaoLoginWithCode(request.code, request.codeVerifier)
         return ResponseEntity.ok(authResponse)
     }
 }
 
 data class KakaoLoginRequest(
-    val accessToken: String // ✅ iOS에서 받은 accessToken을 요청 본문으로 받음
+    val code: String,        // iOS에서 받은 authorization code
+    val codeVerifier: String // iOS에서 생성한 code verifier (PKCE용)
 )
-
