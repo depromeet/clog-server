@@ -19,9 +19,20 @@ class AuthController(
         val authResponse = authService.kakaoLoginWithCode(request.code, request.codeVerifier)
         return ApiResponse.success(authResponse)
     }
+
+    @PostMapping("/apple")
+    fun appleLogin(@RequestBody request: AppleLoginRequest): ApiResponse<AuthResponseDto> {
+        val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
+        return ApiResponse.success(authResponse)
+    }
 }
 
 data class KakaoLoginRequest(
+    val code: String,
+    val codeVerifier: String
+)
+
+data class AppleLoginRequest(
     val code: String,
     val codeVerifier: String
 )

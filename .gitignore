@@ -45,4 +45,4 @@ spy.log
 */src/main/generated/
 
 # Ignore environment variables
-.env
+cl-log-api/.env

@@ -2,8 +2,7 @@ spring:
   application:
     name: cl-log-api
   config:
-    import: "optional:file:.env"
-
+    import: "optional:file:../.env"
     activate:
       on-profile: local
   datasource:
@@ -25,21 +24,20 @@ spring:
         registration:
           kakao:
             client-name: KAKAO
-            client-id:
+            client-id: ${KAKAO_CLIENT_ID}
             redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
             authorization-grant-type: authorization_code
             scope:
               - openid
               - profile_nickname
-
           apple:
             client-name: APPLE
-            client-id: ${APPLE_CLIENT_ID}
-            client-secret: ${APPLE_SECRET}
-            redirect-uri: "https://your-ios-app.com/oauth/callback/apple"
+            client-id: ${apple.client-id}
+            redirect-uri: "http://localhost:8080/login/oauth2/code/apple"
             authorization-grant-type: authorization_code
             scope:
-              - email
+              - openid
+              - name
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -64,3 +62,9 @@ jwt:
     expirationHours: 12
   refresh:
     expirationDays: 30
+
+apple:
+  team-id: ${APPLE_TEAM_ID}
+  client-id: ${APPLE_CLIENT_ID}
+  key-id: ${APPLE_KEY_ID}
+  private-key: ${APPLE_PRIVATE_KEY}
