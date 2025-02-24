@@ -4,15 +4,14 @@ import org.depromeet.cllog.server.api.configuration.ApiConstants.API_BASE_PATH_V
 import org.depromeet.cllog.server.domain.auth.application.AuthService
 import org.depromeet.cllog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.cllog.server.domain.common.ApiResponse
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.depromeet.cllog.server.domain.user.infrastructure.UserRepository
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("$API_BASE_PATH_V1/auth")
 class AuthController(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val userRepository: UserRepository
 ) {
     @PostMapping("/kakao")
     fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ApiResponse<AuthResponseDto> {
@@ -24,6 +23,13 @@ class AuthController(
     fun appleLogin(@RequestBody request: AppleLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
         return ApiResponse.success(authResponse)
+    }
+
+    @GetMapping("/test")
+    fun getUserName(@RequestParam loginId: String): ApiResponse<String> {
+        val user = userRepository.findByLoginId(loginId)
+            .orElseThrow { RuntimeException("사용자를 찾을 수 없습니다. (loginId: $loginId)") }
+        return ApiResponse.success(user.name)
     }
 }
 
