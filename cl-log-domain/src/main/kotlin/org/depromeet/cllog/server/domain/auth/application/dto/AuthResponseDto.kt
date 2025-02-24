@@ -6,16 +6,4 @@ data class AuthResponseDto(
     val loginId: String,
     val accessToken: String,
     val refreshToken: String
-) {
-    companion object {
-        fun of(
-            provider: String,
-            id: Long,
-            loginId: String,
-            accessToken: String,
-            refreshToken: String
-        ): AuthResponseDto {
-            return AuthResponseDto(provider, id, loginId, accessToken, refreshToken)
-        }
-    }
-}
+)

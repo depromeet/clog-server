@@ -1,6 +1,5 @@
 package org.depromeet.cllog.server.domain.auth.application
 
-import org.depromeet.cllog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.cllog.server.domain.user.domain.Provider
 import org.depromeet.cllog.server.domain.user.domain.User
 import org.depromeet.cllog.server.domain.user.infrastructure.UserRepository
@@ -23,10 +22,9 @@ class CustomOAuth2UserService(
         val user = userRepository.findByLoginIdAndProvider(kakaoId, Provider.KAKAO)
             .orElseGet { registerNewKakaoUser(kakaoId, nickname) }
 
-        // ✅ JWT를 SecurityContext에 저장
-        val authResponse = tokenService.generateTokens(user)
+        tokenService.generateTokens(user)
 
-        return oidcUser // ✅ OidcUser 반환 (Spring Security 로그인 흐름 유지)
+        return oidcUser
     }
 
     private fun registerNewKakaoUser(loginId: String, name: String): User {
