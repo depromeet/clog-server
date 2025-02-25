@@ -1,8 +1,8 @@
 rootProject.name = "clog-server"
 
 include(
-    "cl-log-api",
-    "cl-log-domain",
-    "cl-log-global-utils",
-    "cl-log-infrastructure"
+    "clog-api",
+    "clog-domain",
+    "clog-global-utils",
+    "clog-infrastructure",
 )
