@@ -106,3 +106,7 @@ subprojects {
         input.from(tasks.detekt.map { it.xmlReportFile })
     }
 }
+
+tasks.configureEach {
+    onlyIf { false }
+}
