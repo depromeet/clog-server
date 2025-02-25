@@ -40,14 +40,42 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlinx.kover")
 
     dependencies {
+        // 기본
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+        // 웹 및 데이터
+        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+        // Database
+        implementation("com.h2database:h2")
+        runtimeOnly("com.h2database:h2")
+
+        // Spring Security 및 OAuth2
+        implementation("org.springframework.boot:spring-boot-starter-security")
+        implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+        implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+        implementation("com.auth0:java-jwt:4.4.0")
+        implementation("com.auth0:jwks-rsa:0.20.0")
+        implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+        runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+        runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+        // Swagger
+        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+
+        // 유효성 검증
+        implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+        implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
+        // 테스트
         testImplementation(kotlin("test"))
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
+        // 코드 품질 도구
         detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
         kover(project(project.path))
     }
@@ -57,7 +85,7 @@ subprojects {
             files("$rootDir/config/detekt.yml")
         )
         autoCorrect = true
-        buildUponDefaultConfig = true
+        buildUponDefaultConfig = false
         debug = true
         tasks.withType<Detekt>().configureEach {
             reports {

@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: cl-log-api
+  config:
+    import: "optional:file:../.env"
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: create
+        default_batch_fetch_size: 50
+    show-sql: false
+    open-in-view: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-name: KAKAO
+            client-id: ${KAKAO_CLIENT_ID:6327033e9a8d02c71818b02fe5374c7d}
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
+              - profile_nickname
+          apple:
+            client-name: APPLE
+            client-id: ${apple.client-id}
+            redirect-uri: "http://localhost:8080/login/oauth2/code/apple"
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
+              - name
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            jwk-set-uri: https://kauth.kakao.com/.well-known/jwks.json
+            user-name-attribute: sub
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize
+            token-uri: https://appleid.apple.com/auth/token
+            user-info-uri: https://appleid.apple.com/auth/userinfo
+            user-name-attribute: sub
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+jwt:
+  secret: your-secret-key
+  access:
+    expirationHours: 12
+  refresh:
+    expirationDays: 30
+
+apple:
+  team-id: ${APPLE_TEAM_ID:SUMATJC294}
+  client-id: ${APPLE_CLIENT_ID:com.supershy.climbinglog.web}
+  key-id: ${APPLE_KEY_ID:2LCD3NVM7C}
+  private-key: ${APPLE_PRIVATE_KEY:-----BEGIN PRIVATE KEY-----\nMIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgHNrrMRdZ8tqnHJ52\ncbwg/geX1Wj9NY96+wGaBv4bY++gCgYIKoZIzj0DAQehRANCAAT/XB7o6MlUvJNb\nlwVwoljgcPSlSXnN6TbWk3s+f9WBUp4SNDIKBcYmVE3uHgykvMN0ICLYLF5Zntzf\n7ojx67sL\n-----END PRIVATE KEY-----}

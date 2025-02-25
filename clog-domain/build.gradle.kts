@@ -1,6 +1,5 @@
 dependencies {
     implementation(project(":clog-global-utils"))
-    implementation(project(":clog-infrastructure"))
 }
 
 tasks {
