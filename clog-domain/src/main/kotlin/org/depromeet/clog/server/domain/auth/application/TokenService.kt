@@ -30,12 +30,12 @@ class TokenService(
     fun generateTokens(user: User): AuthResponseDto {
         try {
             val accessToken = createToken(
-                user.id,
+                user.loginId,
                 user.provider.toString(),
                 accessTokenExpirationHours * 60 * 60 * 1000
             )
             val refreshToken = createToken(
-                user.id,
+                user.loginId,
                 user.provider.toString(),
                 refreshTokenExpirationDays * 24 * 60 * 60 * 1000
             )
@@ -62,9 +62,9 @@ class TokenService(
     /**
      * JWT 토큰 생성
      */
-    private fun createToken(id: Long, provider: String, expirationMillis: Long): String {
+    private fun createToken(loginId: String, provider: String, expirationMillis: Long): String {
         return "Bearer " + JWT.create()
-            .withClaim("id", id)
+            .withClaim("loginId", loginId)
             .withClaim("provider", provider)
             .withExpiresAt(Date(System.currentTimeMillis() + expirationMillis))
             .sign(algorithm)
@@ -75,12 +75,15 @@ class TokenService(
             val decodedJWT = JWT.require(algorithm)
                 .build()
                 .verify(token.removePrefix("Bearer "))
-            val userId = decodedJWT.getClaim("id").asLong()
+
+            val loginId = decodedJWT.getClaim("loginId").asString()
             val providerString = decodedJWT.getClaim("provider").asString()
                 ?: throw AuthException(AuthErrorCode.TOKEN_INVALID)
+
             val provider = Provider.valueOf(providerString)
+
             return LoginDetails(
-                loginId = userId.toString(),
+                loginId = loginId,
                 provider = provider
             )
         } catch (e: TokenExpiredException) {
