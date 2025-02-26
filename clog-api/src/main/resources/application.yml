@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cl-log-api
+    name: clog-api
   config:
     import: "optional:file:../.env"
     activate:
@@ -13,7 +13,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        ddl-auto: create
+        ddl-auto: update
         default_batch_fetch_size: 50
     show-sql: false
     open-in-view: false
