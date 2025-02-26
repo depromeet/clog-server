@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @SpringBootApplication(scanBasePackages = ["org.depromeet.clog.server"])
 @EntityScan(basePackages = ["org.depromeet.clog.server.domain", "org.depromeet.clog.server.infrastructure"])
-@EnableJpaRepositories(basePackages = ["org.depromeet.clog.server"])
+@EnableJpaRepositories(basePackages = ["org.depromeet.clog.server.infrastructure"])
 class ClogApplication
 
 fun main(args: Array<String>) {
