@@ -56,7 +56,7 @@ class TokenService(
      * 특정 로그인 ID를 가진 사용자를 조회하는 메서드
      */
     fun getUserByLoginId(loginId: String): User? {
-        return userRepository.findByLoginIdAndProvider(loginId, Provider.KAKAO).orElse(null)
+        return userRepository.findByLoginIdAndProvider(loginId, Provider.KAKAO)
     }
 
     /**

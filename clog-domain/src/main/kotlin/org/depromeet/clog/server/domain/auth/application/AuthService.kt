@@ -58,7 +58,8 @@ class AuthService(
             ?: throw AuthException(AuthErrorCode.ID_TOKEN_MISSING)
         val kakaoUser = validateAndParseKakaoIdToken(idToken)
         val user = userRepository.findByLoginIdAndProvider(kakaoUser.id, Provider.KAKAO)
-            .orElseGet { registerNewKakaoUser(kakaoUser) }
+            ?: registerNewKakaoUser(kakaoUser)
+
         return tokenService.generateTokens(user)
     }
 
@@ -132,8 +133,10 @@ class AuthService(
         val idToken = tokenResponse["id_token"] as? String
             ?: throw AuthException(AuthErrorCode.ID_TOKEN_MISSING)
         val appleUser = validateAndParseAppleIdToken(idToken)
+
         val user = userRepository.findByLoginIdAndProvider(appleUser.id, Provider.APPLE)
-            .orElseGet { registerNewAppleUser(appleUser) }
+            ?: registerNewAppleUser(appleUser)
+
         return tokenService.generateTokens(user)
     }
 

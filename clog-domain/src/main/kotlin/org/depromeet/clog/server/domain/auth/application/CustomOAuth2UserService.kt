@@ -23,7 +23,7 @@ class CustomOAuth2UserService(
         val nickname = (oidcUser.attributes["nickname"] as? String) ?: "카카오 유저"
 
         val user = userRepository.findByLoginIdAndProvider(kakaoId, Provider.KAKAO)
-            .orElseGet { registerNewKakaoUser(kakaoId, nickname) }
+            ?: registerNewKakaoUser(kakaoId, nickname)
 
         tokenService.generateTokens(user)
 
