@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: clog-api
+    version: 0.0.1
+
+springdoc:
+  swagger-ui:
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: method
