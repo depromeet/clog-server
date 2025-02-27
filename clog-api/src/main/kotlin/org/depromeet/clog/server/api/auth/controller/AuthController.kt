@@ -3,7 +3,9 @@ package org.depromeet.clog.server.api.auth.controller
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.domain.auth.application.AuthService
 import org.depromeet.clog.server.domain.auth.application.TokenService
+import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
+import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
 import org.depromeet.clog.server.domain.common.ApiResponse
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
 import org.springframework.http.HttpHeaders
@@ -28,7 +30,7 @@ class AuthController(
         return ApiResponse.success(authResponse)
     }
 
-    @GetMapping("/me")
+    @GetMapping("/test")
     fun getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<String> {
         val loginDetails = tokenService.extractLoginDetails(token)
         val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
@@ -37,13 +39,3 @@ class AuthController(
         return ApiResponse.success(user.name)
     }
 }
-
-data class KakaoLoginRequest(
-    val code: String,
-    val codeVerifier: String
-)
-
-data class AppleLoginRequest(
-    val code: String,
-    val codeVerifier: String
-)
