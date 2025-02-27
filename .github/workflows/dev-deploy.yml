@@ -1,9 +1,9 @@
-name: [DEV] Build and Deploy
+name: "[DEV] Build and Deploy"
 
 on:
   push:
     branches:
-      - 'develop'
+      - develop
 
 jobs:
   build-deploy:
