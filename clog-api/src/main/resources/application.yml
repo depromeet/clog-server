@@ -68,3 +68,12 @@ apple:
   client-id: ${APPLE_CLIENT_ID}
   key-id: ${APPLE_KEY_ID}
   private-key: ${APPLE_PRIVATE_KEY}
+
+    version: 0.0.1
+
+springdoc:
+  swagger-ui:
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: method
+
