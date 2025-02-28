@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.api.security
+package org.depromeet.clog.server.api.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest

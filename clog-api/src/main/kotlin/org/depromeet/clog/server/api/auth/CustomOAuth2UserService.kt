@@ -1,5 +1,6 @@
-package org.depromeet.clog.server.domain.auth.application
+package org.depromeet.clog.server.api.auth
 
+import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthErrorCode
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.user.domain.Provider
