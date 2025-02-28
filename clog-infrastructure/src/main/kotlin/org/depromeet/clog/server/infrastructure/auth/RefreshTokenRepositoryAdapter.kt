@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component
 
 @Component
 class RefreshTokenRepositoryAdapter(
-    private val jpaRefreshTokenRepository: JpaRefreshTokenRepository
+    private val refreshTokenJpaRepository: RefreshTokenJpaRepository
 ) : RefreshTokenRepository {
 
     override fun save(token: RefreshToken): RefreshToken =
-        jpaRefreshTokenRepository.save(token)
+        refreshTokenJpaRepository.save(token)
 
     override fun findById(id: String): RefreshToken? =
-        jpaRefreshTokenRepository.findById(id).orElse(null)
+        refreshTokenJpaRepository.findById(id).orElse(null)
 
     override fun delete(token: RefreshToken) =
-        jpaRefreshTokenRepository.delete(token)
+        refreshTokenJpaRepository.delete(token)
 }

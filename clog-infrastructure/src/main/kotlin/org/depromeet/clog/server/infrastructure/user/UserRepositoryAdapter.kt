@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserRepositoryAdapter(
-    private val jpaUserRepository: JpaUserRepository
+    private val userJpaRepository: UserJpaRepository
 ) : UserRepository {
 
     override fun findByLoginIdAndProvider(loginId: String, provider: Provider): User? =
-        jpaUserRepository.findByLoginIdAndProvider(loginId, provider).orElse(null)
+        userJpaRepository.findByLoginIdAndProvider(loginId, provider).orElse(null)
 
     override fun findByLoginId(loginId: String): User? =
-        jpaUserRepository.findByLoginId(loginId).orElse(null)
+        userJpaRepository.findByLoginId(loginId).orElse(null)
 
     override fun save(user: User): User =
-        jpaUserRepository.save(user)
+        userJpaRepository.save(user)
 }

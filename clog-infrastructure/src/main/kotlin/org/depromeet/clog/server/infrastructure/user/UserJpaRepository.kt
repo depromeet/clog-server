@@ -5,7 +5,7 @@ import org.depromeet.clog.server.domain.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface JpaUserRepository : JpaRepository<User, Long> {
+interface UserJpaRepository : JpaRepository<User, Long> {
     fun findByLoginIdAndProvider(loginId: String, provider: Provider): Optional<User>
     fun findByLoginId(loginId: String): Optional<User>
 }
