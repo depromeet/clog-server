@@ -18,8 +18,8 @@ import java.util.*
 @Service
 class TokenService(
     @Value("\${jwt.secret}") private val secret: String,
-    @Value("\${jwt.access.expirationHours}") private val accessTokenExpirationHours: Long,
-    @Value("\${jwt.refresh.expirationDays}") private val refreshTokenExpirationDays: Long,
+    @Value("\${jwt.access-token-expiration-millis}") private val accessTokenExpirationMillis: Long,
+    @Value("\${jwt.refresh-token-expiration-millis}") private val refreshTokenExpirationMillis: Long,
     private val userRepository: UserRepository
 ) {
     private val algorithm: Algorithm = Algorithm.HMAC512(secret)
@@ -29,16 +29,8 @@ class TokenService(
      */
     fun generateTokens(user: User): AuthResponseDto {
         try {
-            val accessToken = createToken(
-                user.loginId,
-                user.provider.toString(),
-                accessTokenExpirationHours * 60 * 60 * 1000
-            )
-            val refreshToken = createToken(
-                user.loginId,
-                user.provider.toString(),
-                refreshTokenExpirationDays * 24 * 60 * 60 * 1000
-            )
+            val accessToken = createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
+            val refreshToken = createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
 
             return AuthResponseDto(
                 provider = user.provider.toString(),
