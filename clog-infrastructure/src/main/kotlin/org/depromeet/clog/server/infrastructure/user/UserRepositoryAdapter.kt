@@ -11,10 +11,10 @@ class UserRepositoryAdapter(
 ) : UserRepository {
 
     override fun findByLoginIdAndProvider(loginId: String, provider: Provider): User? =
-        userJpaRepository.findByLoginIdAndProvider(loginId, provider).orElse(null)
+        userJpaRepository.findByLoginIdAndProvider(loginId, provider)
 
     override fun findByLoginId(loginId: String): User? =
-        userJpaRepository.findByLoginId(loginId).orElse(null)
+        userJpaRepository.findByLoginId(loginId)
 
     override fun save(user: User): User =
         userJpaRepository.save(user)
