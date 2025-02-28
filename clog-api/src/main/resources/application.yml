@@ -1,6 +1,7 @@
 spring:
   application:
     name: clog-api
+    version: 0.0.1
   config:
     import: "optional:file:../.env"
     activate:
@@ -13,7 +14,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        ddl-auto: update
+        ddl-auto: create
         default_batch_fetch_size: 50
     show-sql: false
     open-in-view: false
@@ -32,7 +33,7 @@ spring:
               - profile_nickname
           apple:
             client-name: APPLE
-            client-id: ${apple.client-id}
+            client-id: ${APPLE_CLIENT_ID}
             redirect-uri: "http://localhost:8080/login/oauth2/code/apple"
             authorization-grant-type: authorization_code
             scope:
@@ -57,11 +58,9 @@ decorator:
       enable-logging: true
 
 jwt:
-  secret: your-secret-key
-  access:
-    expirationHours: 12
-  refresh:
-    expirationDays: 30
+  secret: ${JWT_SECRET}
+  access-token-expiration-millis: ${ACCESS_MILLIS}
+  refresh-token-expiration-millis: ${REFRESH_MILLIS}
 
 apple:
   team-id: ${APPLE_TEAM_ID}
@@ -69,11 +68,8 @@ apple:
   key-id: ${APPLE_KEY_ID}
   private-key: ${APPLE_PRIVATE_KEY}
 
-    version: 0.0.1
-
 springdoc:
   swagger-ui:
     groups-order: DESC
     tags-sorter: alpha
     operations-sorter: method
-
