@@ -2,6 +2,7 @@ package org.depromeet.clog.server.infrastructure.auth
 
 import org.depromeet.clog.server.domain.auth.domain.RefreshToken
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
+import org.depromeet.clog.server.domain.user.domain.Provider
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
@@ -16,6 +17,6 @@ class RefreshTokenRepositoryAdapter(
     override fun findById(id: String): RefreshToken? =
         refreshTokenJpaRepository.findByIdOrNull(id)
 
-    override fun delete(token: RefreshToken) =
-        refreshTokenJpaRepository.delete(token)
+    override fun deleteByLoginIdAndProvider(loginId: String, provider: Provider) =
+        refreshTokenJpaRepository.deleteByLoginIdAndProvider(loginId, provider)
 }

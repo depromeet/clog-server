@@ -6,6 +6,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.LoginDetails
+import org.depromeet.clog.server.domain.auth.domain.RefreshToken
+import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthErrorCode
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.user.domain.Provider
@@ -20,7 +22,8 @@ class TokenService(
     @Value("\${jwt.secret}") private val secret: String,
     @Value("\${jwt.access-token-expiration-millis}") private val accessTokenExpirationMillis: Long,
     @Value("\${jwt.refresh-token-expiration-millis}") private val refreshTokenExpirationMillis: Long,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val refreshTokenRepository: RefreshTokenRepository
 ) {
     private val algorithm: Algorithm = Algorithm.HMAC512(secret)
 
@@ -31,6 +34,9 @@ class TokenService(
         try {
             val accessToken = createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
             val refreshToken = createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
+
+            refreshTokenRepository.deleteByLoginIdAndProvider(user.loginId, user.provider)
+            refreshTokenRepository.save(RefreshToken(user.loginId, user.provider, refreshToken))
 
             return AuthResponseDto(
                 provider = user.provider.toString(),
