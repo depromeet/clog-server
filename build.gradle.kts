@@ -40,8 +40,10 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlinx.kover")
 
     dependencies {
+
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.springframework.boot:spring-boot-starter")
+        implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
         testImplementation(kotlin("test"))
@@ -57,7 +59,7 @@ subprojects {
             files("$rootDir/config/detekt.yml")
         )
         autoCorrect = true
-        buildUponDefaultConfig = true
+        buildUponDefaultConfig = false
         debug = true
         tasks.withType<Detekt>().configureEach {
             reports {

@@ -26,6 +26,10 @@ style:
   WildcardImport:
     active: false
 
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+
 formatting:
   NoWildcardImports:
     active: false

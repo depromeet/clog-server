@@ -6,7 +6,7 @@ package org.depromeet.clog.server.domain.common
  * - 한 도메인은 하나의 에러코드를 가지도록 권장된다.
  *     - 이 말인 즉슨, `enum` 클래스로 구현하는 것이 적합하다.
  * - 모든 에러 코드는 에러 코드가 발생하는 도메인의 하위 패키지에 위치해야 한다.
- *     - 예) `org.depromeet.cllog.server.domain.user.exception` 패키지에 위치한 `UserErrorCode` 클래스
+ *     - 예) `org.depromeet.clog.server.domain.user.exception` 패키지에 위치한 `UserErrorCode` 클래스
  *
  * @author kkjsw17
  */

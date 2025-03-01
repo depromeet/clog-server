@@ -43,3 +43,6 @@ spy.log
 
 ### Qclass ###
 */src/main/generated/
+
+# Ignore environment variables
+cl-log-api/.env

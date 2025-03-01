@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class ClogControllerAdvice {
 
     @ExceptionHandler(ClogException::class)
-    fun handleClLogException(e: ClogException): ResponseEntity<ApiResponse<Unit>> {
+    fun handleClogException(e: ClogException): ResponseEntity<ApiResponse<Unit>> {
         return ResponseEntity.status(e.errorCode.httpStatus)
             .body(ApiResponse.fail(e))
     }
