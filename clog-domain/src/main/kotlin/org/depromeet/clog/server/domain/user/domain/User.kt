@@ -3,7 +3,6 @@ package org.depromeet.clog.server.domain.user.domain
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "users")
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
