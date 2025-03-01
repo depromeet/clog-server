@@ -8,6 +8,7 @@ import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
 import org.depromeet.clog.server.domain.common.ApiResponse
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.*
 
@@ -30,6 +31,7 @@ class AuthController(
         return ApiResponse.success(authResponse)
     }
 
+    @Profile("dev", "local")
     @GetMapping("/test")
     fun getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<String> {
         val loginDetails = tokenService.extractLoginDetails(token)
