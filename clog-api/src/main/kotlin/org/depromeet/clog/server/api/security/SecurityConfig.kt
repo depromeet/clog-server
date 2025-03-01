@@ -19,11 +19,25 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("$API_BASE_PATH_V1/auth/kakao","$API_BASE_PATH_V1/auth/apple").permitAll()
+                auth.requestMatchers(
+                    *PERMIT_ALL_PATTERNS.toTypedArray()
+                ).permitAll()
                 auth.anyRequest().authenticated()
             }
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
+    }
+
+
+    companion object {
+        private val PERMIT_ALL_PATTERNS = listOf(
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/actuator/**",
+            "/v3/api-docs/**",
+            "$API_BASE_PATH_V1/auth/**",
+        )
     }
 }
