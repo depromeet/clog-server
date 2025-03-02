@@ -35,8 +35,9 @@ class TokenService(
             val accessToken = createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
             val refreshToken = createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
 
+            val refreshTokenValue = refreshToken.removePrefix("Bearer ")
             refreshTokenRepository.deleteByLoginIdAndProvider(user.loginId, user.provider)
-            refreshTokenRepository.save(RefreshToken(user.loginId, user.provider, refreshToken))
+            refreshTokenRepository.save(RefreshToken(user.loginId, user.provider, refreshTokenValue))
 
             return AuthResponseDto(
                 provider = user.provider.toString(),
