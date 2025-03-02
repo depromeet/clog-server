@@ -11,11 +11,13 @@ class RefreshTokenRepositoryAdapter(
     private val refreshTokenJpaRepository: RefreshTokenJpaRepository
 ) : RefreshTokenRepository {
 
-    override fun save(token: RefreshToken): RefreshToken =
-        refreshTokenJpaRepository.save(token)
+    override fun save(token: RefreshToken): RefreshToken {
+        val entity = RefreshTokenEntity.fromDomain(token)
+        return refreshTokenJpaRepository.save(entity).toDomain()
+    }
 
     override fun findById(id: String): RefreshToken? =
-        refreshTokenJpaRepository.findByIdOrNull(id)
+        refreshTokenJpaRepository.findByIdOrNull(id)?.toDomain()
 
     override fun deleteByLoginIdAndProvider(loginId: String, provider: Provider) =
         refreshTokenJpaRepository.deleteByLoginIdAndProvider(loginId, provider)
