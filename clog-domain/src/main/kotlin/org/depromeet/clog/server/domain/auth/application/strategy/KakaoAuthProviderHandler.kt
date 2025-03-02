@@ -23,7 +23,7 @@ class KakaoAuthProviderHandler(
     private val userRepository: UserRepository
 ) : AuthProviderHandler<KakaoLoginRequest> {
 
-    @Value("\${spring.security.oauth2.client.registration.kakao.client-id}")
+    @Value("\${kakao.client-id}")
     private lateinit var kakaoClientId: String
 
     override fun login(request: KakaoLoginRequest): AuthResponseDto {

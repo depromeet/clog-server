@@ -6,12 +6,9 @@ spring:
     oauth2:
       client:
         registration:
-          kakao:
-            client-name: KAKAO
-            client-id: ${KAKAO_CLIENT_ID}
           apple:
             client-name: APPLE
-            client-id: ${APPLE_CLIENT_ID}
+            client-id: ${APPLE_CLIENT_ID:com.supershy.climbinglog.dev}
             redirect-uri: "https://dev-api.climb-log.my/login/oauth2/code/apple"
             authorization-grant-type: authorization_code
             scope:
@@ -32,15 +29,17 @@ decorator:
       enable-logging: true
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ${JWT_SECRET:your-secret-key}
   access-token-expiration-millis: 3600000
   refresh-token-expiration-millis: 604800000
 
 apple:
-  team-id: ${APPLE_TEAM_ID}
-  client-id: ${APPLE_CLIENT_ID}
-  key-id: ${APPLE_KEY_ID}
-  private-key: ${APPLE_PRIVATE_KEY}
+  team-id: ${APPLE_TEAM_ID:SUMATJC294}
+  client-id: ${APPLE_CLIENT_ID:com.supershy.climbinglog.dev}
+  key-id: ${APPLE_KEY_ID:2LCD3NVM7C}
+  private-key: ${APPLE_PRIVATE_KEY:-----BEGIN PRIVATE KEY-----\nMIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgHNrrMRdZ8tqnHJ52\ncbwg/geX1Wj9NY96+wGaBv4bY++gCgYIKoZIzj0DAQehRANCAAT/XB7o6MlUvJNb\nlwVwoljgcPSlSXnN6TbWk3s+f9WBUp4SNDIKBcYmVE3uHgykvMN0ICLYLF5Zntzf\n7ojx67sL\n-----END PRIVATE KEY-----}
+kakao :
+  client-id: ${KAKAO_CLIENT_ID:bcd91f3c57fea5dcd79cb36287f3b714}
 
 springdoc:
   swagger-ui:
