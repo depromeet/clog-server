@@ -36,7 +36,7 @@ class AuthController(
     fun getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<String> {
         val loginDetails = tokenService.extractLoginDetails(token)
         val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
-            ?: throw RuntimeException("사용자를 찾을 수 없습니다. (loginId: ${loginDetails.loginId})")
+            ?: throw IllegalStateException("사용자를 찾을 수 없습니다. (loginId: ${loginDetails.loginId})")
 
         return ApiResponse.success(user.name)
     }

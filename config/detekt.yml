@@ -25,6 +25,8 @@ style:
     active: false
   WildcardImport:
     active: false
+  UseCheckOrError:
+    active: false
 
 exceptions:
   TooGenericExceptionCaught:

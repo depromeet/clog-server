@@ -83,6 +83,7 @@ class TokenService(
             .sign(algorithm)
     }
 
+    @Suppress("ThrowsCount")
     fun extractLoginDetails(token: String): LoginDetails {
         try {
             val decodedJWT = JWT.require(algorithm)

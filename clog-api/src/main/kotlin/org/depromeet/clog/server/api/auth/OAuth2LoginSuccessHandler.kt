@@ -60,7 +60,6 @@ class OAuth2LoginSuccessHandler(
 
             // JSON 응답 전송
             sendResponse(response, HttpStatus.OK, authResponse)
-
         } catch (e: AuthException) {
             logger.error("OAuth2 로그인 처리 중 AuthException 발생: ${e.message}", e)
             sendResponse(response, HttpStatus.valueOf(e.errorCode.httpStatus), mapOf("error" to e.message))
