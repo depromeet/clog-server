@@ -1,8 +1,8 @@
 package org.depromeet.clog.server.api.auth
 
 import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.auth.presentation.exception.AuthErrorCode
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
+import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
@@ -20,7 +20,7 @@ class CustomOAuth2UserService(
     override fun loadUser(userRequest: OidcUserRequest): OidcUser {
         val oidcUser = super.loadUser(userRequest)
         val kakaoId = oidcUser.attributes["sub"]?.toString()
-            ?: throw AuthException(AuthErrorCode.AUTHENTICATION_FAILED)
+            ?: throw AuthException(ErrorCode.AUTHENTICATION_FAILED)
         val nickname = (oidcUser.attributes["nickname"] as? String) ?: "카카오 유저"
 
         val user = userRepository.findByLoginIdAndProvider(kakaoId, Provider.KAKAO)

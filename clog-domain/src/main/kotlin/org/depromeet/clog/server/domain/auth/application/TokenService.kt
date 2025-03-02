@@ -8,8 +8,8 @@ import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.LoginDetails
 import org.depromeet.clog.server.domain.auth.domain.RefreshToken
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
-import org.depromeet.clog.server.domain.auth.presentation.exception.AuthErrorCode
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
+import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
@@ -40,7 +40,7 @@ class TokenService(
             val refreshTokenValue = refreshToken.removePrefix("Bearer ")
             val userId = user.id
                 ?: throw AuthException(
-                    AuthErrorCode.AUTHENTICATION_FAILED,
+                    ErrorCode.AUTHENTICATION_FAILED,
                     RuntimeException("존재하지 않는 userId")
                 )
             refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
@@ -61,7 +61,7 @@ class TokenService(
                 refreshToken = refreshToken
             )
         } catch (e: Exception) {
-            throw AuthException(AuthErrorCode.AUTHENTICATION_FAILED, e)
+            throw AuthException(ErrorCode.AUTHENTICATION_FAILED, e)
         }
     }
 
@@ -92,7 +92,7 @@ class TokenService(
 
             val loginId = decodedJWT.getClaim("loginId").asString()
             val providerString = decodedJWT.getClaim("provider").asString()
-                ?: throw AuthException(AuthErrorCode.TOKEN_INVALID)
+                ?: throw AuthException(ErrorCode.TOKEN_INVALID)
 
             val provider = Provider.valueOf(providerString)
 
@@ -101,11 +101,11 @@ class TokenService(
                 provider = provider
             )
         } catch (e: TokenExpiredException) {
-            throw AuthException(AuthErrorCode.TOKEN_EXPIRED, e)
+            throw AuthException(ErrorCode.TOKEN_EXPIRED, e)
         } catch (e: JWTVerificationException) {
-            throw AuthException(AuthErrorCode.TOKEN_INVALID, e)
+            throw AuthException(ErrorCode.TOKEN_INVALID, e)
         } catch (e: IllegalArgumentException) {
-            throw AuthException(AuthErrorCode.TOKEN_INVALID, e)
+            throw AuthException(ErrorCode.TOKEN_INVALID, e)
         }
     }
 }
