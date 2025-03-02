@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.auth.controller
 
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
-import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodeExamples
+import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.auth.application.AuthService
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
@@ -22,7 +22,7 @@ class AuthController(
     private val tokenService: TokenService
 ) {
     @PostMapping("/kakao")
-    @ApiErrorCodeExamples([ErrorCode.TOKEN_EXPIRED])
+    @ApiErrorCodes([ErrorCode.TOKEN_EXPIRED])
     fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.kakaoLoginWithIdToken(request.idToken)
         return ApiResponse.from(authResponse)

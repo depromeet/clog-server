@@ -4,6 +4,6 @@ import org.depromeet.clog.server.domain.common.ErrorCode
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ApiErrorCodeExamples(
+annotation class ApiErrorCodes(
     val value: Array<ErrorCode>,
 )

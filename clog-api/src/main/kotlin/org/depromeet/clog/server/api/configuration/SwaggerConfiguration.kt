@@ -11,7 +11,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
-import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodeExamples
+import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.common.ErrorResponse
 import org.springdoc.core.customizers.OperationCustomizer
@@ -47,7 +47,7 @@ class SwaggerConfiguration(
 
     @Bean
     fun errorResponseCustomizer(): OperationCustomizer = OperationCustomizer { operation, handlerMethod ->
-        handlerMethod.getMethodAnnotation(ApiErrorCodeExamples::class.java)
+        handlerMethod.getMethodAnnotation(ApiErrorCodes::class.java)
             ?.let { addErrorExamples(operation, it.value) }
 
         operation
