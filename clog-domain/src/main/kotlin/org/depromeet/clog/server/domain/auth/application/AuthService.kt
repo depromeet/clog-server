@@ -52,37 +52,12 @@ class AuthService(
 
     // ---------------- Kakao 로그인 ----------------
 
-    fun kakaoLoginWithCode(authorizationCode: String, codeVerifier: String): AuthResponseDto {
-        val tokenResponse = requestAccessToken(authorizationCode, codeVerifier)
-        val idToken = tokenResponse["id_token"] as? String
-            ?: throw AuthException(AuthErrorCode.ID_TOKEN_MISSING)
+    fun kakaoLoginWithIdToken(idToken: String): AuthResponseDto {
         val kakaoUser = validateAndParseKakaoIdToken(idToken)
         val user = userRepository.findByLoginIdAndProvider(kakaoUser.id, Provider.KAKAO)
             ?: registerNewKakaoUser(kakaoUser)
 
         return tokenService.generateTokens(user)
-    }
-
-    private fun requestAccessToken(
-        authorizationCode: String,
-        codeVerifier: String
-    ): Map<String, Any> {
-        val headers = HttpHeaders().apply { contentType = MediaType.APPLICATION_FORM_URLENCODED }
-        val body = LinkedMultiValueMap<String, String>().apply {
-            add("grant_type", "authorization_code")
-            add("client_id", kakaoClientId)
-            add("redirect_uri", "http://localhost:8080/login/oauth2/code/kakao")
-            add("code", authorizationCode)
-            add("code_verifier", codeVerifier)
-        }
-        val requestEntity = HttpEntity(body, headers)
-        val responseEntity = restTemplate.exchange(
-            "https://kauth.kakao.com/oauth/token",
-            HttpMethod.POST,
-            requestEntity,
-            object : ParameterizedTypeReference<Map<String, Any>>() {}
-        )
-        return responseEntity.body ?: throw AuthException(AuthErrorCode.TOKEN_INVALID)
     }
 
     private fun validateAndParseKakaoIdToken(idToken: String): KakaoUserInfo {
@@ -93,8 +68,7 @@ class AuthService(
                 .rateLimited(10, 1, TimeUnit.MINUTES)
                 .build()
             val decodedJWT = JWT.decode(idToken)
-            val keyId =
-                decodedJWT.keyId ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
+            val keyId = decodedJWT.keyId ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val jwk = jwkProvider.get(keyId)
             val publicKey = jwk.publicKey as RSAPublicKey
             val algorithm = Algorithm.RSA256(publicKey, null)
@@ -103,8 +77,8 @@ class AuthService(
                 .withAudience(kakaoClientId)
                 .build()
             val verifiedJWT = verifier.verify(idToken)
-            val subject =
-                verifiedJWT.subject ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
+            val subject = verifiedJWT.subject
+                ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val nickname = verifiedJWT.getClaim("nickname").asString() ?: "kakaoUser"
             return KakaoUserInfo(
                 id = subject,
