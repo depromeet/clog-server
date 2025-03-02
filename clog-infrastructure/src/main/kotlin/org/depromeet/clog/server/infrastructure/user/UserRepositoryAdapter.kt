@@ -11,11 +11,11 @@ class UserRepositoryAdapter(
 ) : UserRepository {
 
     override fun findByLoginIdAndProvider(loginId: String, provider: Provider): User? =
-        userJpaRepository.findByLoginIdAndProvider(loginId, provider)
+        userJpaRepository.findByLoginIdAndProvider(loginId, provider)?.toDomain()
 
     override fun findByLoginId(loginId: String): User? =
-        userJpaRepository.findByLoginId(loginId)
+        userJpaRepository.findByLoginId(loginId)?.toDomain()
 
     override fun save(user: User): User =
-        userJpaRepository.save(user)
+        userJpaRepository.save(UserEntity.fromDomain(user)).toDomain()
 }
