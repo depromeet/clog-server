@@ -20,11 +20,9 @@ import java.util.concurrent.TimeUnit
 @Service
 class KakaoAuthProviderHandler(
     private val tokenService: TokenService,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    @Value("\${kakao.client-id}") private val kakaoClientId: String
 ) : AuthProviderHandler<KakaoLoginRequest> {
-
-    @Value("\${kakao.client-id}")
-    private lateinit var kakaoClientId: String
 
     override fun login(request: KakaoLoginRequest): AuthResponseDto {
         val kakaoUser = validateAndParseKakaoIdToken(request.idToken)

@@ -34,20 +34,12 @@ import java.util.concurrent.TimeUnit
 class AppleAuthProviderHandler(
     private val tokenService: TokenService,
     private val userRepository: UserRepository,
-    private val restTemplate: RestTemplate
+    private val restTemplate: RestTemplate,
+    @Value("\${apple.team-id}") private val appleTeamId: String,
+    @Value("\${apple.client-id}") private val appleClientId: String,
+    @Value("\${apple.key-id}") private val appleKeyId: String,
+    @Value("\${apple.private-key}") private val applePrivateKey: String
 ) : AuthProviderHandler<AppleLoginRequest> {
-
-    @Value("\${apple.team-id}")
-    private lateinit var appleTeamId: String
-
-    @Value("\${apple.client-id}")
-    private lateinit var appleClientId: String
-
-    @Value("\${apple.key-id}")
-    private lateinit var appleKeyId: String
-
-    @Value("\${apple.private-key}")
-    private lateinit var applePrivateKey: String
 
     override fun login(request: AppleLoginRequest): AuthResponseDto {
         val tokenResponse = requestAppleAccessToken(request.code, request.codeVerifier)
