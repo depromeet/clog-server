@@ -31,6 +31,7 @@ class KakaoAuthProviderHandler(
         return tokenService.generateTokens(user)
     }
 
+    @Suppress("ThrowsCount")
     private fun validateAndParseKakaoIdToken(idToken: String): KakaoUserInfo {
         try {
             val jwksUrl = URL("https://kauth.kakao.com/.well-known/jwks.json")

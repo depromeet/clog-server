@@ -30,6 +30,7 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+@Suppress("LongParameterList")
 @Service
 class AppleAuthProviderHandler(
     private val tokenService: TokenService,
@@ -74,6 +75,7 @@ class AppleAuthProviderHandler(
         return responseEntity.body ?: throw AuthException(AuthErrorCode.TOKEN_INVALID)
     }
 
+    @Suppress("ThrowsCount")
     private fun validateAndParseAppleIdToken(idToken: String): AppleUserInfo {
         try {
             val jwksUrl = URL("https://appleid.apple.com/auth/keys")
@@ -115,8 +117,8 @@ class AppleAuthProviderHandler(
         val expMillis = nowMillis + 180L * 24 * 60 * 60 * 1000
 
         val formattedKey = "-----BEGIN PRIVATE KEY-----\n" +
-                applePrivateKey.replace("\\\\n", "\n").trim() +
-                "\n-----END PRIVATE KEY-----"
+            applePrivateKey.replace("\\\\n", "\n").trim() +
+            "\n-----END PRIVATE KEY-----"
         val decodedKey = Base64.getDecoder().decode(
             formattedKey
                 .replace("-----BEGIN PRIVATE KEY-----", "")
