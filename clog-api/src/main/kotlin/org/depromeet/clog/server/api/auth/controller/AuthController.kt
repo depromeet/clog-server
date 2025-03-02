@@ -21,7 +21,7 @@ class AuthController(
 ) {
     @PostMapping("/kakao")
     fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ApiResponse<AuthResponseDto> {
-        val authResponse = authService.kakaoLoginWithCode(request.code, request.codeVerifier)
+        val authResponse = authService.kakaoLoginWithIdToken(request.idToken)
         return ApiResponse.success(authResponse)
     }
 

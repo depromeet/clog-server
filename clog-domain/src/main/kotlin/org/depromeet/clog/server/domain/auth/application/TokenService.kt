@@ -32,11 +32,26 @@ class TokenService(
      */
     fun generateTokens(user: User): AuthResponseDto {
         try {
-            val accessToken = createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
-            val refreshToken = createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
+            val accessToken =
+                createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
+            val refreshToken =
+                createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
 
-            refreshTokenRepository.deleteByLoginIdAndProvider(user.loginId, user.provider)
-            refreshTokenRepository.save(RefreshToken(user.loginId, user.provider, refreshToken))
+            val refreshTokenValue = refreshToken.removePrefix("Bearer ")
+            val userId = user.id
+                ?: throw AuthException(
+                    AuthErrorCode.AUTHENTICATION_FAILED,
+                    RuntimeException("존재하지 않는 userId")
+                )
+            refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
+            refreshTokenRepository.save(
+                RefreshToken(
+                    userId,
+                    user.loginId,
+                    user.provider,
+                    refreshTokenValue
+                )
+            )
 
             return AuthResponseDto(
                 provider = user.provider.toString(),

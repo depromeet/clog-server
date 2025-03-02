@@ -6,14 +6,6 @@ spring:
     oauth2:
       client:
         registration:
-          kakao:
-            client-name: KAKAO
-            client-id: ${KAKAO_CLIENT_ID}
-            redirect-uri: "https://dev-api.climb-log.my/login/oauth2/code/kakao"
-            authorization-grant-type: authorization_code
-            scope:
-              - openid
-              - profile_nickname
           apple:
             client-name: APPLE
             client-id: ${APPLE_CLIENT_ID}
@@ -24,11 +16,7 @@ spring:
               - name
         provider:
           kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
             jwk-set-uri: https://kauth.kakao.com/.well-known/jwks.json
-            user-name-attribute: sub
           apple:
             authorization-uri: https://appleid.apple.com/auth/authorize
             token-uri: https://appleid.apple.com/auth/token
@@ -50,6 +38,8 @@ apple:
   client-id: ${APPLE_CLIENT_ID}
   key-id: ${APPLE_KEY_ID}
   private-key: ${APPLE_PRIVATE_KEY}
+kakao :
+  client-id: ${KAKAO_CLIENT_ID}
 
 springdoc:
   swagger-ui:
