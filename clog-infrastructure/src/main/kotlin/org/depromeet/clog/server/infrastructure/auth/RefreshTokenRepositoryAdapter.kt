@@ -19,6 +19,6 @@ class RefreshTokenRepositoryAdapter(
     override fun findById(id: String): RefreshToken? =
         refreshTokenJpaRepository.findByIdOrNull(id)?.toDomain()
 
-    override fun deleteByLoginIdAndProvider(loginId: String, provider: Provider) =
-        refreshTokenJpaRepository.deleteByLoginIdAndProvider(loginId, provider)
+    override fun deleteByUserIdAndProvider(userId: Long, provider: Provider) =
+        refreshTokenJpaRepository.deleteByUserIdAndProvider(userId, provider)
 }

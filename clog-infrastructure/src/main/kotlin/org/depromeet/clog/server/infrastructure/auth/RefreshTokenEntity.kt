@@ -10,6 +10,8 @@ import org.depromeet.clog.server.domain.user.domain.Provider
 @Entity
 class RefreshTokenEntity(
     @Id
+    val userId: Long,
+
     val loginId: String,
 
     @Enumerated(EnumType.STRING)
@@ -18,6 +20,7 @@ class RefreshTokenEntity(
     var token: String
 ) {
     fun toDomain(): RefreshToken = RefreshToken(
+        userId = userId,
         loginId = loginId,
         provider = provider,
         token = token
@@ -26,6 +29,7 @@ class RefreshTokenEntity(
     companion object {
         fun fromDomain(refreshToken: RefreshToken): RefreshTokenEntity =
             RefreshTokenEntity(
+                userId = refreshToken.userId,
                 loginId = refreshToken.loginId,
                 provider = refreshToken.provider,
                 token = refreshToken.token

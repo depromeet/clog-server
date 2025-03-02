@@ -6,5 +6,5 @@ import org.depromeet.clog.server.domain.user.domain.Provider
 interface RefreshTokenRepository {
     fun save(token: RefreshToken): RefreshToken
     fun findById(id: String): RefreshToken?
-    fun deleteByLoginIdAndProvider(loginId: String, provider: Provider)
+    fun deleteByUserIdAndProvider(userId: Long, provider: Provider)
 }
