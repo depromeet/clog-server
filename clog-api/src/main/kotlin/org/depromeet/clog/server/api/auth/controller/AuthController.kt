@@ -22,13 +22,13 @@ class AuthController(
     @PostMapping("/kakao")
     fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.kakaoLoginWithIdToken(request.idToken)
-        return ApiResponse.success(authResponse)
+        return ApiResponse.from(authResponse)
     }
 
     @PostMapping("/apple")
     fun appleLogin(@RequestBody request: AppleLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
-        return ApiResponse.success(authResponse)
+        return ApiResponse.from(authResponse)
     }
 
     @Profile("dev", "local")
@@ -38,6 +38,6 @@ class AuthController(
         val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
             ?: throw IllegalStateException("사용자를 찾을 수 없습니다. (loginId: ${loginDetails.loginId})")
 
-        return ApiResponse.success(user.name)
+        return ApiResponse.from(user.name)
     }
 }
