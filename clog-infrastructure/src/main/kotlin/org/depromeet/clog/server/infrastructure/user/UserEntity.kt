@@ -33,7 +33,7 @@ class UserEntity(
         isDeleted = isDeleted
     )
 
-    companion object{
+    companion object {
         fun fromDomain(user: User): UserEntity = UserEntity(
             id = user.id,
             loginId = user.loginId,

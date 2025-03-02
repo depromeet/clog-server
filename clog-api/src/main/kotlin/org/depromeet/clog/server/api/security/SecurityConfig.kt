@@ -29,7 +29,6 @@ class SecurityConfig(
         return http.build()
     }
 
-
     companion object {
         private val PERMIT_ALL_PATTERNS = listOf(
             "/swagger-ui/**",

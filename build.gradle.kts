@@ -59,8 +59,11 @@ subprojects {
             files("$rootDir/config/detekt.yml")
         )
         autoCorrect = true
-        buildUponDefaultConfig = false
+        buildUponDefaultConfig = true
         debug = true
+        allRules = false
+        parallel = true
+
         tasks.withType<Detekt>().configureEach {
             reports {
                 html.required.set(true)
