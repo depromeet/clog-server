@@ -46,3 +46,9 @@ springdoc:
     groups-order: DESC
     tags-sorter: alpha
     operations-sorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
