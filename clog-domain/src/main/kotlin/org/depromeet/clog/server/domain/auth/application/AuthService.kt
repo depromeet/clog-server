@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.domain.auth.application
 
+import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
@@ -12,10 +13,13 @@ class AuthService(
     private val kakaoAuthProviderHandler: KakaoAuthProviderHandler,
     private val appleAuthProviderHandler: AppleAuthProviderHandler
 ) {
+
+    @Transactional
     fun kakaoLoginWithIdToken(idToken: String): AuthResponseDto {
         return kakaoAuthProviderHandler.login(KakaoLoginRequest(idToken))
     }
 
+    @Transactional
     fun appleLoginWithCode(authorizationCode: String, codeVerifier: String): AuthResponseDto {
         return appleAuthProviderHandler.login(AppleLoginRequest(authorizationCode, codeVerifier))
     }

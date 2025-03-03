@@ -1,6 +1,7 @@
 dependencies {
     implementation(project(":clog-global-utils"))
 
+    implementation("org.hibernate.orm:hibernate-core")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
