@@ -2,6 +2,7 @@ package org.depromeet.clog.server.api.security.jwt
 
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
@@ -9,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -24,7 +24,7 @@ class JwtFilter(
     private val userRepository: UserRepository
 ) : OncePerRequestFilter() {
 
-    private val logger = LoggerFactory.getLogger(JwtFilter::class.java)
+    private val log = KotlinLogging.logger {}
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
@@ -43,7 +43,7 @@ class JwtFilter(
             val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
 
             if (user == null) {
-                logger.warn("사용자 없음: ${loginDetails.loginId}")
+                log.warn("사용자 없음: ${loginDetails.loginId}")
                 filterChain.doFilter(request, response)
                 return
             }
@@ -53,11 +53,11 @@ class JwtFilter(
                 SecurityContextHolder.getContext().authentication = authentication
             }
         } catch (e: AuthException) {
-            logger.error("Auth exception 발생: ${e.message}", e)
+            log.error(e) { "Auth exception 발생: ${e.message}" }
         } catch (e: TokenExpiredException) {
-            logger.error("JWT Token expired: ${e.message}", e)
+            log.error(e) { "JWT Token expired: ${e.message}" }
         } catch (e: JWTVerificationException) {
-            logger.error("JWT Verification failed: ${e.message}", e)
+            log.error(e) { "JWT Verification failed: ${e.message}" }
         }
 
         filterChain.doFilter(request, response)
