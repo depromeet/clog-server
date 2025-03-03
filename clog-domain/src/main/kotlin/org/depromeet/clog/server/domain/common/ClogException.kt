@@ -10,5 +10,6 @@ package org.depromeet.clog.server.domain.common
  */
 abstract class ClogException(
     val errorCode: ErrorCode,
+    val detail: Map<String, Any>? = null,
     message: String? = errorCode.message,
 ) : Exception(message)

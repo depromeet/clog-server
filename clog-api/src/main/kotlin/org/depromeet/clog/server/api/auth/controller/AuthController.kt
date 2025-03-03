@@ -1,12 +1,14 @@
 package org.depromeet.clog.server.api.auth.controller
 
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
+import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.auth.application.AuthService
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
 import org.depromeet.clog.server.domain.common.ApiResponse
+import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpHeaders
@@ -20,15 +22,16 @@ class AuthController(
     private val tokenService: TokenService
 ) {
     @PostMapping("/kakao")
+    @ApiErrorCodes([ErrorCode.TOKEN_EXPIRED])
     fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.kakaoLoginWithIdToken(request.idToken)
-        return ApiResponse.success(authResponse)
+        return ApiResponse.from(authResponse)
     }
 
     @PostMapping("/apple")
     fun appleLogin(@RequestBody request: AppleLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
-        return ApiResponse.success(authResponse)
+        return ApiResponse.from(authResponse)
     }
 
     @Profile("dev", "local")
@@ -38,6 +41,6 @@ class AuthController(
         val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
             ?: throw IllegalStateException("사용자를 찾을 수 없습니다. (loginId: ${loginDetails.loginId})")
 
-        return ApiResponse.success(user.name)
+        return ApiResponse.from(user.name)
     }
 }

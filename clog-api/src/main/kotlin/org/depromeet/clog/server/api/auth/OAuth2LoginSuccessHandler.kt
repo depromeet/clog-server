@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
-import org.depromeet.clog.server.domain.auth.presentation.exception.AuthErrorCode
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
+import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.User
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -32,7 +32,7 @@ class OAuth2LoginSuccessHandler(
         try {
             val oAuth2User = authentication.principal as? OAuth2User
                 ?: throw AuthException(
-                    errorCode = AuthErrorCode.AUTHENTICATION_FAILED,
+                    errorCode = ErrorCode.AUTHENTICATION_FAILED,
                     cause = RuntimeException("인증된 사용자 정보 없음")
                 )
             logger.info("로그인 성공: 사용자 인증 정보 확인 완료")
@@ -40,7 +40,7 @@ class OAuth2LoginSuccessHandler(
             // OAuth2User에서 사용자 정보 추출
             val kakaoId = oAuth2User.attributes["sub"]?.toString()
                 ?: throw AuthException(
-                    errorCode = AuthErrorCode.AUTHENTICATION_FAILED,
+                    errorCode = ErrorCode.AUTHENTICATION_FAILED,
                     cause = RuntimeException("카카오 ID 누락")
                 )
             val nickname = oAuth2User.attributes["nickname"] as? String ?: "카카오 유저"
@@ -49,7 +49,7 @@ class OAuth2LoginSuccessHandler(
             // 서비스의 User 엔티티에서 사용자 찾기
             val user: User = tokenService.getUserByLoginId(kakaoId)
                 ?: throw AuthException(
-                    errorCode = AuthErrorCode.AUTHENTICATION_FAILED,
+                    errorCode = ErrorCode.AUTHENTICATION_FAILED,
                     cause = RuntimeException("유저 정보 없음: $kakaoId")
                 )
             logger.info("유저 정보 조회 완료: ${user.id}, ${user.loginId}")

@@ -6,8 +6,8 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.*
-import org.depromeet.clog.server.domain.auth.presentation.exception.AuthErrorCode
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
+import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
@@ -41,7 +41,7 @@ class KakaoAuthProviderHandler(
                 .build()
             val decodedJWT = JWT.decode(idToken)
             val keyId =
-                decodedJWT.keyId ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
+                decodedJWT.keyId ?: throw AuthException(ErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val jwk = jwkProvider.get(keyId)
             val publicKey = jwk.publicKey as RSAPublicKey
             val algorithm: Algorithm = Algorithm.RSA256(publicKey, null)
@@ -51,7 +51,7 @@ class KakaoAuthProviderHandler(
                 .build()
             val verifiedJWT = verifier.verify(idToken)
             val subject =
-                verifiedJWT.subject ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
+                verifiedJWT.subject ?: throw AuthException(ErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val nickname = verifiedJWT.getClaim("nickname").asString() ?: "kakaoUser"
             return KakaoUserInfo(
                 id = subject,
@@ -60,7 +60,7 @@ class KakaoAuthProviderHandler(
                 )
             )
         } catch (e: Exception) {
-            throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED, e)
+            throw AuthException(ErrorCode.ID_TOKEN_VALIDATION_FAILED, e)
         }
     }
 

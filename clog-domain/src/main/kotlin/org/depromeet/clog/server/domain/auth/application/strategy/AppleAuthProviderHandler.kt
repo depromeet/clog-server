@@ -9,8 +9,8 @@ import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AppleUserInfo
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
-import org.depromeet.clog.server.domain.auth.presentation.exception.AuthErrorCode
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
+import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
@@ -45,7 +45,7 @@ class AppleAuthProviderHandler(
     override fun login(request: AppleLoginRequest): AuthResponseDto {
         val tokenResponse = requestAppleAccessToken(request.code, request.codeVerifier)
         val idToken = tokenResponse["id_token"] as? String
-            ?: throw AuthException(AuthErrorCode.ID_TOKEN_MISSING)
+            ?: throw AuthException(ErrorCode.ID_TOKEN_MISSING)
         val appleUser = validateAndParseAppleIdToken(idToken)
         val user = userRepository.findByLoginIdAndProvider(appleUser.id, Provider.APPLE)
             ?: registerNewAppleUser(appleUser)
@@ -72,7 +72,7 @@ class AppleAuthProviderHandler(
             requestEntity,
             object : ParameterizedTypeReference<Map<String, Any>>() {}
         )
-        return responseEntity.body ?: throw AuthException(AuthErrorCode.TOKEN_INVALID)
+        return responseEntity.body ?: throw AuthException(ErrorCode.TOKEN_INVALID)
     }
 
     @Suppress("ThrowsCount")
@@ -85,7 +85,7 @@ class AppleAuthProviderHandler(
                 .build()
             val decodedJWT = JWT.decode(idToken)
             val keyId =
-                decodedJWT.keyId ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
+                decodedJWT.keyId ?: throw AuthException(ErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val jwk = jwkProvider.get(keyId)
             val publicKey = jwk.publicKey as RSAPublicKey
             val algorithm = Algorithm.RSA256(publicKey, null)
@@ -95,11 +95,11 @@ class AppleAuthProviderHandler(
                 .build()
             val verifiedJWT = verifier.verify(idToken)
             val subject =
-                verifiedJWT.subject ?: throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED)
+                verifiedJWT.subject ?: throw AuthException(ErrorCode.ID_TOKEN_VALIDATION_FAILED)
             val name = verifiedJWT.getClaim("name").asString() ?: "appleUser"
             return AppleUserInfo(id = subject, name = name)
         } catch (e: Exception) {
-            throw AuthException(AuthErrorCode.ID_TOKEN_VALIDATION_FAILED, e)
+            throw AuthException(ErrorCode.ID_TOKEN_VALIDATION_FAILED, e)
         }
     }
 

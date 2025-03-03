@@ -22,6 +22,6 @@ class ExampleController(
         @RequestParam(required = false, defaultValue = "false") error: Boolean,
     ): ApiResponse<String> {
         val response = getExample(error)
-        return ApiResponse.success(response)
+        return ApiResponse.from(response)
     }
 }
