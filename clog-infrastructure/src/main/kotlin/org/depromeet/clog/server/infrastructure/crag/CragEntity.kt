@@ -5,6 +5,7 @@ import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 import org.hibernate.annotations.Comment
 
+@Table(name = "crag")
 @Entity
 class CragEntity(
     @Id
