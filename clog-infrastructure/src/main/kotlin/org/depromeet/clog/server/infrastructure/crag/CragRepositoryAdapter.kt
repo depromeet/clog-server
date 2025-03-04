@@ -1,0 +1,12 @@
+package org.depromeet.clog.server.infrastructure.crag
+
+import org.depromeet.clog.server.domain.crag.domain.Crag
+import org.depromeet.clog.server.domain.crag.domain.CragRepository
+
+class CragRepositoryAdapter(
+    private val cragJpaRepository: CragJpaRepository
+) : CragRepository {
+
+    override fun save(crag: Crag): Crag =
+        cragJpaRepository.save(CragEntity.fromDomain(crag)).toDomain()
+}
