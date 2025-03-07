@@ -12,7 +12,6 @@ import org.depromeet.clog.server.domain.auth.presentation.exception.AuthExceptio
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
-import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
@@ -22,7 +21,6 @@ class TokenService(
     @Value("\${jwt.secret}") private val secret: String,
     @Value("\${jwt.access-token-expiration-millis}") private val accessTokenExpirationMillis: Long,
     @Value("\${jwt.refresh-token-expiration-millis}") private val refreshTokenExpirationMillis: Long,
-    private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository
 ) {
     private val algorithm: Algorithm = Algorithm.HMAC512(secret)
@@ -32,17 +30,14 @@ class TokenService(
      */
     fun generateTokens(user: User): AuthResponseDto {
         try {
-            val accessToken =
-                createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
-            val refreshToken =
-                createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
+            val accessToken = createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
+            val refreshToken = createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
 
             val refreshTokenValue = refreshToken.removePrefix("Bearer ")
-            val userId = user.id
-                ?: throw AuthException(
-                    ErrorCode.AUTHENTICATION_FAILED,
-                    RuntimeException("존재하지 않는 userId")
-                )
+            val userId = user.id ?: throw AuthException(
+                ErrorCode.AUTHENTICATION_FAILED,
+                RuntimeException("존재하지 않는 userId")
+            )
             refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
             refreshTokenRepository.save(
                 RefreshToken(
@@ -63,13 +58,6 @@ class TokenService(
         } catch (e: Exception) {
             throw AuthException(ErrorCode.AUTHENTICATION_FAILED, e)
         }
-    }
-
-    /**
-     * 특정 로그인 ID를 가진 사용자를 조회하는 메서드
-     */
-    fun getUserByLoginId(loginId: String): User? {
-        return userRepository.findByLoginIdAndProvider(loginId, Provider.KAKAO)
     }
 
     /**
@@ -100,12 +88,13 @@ class TokenService(
                 loginId = loginId,
                 provider = provider
             )
-        } catch (e: TokenExpiredException) {
-            throw AuthException(ErrorCode.TOKEN_EXPIRED, e)
-        } catch (e: JWTVerificationException) {
-            throw AuthException(ErrorCode.TOKEN_INVALID, e)
-        } catch (e: IllegalArgumentException) {
-            throw AuthException(ErrorCode.TOKEN_INVALID, e)
+        } catch (e: Exception) {
+            val errorCode = when (e) {
+                is TokenExpiredException -> ErrorCode.TOKEN_EXPIRED
+                is JWTVerificationException, is IllegalArgumentException -> ErrorCode.TOKEN_INVALID
+                else -> ErrorCode.AUTHENTICATION_FAILED
+            }
+            throw AuthException(errorCode, e)
         }
     }
 }

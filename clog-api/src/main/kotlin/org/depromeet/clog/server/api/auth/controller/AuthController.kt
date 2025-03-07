@@ -3,6 +3,7 @@ package org.depromeet.clog.server.api.auth.controller
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.auth.application.AuthService
+import org.depromeet.clog.server.domain.auth.application.LogoutService
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     private val authService: AuthService,
     private val userRepository: UserRepository,
-    private val tokenService: TokenService
+    private val tokenService: TokenService,
+    private val logoutService: LogoutService
 ) {
     @PostMapping("/kakao")
     @ApiErrorCodes([ErrorCode.TOKEN_EXPIRED])
@@ -32,6 +34,13 @@ class AuthController(
     fun appleLogin(@RequestBody request: AppleLoginRequest): ApiResponse<AuthResponseDto> {
         val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
         return ApiResponse.from(authResponse)
+    }
+
+    @PostMapping("/logout")
+    @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
+    fun logout(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<Nothing?> {
+        logoutService.logout(token)
+        return ApiResponse.from(null)
     }
 
     @Profile("dev", "local")

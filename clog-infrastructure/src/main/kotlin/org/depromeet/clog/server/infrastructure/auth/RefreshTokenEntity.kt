@@ -15,6 +15,8 @@ class RefreshTokenEntity(
     @Enumerated(EnumType.STRING)
     val provider: Provider,
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     var token: String
 ) {
     fun toDomain(): RefreshToken = RefreshToken(
