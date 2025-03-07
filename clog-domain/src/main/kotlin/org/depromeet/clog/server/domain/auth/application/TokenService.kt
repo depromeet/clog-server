@@ -12,8 +12,6 @@ import org.depromeet.clog.server.domain.auth.presentation.exception.AuthExceptio
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
-import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
-import org.depromeet.clog.server.domain.user.presentation.exception.UserException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
@@ -23,7 +21,6 @@ class TokenService(
     @Value("\${jwt.secret}") private val secret: String,
     @Value("\${jwt.access-token-expiration-millis}") private val accessTokenExpirationMillis: Long,
     @Value("\${jwt.refresh-token-expiration-millis}") private val refreshTokenExpirationMillis: Long,
-    private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository
 ) {
     private val algorithm: Algorithm = Algorithm.HMAC512(secret)
@@ -91,21 +88,13 @@ class TokenService(
                 loginId = loginId,
                 provider = provider
             )
-        } catch (e: TokenExpiredException) {
-            throw AuthException(ErrorCode.TOKEN_EXPIRED, e)
-        } catch (e: JWTVerificationException) {
-            throw AuthException(ErrorCode.TOKEN_INVALID, e)
-        } catch (e: IllegalArgumentException) {
-            throw AuthException(ErrorCode.TOKEN_INVALID, e)
+        } catch (e: Exception) {
+            val errorCode = when (e) {
+                is TokenExpiredException -> ErrorCode.TOKEN_EXPIRED
+                is JWTVerificationException, is IllegalArgumentException -> ErrorCode.TOKEN_INVALID
+                else -> ErrorCode.AUTHENTICATION_FAILED
+            }
+            throw AuthException(errorCode, e)
         }
-    }
-
-    fun logout(token: String) {
-        val loginDetails = extractLoginDetails(token)
-
-        val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
-            ?: throw UserException(ErrorCode.USER_NOT_FOUND)
-
-        refreshTokenRepository.deleteByUserIdAndProvider(user.id!!, user.provider)
     }
 }
