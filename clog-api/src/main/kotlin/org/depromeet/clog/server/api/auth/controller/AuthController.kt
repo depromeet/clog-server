@@ -36,9 +36,9 @@ class AuthController(
 
     @PostMapping("/logout")
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
-    fun logout(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<Unit> {
+    fun logout(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<Nothing?> {
         tokenService.logout(token)
-        return ApiResponse.success()
+        return ApiResponse.from(null)
     }
 
     @Profile("dev", "local")
