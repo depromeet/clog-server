@@ -1,7 +1,6 @@
 package org.depromeet.clog.server.domain.common
 
 data class ApiResponse<T>(
-    val success: Boolean = true,
     val data: T? = null
 ) {
     companion object {
