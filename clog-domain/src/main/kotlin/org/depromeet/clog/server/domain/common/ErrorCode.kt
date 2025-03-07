@@ -16,5 +16,5 @@ enum class ErrorCode(
     AUTHENTICATION_FAILED("C4012", "인증에 실패하였습니다.", 401),
 
     // USER
-    USER_NOT_FOUND("C4002", "존재하지 않는 회원입니다.", 404)
+    USER_NOT_FOUND("C4040", "존재하지 않는 회원입니다.", 404)
 }
