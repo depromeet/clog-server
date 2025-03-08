@@ -27,4 +27,8 @@ class VideoAdapter(
         return videoJpaRepository.findByProblemIdOrderByIdDesc(problemId)
             .map { videoMapper.toDomain(it) }
     }
+
+    override fun updateThumbnailUrl(videoId: Long, thumbnailUrl: String): Int {
+        return videoJpaRepository.updateThumbnailUrl(videoId, thumbnailUrl)
+    }
 }
