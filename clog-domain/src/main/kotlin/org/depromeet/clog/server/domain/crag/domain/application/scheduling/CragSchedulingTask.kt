@@ -30,7 +30,17 @@ class CragSchedulingTask(
         val roadAddressName: String,
         val x: Double,
         val y: Double
-    )
+    ) {
+        fun toDomain(): Crag = Crag(
+            name = this.placeName,
+            roadAddress = this.roadAddressName,
+            coordinate = Coordinate(
+                longitude = this.x,
+                latitude = this.y
+            ),
+            kakaoPlaceId = this.id
+        )
+    }
 
     data class KakaoSearchMeta(
         @JsonProperty("is_end") val isEnd: Boolean
@@ -92,17 +102,7 @@ class CragSchedulingTask(
     private fun saveAndUpdateCrag(response: KakaoSearchResponse) {
         val newCrags = response.documents
             .filterNot { cragRepository.existsByKakaoPlaceId(it.id) }
-            .map { doc ->
-                Crag(
-                    name = doc.placeName,
-                    roadAddress = doc.roadAddressName,
-                    coordinate = Coordinate(
-                        longitude = doc.x,
-                        latitude = doc.y
-                    ),
-                    kakaoPlaceId = doc.id
-                )
-            }
+            .map { it.toDomain() }
 
         if (newCrags.isNotEmpty()) {
             cragRepository.saveAll(newCrags)
