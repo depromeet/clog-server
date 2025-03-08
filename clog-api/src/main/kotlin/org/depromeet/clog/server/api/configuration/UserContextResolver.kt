@@ -17,7 +17,7 @@ class UserContextResolver(
 ) : HandlerMethodArgumentResolver {
 
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.parameterType == UserContext::class.java
+        return UserContext::class.java.isAssignableFrom(parameter.parameterType)
     }
 
     override fun resolveArgument(
