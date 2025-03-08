@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.transaction.Transactional
-import mu.KotlinLogging
 import org.depromeet.clog.server.domain.auth.application.dto.LoginDetails
 import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.domain.RefreshToken
