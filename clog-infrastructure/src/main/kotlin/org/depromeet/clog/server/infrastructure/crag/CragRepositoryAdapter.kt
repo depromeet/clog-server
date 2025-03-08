@@ -11,4 +11,12 @@ class CragRepositoryAdapter(
 
     override fun save(crag: Crag): Crag =
         cragJpaRepository.save(CragEntity.fromDomain(crag)).toDomain()
+
+    override fun saveAll(crags: List<Crag>): List<Crag> =
+        cragJpaRepository.saveAll(ArrayList(crags.map { CragEntity.fromDomain(it) }))
+            .toList()
+            .map { it.toDomain() }
+
+    override fun existsByKakaoPlaceId(kakaoPlaceId: Long): Boolean =
+        cragJpaRepository.existsByKakaoPlaceId(kakaoPlaceId)
 }
