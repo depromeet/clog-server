@@ -6,7 +6,7 @@ import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.LocalLoginRequest
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
-import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
+import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.stereotype.Service
 
 @Service

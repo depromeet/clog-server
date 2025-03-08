@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.controller
 
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
-import org.depromeet.clog.server.domain.common.ApiResponse
+import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.example.GetExample
 import org.springframework.context.annotation.Profile
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,8 +20,8 @@ class ExampleController(
     @GetMapping
     fun getExamples(
         @RequestParam(required = false, defaultValue = "false") error: Boolean,
-    ): ApiResponse<String> {
+    ): ClogApiResponse<String> {
         val response = getExample(error)
-        return ApiResponse.from(response)
+        return ClogApiResponse.from(response)
     }
 }

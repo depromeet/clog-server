@@ -9,9 +9,9 @@ import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.LocalLoginRequest
-import org.depromeet.clog.server.domain.common.ApiResponse
+import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
-import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
+import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.*
@@ -26,39 +26,39 @@ class AuthController(
 ) {
     @PostMapping("/kakao")
     @ApiErrorCodes([ErrorCode.TOKEN_EXPIRED])
-    fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ApiResponse<AuthResponseDto> {
+    fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ClogApiResponse<AuthResponseDto> {
         val authResponse = authService.kakaoLoginWithIdToken(request.idToken)
-        return ApiResponse.from(authResponse)
+        return ClogApiResponse.from(authResponse)
     }
 
     @PostMapping("/apple")
-    fun appleLogin(@RequestBody request: AppleLoginRequest): ApiResponse<AuthResponseDto> {
+    fun appleLogin(@RequestBody request: AppleLoginRequest): ClogApiResponse<AuthResponseDto> {
         val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
-        return ApiResponse.from(authResponse)
+        return ClogApiResponse.from(authResponse)
     }
 
     @PostMapping("/logout")
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
-    fun logout(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<Nothing?> {
+    fun logout(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ClogApiResponse<Nothing?> {
         logoutService.logout(token)
-        return ApiResponse.from(null)
+        return ClogApiResponse.from(null)
     }
 
     @Profile("dev", "local")
     @GetMapping("/test")
-    fun getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<String> {
+    fun getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ClogApiResponse<String> {
         val loginDetails = tokenService.extractLoginDetails(token)
         val user =
             userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
                 ?: throw IllegalStateException("사용자를 찾을 수 없습니다. (loginId: ${loginDetails.loginId})")
 
-        return ApiResponse.from(user.name)
+        return ClogApiResponse.from(user.name)
     }
 
     @Profile("dev", "local")
     @PostMapping("/local-login")
-    fun localLogin(@RequestBody request: LocalLoginRequest): ApiResponse<AuthResponseDto> {
+    fun localLogin(@RequestBody request: LocalLoginRequest): ClogApiResponse<AuthResponseDto> {
         val authResponse = authService.localLogin(request.loginId)
-        return ApiResponse.from(authResponse)
+        return ClogApiResponse.from(authResponse)
     }
 }

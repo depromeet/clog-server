@@ -11,7 +11,7 @@ import org.depromeet.clog.server.domain.auth.presentation.exception.AuthExceptio
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
-import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
+import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.net.URL
