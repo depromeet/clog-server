@@ -107,12 +107,19 @@ class AppleAuthProviderHandler(
     }
 
     private fun registerNewAppleUser(appleUser: AppleUserInfo): User {
-        val newUser = User(
-            loginId = appleUser.id,
-            name = appleUser.name,
-            provider = Provider.APPLE
-        )
-        return userRepository.save(newUser)
+        val existingUser = userRepository.findByLoginIdAndProvider(appleUser.id, Provider.APPLE)
+
+        return if (existingUser != null && existingUser.isDeleted) {
+            existingUser.isDeleted = false
+            userRepository.save(existingUser)
+        } else {
+            val newUser = User(
+                loginId = appleUser.id,
+                name = appleUser.name,
+                provider = Provider.APPLE
+            )
+            userRepository.save(newUser)
+        }
     }
 
     private fun generateAppleClientSecret(): String {

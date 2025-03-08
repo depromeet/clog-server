@@ -68,11 +68,18 @@ class KakaoAuthProviderHandler(
     }
 
     private fun registerNewKakaoUser(kakaoUserInfo: KakaoUserInfo): User {
-        val newUser = User(
-            loginId = kakaoUserInfo.id,
-            name = kakaoUserInfo.nickname,
-            provider = Provider.KAKAO
-        )
-        return userRepository.save(newUser)
+        val existingUser = userRepository.findByLoginIdAndProvider(kakaoUserInfo.id, Provider.KAKAO)
+
+        return if (existingUser != null && existingUser.isDeleted) {
+            existingUser.isDeleted = false
+            userRepository.save(existingUser)
+        } else {
+            val newUser = User(
+                loginId = kakaoUserInfo.id,
+                name = kakaoUserInfo.nickname,
+                provider = Provider.KAKAO
+            )
+            userRepository.save(newUser)
+        }
     }
 }

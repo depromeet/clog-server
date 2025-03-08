@@ -16,6 +16,12 @@ class UserRepositoryAdapter(
     ): User? =
         userJpaRepository.findByLoginIdAndProviderAndIsDeletedFalse(loginId, provider)?.toDomain()
 
+    override fun findByLoginIdAndProvider(
+        loginId: String,
+        provider: Provider
+    ): User? =
+        userJpaRepository.findByLoginIdAndProvider(loginId, provider)?.toDomain()
+
     override fun findByIdAndIsDeletedFalse(id: Long): User? =
         userJpaRepository.findByIdAndIsDeletedFalse(id)?.toDomain()
 
