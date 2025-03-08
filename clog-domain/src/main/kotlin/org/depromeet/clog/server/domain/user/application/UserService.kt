@@ -8,12 +8,11 @@ import org.depromeet.clog.server.domain.user.presentation.exception.UserExceptio
 import org.springframework.stereotype.Service
 
 @Service
+@Transactional
 class UserService(
     private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository
 ) {
-
-    @Transactional
     fun withdraw(userId: Long) {
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
             ?: throw UserException(ErrorCode.USER_NOT_FOUND)
