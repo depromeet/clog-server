@@ -18,7 +18,10 @@ class LogoutService(
         val loginDetails = tokenService.extractLoginDetails(token)
 
         val user =
-            userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
+            userRepository.findByLoginIdAndProviderAndIsDeletedFalse(
+                loginDetails.loginId,
+                loginDetails.provider
+            )
                 ?: throw AuthException(ErrorCode.USER_NOT_FOUND)
 
         refreshTokenRepository.deleteByUserIdAndProvider(user.id!!, user.provider)

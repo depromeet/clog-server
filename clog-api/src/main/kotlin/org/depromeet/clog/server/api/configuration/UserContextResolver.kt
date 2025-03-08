@@ -32,7 +32,7 @@ class UserContextResolver(
         val loginDetails = tokenService.extractLoginDetails(token)
 
         return UserContext(
-            userId = loginDetails.loginId.toLong(),
+            userId = loginDetails.userId,
         )
     }
 }

@@ -4,6 +4,6 @@ import org.depromeet.clog.server.domain.user.domain.Provider
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserJpaRepository : JpaRepository<UserEntity, Long> {
-    fun findByLoginIdAndProvider(loginId: String, provider: Provider): UserEntity?
-    fun findByLoginId(loginId: String): UserEntity?
+    fun findByLoginIdAndProviderAndIsDeletedFalse(loginId: String, provider: Provider): UserEntity?
+    fun findByIdAndIsDeletedFalse(id: Long): UserEntity?
 }
