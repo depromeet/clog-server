@@ -2,6 +2,7 @@ package org.depromeet.clog.server.infrastructure.crag
 
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -19,4 +20,7 @@ class CragRepositoryAdapter(
 
     override fun existsByKakaoPlaceId(kakaoPlaceId: Long): Boolean =
         cragJpaRepository.existsByKakaoPlaceId(kakaoPlaceId)
+
+    override fun findById(id: Long): Crag? =
+        cragJpaRepository.findByIdOrNull(id)?.toDomain()
 }

@@ -1,11 +1,12 @@
 package org.depromeet.clog.server.domain.attempt
 
-import org.depromeet.clog.server.domain.video.Video
+import java.time.Instant
 
 data class Attempt(
-    val id: Long = 0L,
-    val video: Video? = null,
+    val id: Long? = null,
+    val problemId: Long,
+    val videoId: Long,
     val status: AttemptStatus,
-    val createdAt: String,
-    val updatedAt: String,
+    val createdAt: Instant? = null,
+    val updatedAt: Instant? = null,
 )

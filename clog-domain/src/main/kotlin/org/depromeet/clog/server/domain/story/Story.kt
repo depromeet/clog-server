@@ -1,14 +1,14 @@
 package org.depromeet.clog.server.domain.story
 
-import org.depromeet.clog.server.domain.crag.domain.Crag
-import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class Story(
-    val id: Long = 0L,
-    val crag: Crag,
-    val memo: String,
+    val id: Long? = null,
+    val userId: Long,
+    val cragId: Long? = null,
+    val memo: String? = null,
     val date: LocalDate,
-    val createdAt: Instant,
-    val updatedAt: Instant,
+    val createdAt: LocalDateTime? = null,
+    val updatedAt: LocalDateTime? = null,
 )
