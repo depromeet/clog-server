@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.problem
 
 import jakarta.persistence.*
+import org.depromeet.clog.server.domain.attempt.Attempt
 import org.depromeet.clog.server.domain.problem.Problem
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 
@@ -20,11 +21,12 @@ class ProblemEntity(
     val gradeId: Long? = null,
 ) : BaseEntity() {
 
-    fun toDomain(): Problem {
+    fun toDomain(attempts: List<Attempt> = emptyList()): Problem {
         return Problem(
             id = id,
             storyId = storyId,
             gradeId = gradeId,
+            attempts = attempts,
         )
     }
 

@@ -20,7 +20,7 @@ class ProblemController(
     fun register(
         @PathVariable storyId: Long,
         @RequestBody @Valid request: ProblemRequest,
-    ): ClogApiResponse<ProblemResponse> {
+    ): ClogApiResponse<SaveProblemResponse> {
         val result = saveProblem(storyId, request)
         return ClogApiResponse.from(result)
     }

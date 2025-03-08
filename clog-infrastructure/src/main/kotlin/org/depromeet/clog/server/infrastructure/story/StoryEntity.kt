@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.story
 
 import jakarta.persistence.*
+import org.depromeet.clog.server.domain.problem.Problem
 import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 import java.time.LocalDate
@@ -25,15 +26,15 @@ class StoryEntity(
     @Column(name = "date")
     val date: LocalDate,
 ) : BaseEntity() {
-    fun toDomain(): Story {
+
+    fun toDomain(problems: List<Problem> = emptyList()): Story {
         return Story(
             id = id,
             userId = userId,
             cragId = cragId,
             date = date,
             memo = memo,
-            createdAt = createdAt,
-            updatedAt = modifiedAt,
+            problems = problems,
         )
     }
 
