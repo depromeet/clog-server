@@ -7,6 +7,10 @@ import org.depromeet.clog.server.domain.auth.application.LogoutService
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.application.UserService
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.depromeet.clog.server.domain.user.application.dto.UpdateUserNameReauest
 import org.depromeet.clog.server.domain.user.domain.UserContext
 import org.springframework.web.bind.annotation.*

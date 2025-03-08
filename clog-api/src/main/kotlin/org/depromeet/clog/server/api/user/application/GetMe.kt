@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.user.application
 
+import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.api.user.presentation.UserResponse
-import org.depromeet.clog.server.domain.user.domain.UserContext
 import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.depromeet.clog.server.domain.user.domain.exception.UserNotFoundException
 import org.springframework.stereotype.Service

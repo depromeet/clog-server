@@ -2,8 +2,8 @@ package org.depromeet.clog.server.api.configuration
 
 import jakarta.servlet.http.HttpServletRequest
 import org.depromeet.clog.server.api.security.jwt.JwtUtils
+import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.user.domain.UserContext
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
