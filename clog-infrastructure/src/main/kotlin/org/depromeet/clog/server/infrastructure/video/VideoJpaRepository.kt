@@ -2,13 +2,13 @@ package org.depromeet.clog.server.infrastructure.video
 
 import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
-import org.springframework.data.jpa.repository.Modifying as Modifying1
 
 interface VideoJpaRepository : JpaRepository<VideoEntity, Long> {
 
-    @Modifying1
+    @Modifying
     @Transactional
     @Query(
         """

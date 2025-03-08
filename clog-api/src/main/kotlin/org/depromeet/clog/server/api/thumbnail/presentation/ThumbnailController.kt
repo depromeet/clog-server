@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("$API_BASE_PATH_V1/thumbnail")
+@RequestMapping("$API_BASE_PATH_V1/thumbnails")
 class ThumbnailController(
     private val thumbnailService: ThumbnailService
 ) {
