@@ -6,11 +6,9 @@ import org.depromeet.clog.server.domain.auth.application.LogoutService
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.application.UserService
+import org.depromeet.clog.server.domain.user.application.dto.UpdateUserNameReauest
 import org.depromeet.clog.server.domain.user.domain.UserContext
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("$API_BASE_PATH_V1/user")
@@ -30,6 +28,16 @@ class UserController(
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
     fun leave(userContext: UserContext): ClogApiResponse<Nothing?> {
         userService.withdraw(userContext.userId)
+        return ClogApiResponse.from(null)
+    }
+
+    @PatchMapping("/name")
+    @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
+    fun updateName(
+        userContext: UserContext,
+        @RequestBody request: UpdateUserNameReauest
+    ): ClogApiResponse<Nothing?> {
+        userService.updateName(userContext.userId, request)
         return ClogApiResponse.from(null)
     }
 }
