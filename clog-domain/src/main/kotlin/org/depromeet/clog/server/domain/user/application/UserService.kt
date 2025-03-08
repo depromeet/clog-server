@@ -3,6 +3,7 @@ package org.depromeet.clog.server.domain.user.application
 import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
 import org.depromeet.clog.server.domain.common.ErrorCode
+import org.depromeet.clog.server.domain.user.application.dto.UpdateUserNameReauest
 import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.depromeet.clog.server.domain.user.presentation.exception.UserException
 import org.springframework.stereotype.Service
@@ -21,5 +22,13 @@ class UserService(
         userRepository.save(user)
 
         refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
+    }
+
+    fun updateName(userId: Long, request: UpdateUserNameReauest) {
+        val user = userRepository.findByIdAndIsDeletedFalse(userId)
+            ?: throw UserException(ErrorCode.USER_NOT_FOUND)
+
+        user.name = request.name
+        userRepository.save(user)
     }
 }

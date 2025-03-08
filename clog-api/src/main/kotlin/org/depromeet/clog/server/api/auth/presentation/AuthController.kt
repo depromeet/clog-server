@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.api.auth.presentation
 
+import io.swagger.v3.oas.annotations.Operation
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.auth.application.AuthService
@@ -23,6 +24,7 @@ class AuthController(
     private val authService: AuthService,
     private val tokenService: TokenService
 ) {
+    @Operation(summary = "카카오 로그인")
     @PostMapping("/kakao")
     @ApiErrorCodes([ErrorCode.TOKEN_EXPIRED])
     fun kakaoLogin(@RequestBody request: KakaoLoginRequest): ClogApiResponse<AuthResponseDto> {
@@ -30,12 +32,14 @@ class AuthController(
         return ClogApiResponse.from(authResponse)
     }
 
+    @Operation(summary = "애플 로그인")
     @PostMapping("/apple")
     fun appleLogin(@RequestBody request: AppleLoginRequest): ClogApiResponse<AuthResponseDto> {
         val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
         return ClogApiResponse.from(authResponse)
     }
 
+    @Operation(summary = "액세스토큰 재발급")
     @PostMapping("/reissue/access-token")
     fun refreshToken(@RequestBody request: RefreshTokenRequest): ClogApiResponse<AuthResponseDto> {
         val response = tokenService.refreshAccessToken(request.refreshToken)
