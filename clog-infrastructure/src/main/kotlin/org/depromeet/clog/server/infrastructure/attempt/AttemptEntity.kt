@@ -3,6 +3,7 @@ package org.depromeet.clog.server.infrastructure.attempt
 import jakarta.persistence.*
 import org.depromeet.clog.server.domain.attempt.Attempt
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
+import org.depromeet.clog.server.domain.video.Video
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 
 @Table(name = "attempt")
@@ -23,12 +24,13 @@ class AttemptEntity(
     @Column(name = "status")
     val status: AttemptStatus,
 ) : BaseEntity() {
-    fun toDomain(): Attempt {
+    fun toDomain(video: Video? = null): Attempt {
         return Attempt(
             id = id,
             problemId = problemId,
             videoId = videoId,
             status = status,
+            video = video,
         )
     }
 

@@ -1,13 +1,14 @@
 package org.depromeet.clog.server.api.story.application
 
-import jakarta.transaction.Transactional
 import org.depromeet.clog.server.api.story.presentation.SaveStoryRequest
 import org.depromeet.clog.server.api.story.presentation.SaveStoryResponse
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
 import org.depromeet.clog.server.domain.problem.ProblemRepository
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.depromeet.clog.server.domain.video.VideoRepository
+import org.depromeet.clog.server.domain.video.VideoStampRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SaveStory(
@@ -15,6 +16,7 @@ class SaveStory(
     private val problemRepository: ProblemRepository,
     private val attemptRepository: AttemptRepository,
     private val videoRepository: VideoRepository,
+    private val videoStampRepository: VideoStampRepository,
 ) {
 
     @Transactional
@@ -31,7 +33,11 @@ class SaveStory(
         )
 
         val video = videoRepository.save(
-            request.video.toDomain()
+            request.attempt.video.toDomain()
+        )
+
+        videoStampRepository.saveAll(
+            request.attempt.video.stamps.map { it.toDomain(video.id!!) }
         )
 
         attemptRepository.save(

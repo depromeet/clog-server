@@ -1,11 +1,11 @@
 package org.depromeet.clog.server.domain.problem
 
-import java.time.Instant
+import org.depromeet.clog.server.domain.attempt.Attempt
 
 data class Problem(
     val id: Long? = null,
     val storyId: Long,
     val gradeId: Long? = null,
-    val createdAt: Instant? = null,
-    val updatedAt: Instant? = null,
+
+    val attempts: List<Attempt> = emptyList(),
 )
