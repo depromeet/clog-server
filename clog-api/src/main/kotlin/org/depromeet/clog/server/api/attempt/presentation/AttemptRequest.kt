@@ -5,6 +5,8 @@ import org.depromeet.clog.server.domain.attempt.AttemptStatus
 
 data class AttemptRequest(
     val status: AttemptStatus,
+
+    val video: VideoRequest,
 ) {
     fun toDomain(
         problemId: Long,

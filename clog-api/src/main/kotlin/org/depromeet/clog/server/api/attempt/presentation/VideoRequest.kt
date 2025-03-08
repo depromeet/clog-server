@@ -9,6 +9,8 @@ data class VideoRequest(
     val thumbnailUrl: String,
 
     val durationMs: Long,
+
+    val stamps: List<StampRequest>,
 ) {
     fun toDomain(): Video {
         return Video(
