@@ -1,0 +1,15 @@
+### 카카오 로그인
+POST {{url}}/api/v1/auth/login/kakao
+Content-Type: application/json
+
+{
+  "idToken": "test"
+}
+
+> {%
+    client.global.set("accessToken", response.body.data.accessToken);
+%}
+
+### 내 정보 조회
+GET {{url}}/api/v1/users/me
+Authorization: Bearer {{accessToken}}

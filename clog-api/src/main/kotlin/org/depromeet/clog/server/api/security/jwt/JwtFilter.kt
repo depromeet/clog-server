@@ -9,8 +9,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
-import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
-import org.springframework.http.HttpHeaders
+import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -32,7 +31,7 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val rawToken = extractToken(request)
+        val rawToken = JwtUtils.extractToken(request)
         if (rawToken == null) {
             filterChain.doFilter(request, response)
             return
@@ -61,11 +60,5 @@ class JwtFilter(
         }
 
         filterChain.doFilter(request, response)
-    }
-
-    private fun extractToken(request: HttpServletRequest): String? {
-        return request.getHeader(HttpHeaders.AUTHORIZATION)
-            ?.removePrefix("Bearer ")
-            ?.takeIf { it.isNotBlank() }
     }
 }

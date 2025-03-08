@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.common.ErrorCode
-import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
+import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.stereotype.Service
 
 @Service

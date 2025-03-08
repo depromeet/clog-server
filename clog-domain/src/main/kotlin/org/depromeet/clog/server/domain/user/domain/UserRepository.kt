@@ -1,10 +1,8 @@
-package org.depromeet.clog.server.domain.user.infrastructure
-
-import org.depromeet.clog.server.domain.user.domain.Provider
-import org.depromeet.clog.server.domain.user.domain.User
+package org.depromeet.clog.server.domain.user.domain
 
 interface UserRepository {
     fun findByLoginIdAndProvider(loginId: String, provider: Provider): User?
     fun findByLoginId(loginId: String): User?
+    fun findById(id: Long): User?
     fun save(user: User): User
 }
