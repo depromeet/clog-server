@@ -8,6 +8,7 @@ import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.LocalLoginRequest
 import org.depromeet.clog.server.domain.common.ApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.infrastructure.UserRepository
@@ -47,9 +48,17 @@ class AuthController(
     @GetMapping("/test")
     fun getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) token: String): ApiResponse<String> {
         val loginDetails = tokenService.extractLoginDetails(token)
-        val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
-            ?: throw IllegalStateException("사용자를 찾을 수 없습니다. (loginId: ${loginDetails.loginId})")
+        val user =
+            userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
+                ?: throw IllegalStateException("사용자를 찾을 수 없습니다. (loginId: ${loginDetails.loginId})")
 
         return ApiResponse.from(user.name)
+    }
+
+    @Profile("dev", "local")
+    @PostMapping("/local-login")
+    fun localLogin(@RequestBody request: LocalLoginRequest): ApiResponse<AuthResponseDto> {
+        val authResponse = authService.localLogin(request.loginId)
+        return ApiResponse.from(authResponse)
     }
 }

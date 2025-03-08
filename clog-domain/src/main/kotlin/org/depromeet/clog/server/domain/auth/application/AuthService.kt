@@ -4,23 +4,29 @@ import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.LocalLoginRequest
 import org.depromeet.clog.server.domain.auth.application.strategy.AppleAuthProviderHandler
 import org.depromeet.clog.server.domain.auth.application.strategy.KakaoAuthProviderHandler
+import org.depromeet.clog.server.domain.auth.application.strategy.LocalAuthProviderHandler
 import org.springframework.stereotype.Service
 
 @Service
+@Transactional
 class AuthService(
     private val kakaoAuthProviderHandler: KakaoAuthProviderHandler,
-    private val appleAuthProviderHandler: AppleAuthProviderHandler
+    private val appleAuthProviderHandler: AppleAuthProviderHandler,
+    private val localAuthProviderHandler: LocalAuthProviderHandler
 ) {
 
-    @Transactional
     fun kakaoLoginWithIdToken(idToken: String): AuthResponseDto {
         return kakaoAuthProviderHandler.login(KakaoLoginRequest(idToken))
     }
 
-    @Transactional
     fun appleLoginWithCode(authorizationCode: String, codeVerifier: String): AuthResponseDto {
         return appleAuthProviderHandler.login(AppleLoginRequest(authorizationCode, codeVerifier))
+    }
+
+    fun localLogin(loginId: String): AuthResponseDto {
+        return localAuthProviderHandler.login(LocalLoginRequest((loginId)))
     }
 }

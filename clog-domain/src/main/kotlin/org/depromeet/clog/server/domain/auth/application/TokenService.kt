@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
+import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.dto.LoginDetails
 import org.depromeet.clog.server.domain.auth.domain.RefreshToken
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
+@Transactional
 class TokenService(
     @Value("\${jwt.secret}") private val secret: String,
     @Value("\${jwt.access-token-expiration-millis}") private val accessTokenExpirationMillis: Long,
@@ -30,8 +32,10 @@ class TokenService(
      */
     fun generateTokens(user: User): AuthResponseDto {
         try {
-            val accessToken = createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
-            val refreshToken = createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
+            val accessToken =
+                createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
+            val refreshToken =
+                createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
 
             val refreshTokenValue = refreshToken.removePrefix("Bearer ")
             val userId = user.id ?: throw AuthException(
