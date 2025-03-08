@@ -6,7 +6,11 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.auth.application.dto.*
+import org.depromeet.clog.server.domain.auth.application.dto.KakaoAccount
+import org.depromeet.clog.server.domain.auth.application.dto.KakaoProfile
+import org.depromeet.clog.server.domain.auth.application.dto.KakaoUserInfo
+import org.depromeet.clog.server.domain.auth.application.dto.request.KakaoLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider

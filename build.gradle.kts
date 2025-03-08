@@ -45,6 +45,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("io.github.oshai:kotlin-logging-jvm:7.0.4")
+        implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
         testImplementation(kotlin("test"))
         testImplementation("org.springframework.boot:spring-boot-starter-test")
