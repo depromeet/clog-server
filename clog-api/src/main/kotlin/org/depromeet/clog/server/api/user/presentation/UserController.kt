@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.api.user.presentation
 
+import io.swagger.v3.oas.annotations.Operation
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.auth.application.LogoutService
@@ -17,6 +18,7 @@ class UserController(
     private val logoutService: LogoutService
 ) {
 
+    @Operation(summary = "로그아웃")
     @PostMapping("/log-out")
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
     fun logout(userContext: UserContext): ClogApiResponse<Nothing?> {
@@ -24,6 +26,7 @@ class UserController(
         return ClogApiResponse.from(null)
     }
 
+    @Operation(summary = "회원탈퇴")
     @DeleteMapping("/leave")
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
     fun leave(userContext: UserContext): ClogApiResponse<Nothing?> {
@@ -31,6 +34,7 @@ class UserController(
         return ClogApiResponse.from(null)
     }
 
+    @Operation(summary = "이름 변경")
     @PatchMapping("/name")
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
     fun updateName(
