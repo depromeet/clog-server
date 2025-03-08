@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.story.application.GetStory
+import org.depromeet.clog.server.api.story.application.GetStorySummary
 import org.depromeet.clog.server.api.story.application.SaveStory
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
@@ -14,12 +15,21 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class StoryController(
     private val getStory: GetStory,
+    private val getStorySummary: GetStorySummary,
     private val saveStory: SaveStory,
 ) {
 
     @GetMapping("/{storyId}")
     fun get(@PathVariable storyId: Long): ClogApiResponse<StoryResponse> {
         val result = getStory(storyId)
+        return ClogApiResponse.from(result)
+    }
+
+    @GetMapping("/{storyId}/summary")
+    fun getSummary(
+        @PathVariable storyId: Long,
+    ): ClogApiResponse<StorySummaryResponse> {
+        val result = getStorySummary(storyId)
         return ClogApiResponse.from(result)
     }
 
