@@ -1,6 +1,5 @@
 package org.depromeet.clog.server.api.story.application
 
-import jakarta.transaction.Transactional
 import org.depromeet.clog.server.api.story.presentation.SaveStoryRequest
 import org.depromeet.clog.server.api.story.presentation.SaveStoryResponse
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
@@ -9,6 +8,7 @@ import org.depromeet.clog.server.domain.story.StoryRepository
 import org.depromeet.clog.server.domain.video.VideoRepository
 import org.depromeet.clog.server.domain.video.VideoStampRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SaveStory(

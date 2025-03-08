@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.domain.story
 
+import org.depromeet.clog.server.domain.problem.Problem
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 data class Story(
     val id: Long? = null,
@@ -9,6 +9,6 @@ data class Story(
     val cragId: Long? = null,
     val memo: String? = null,
     val date: LocalDate,
-    val createdAt: LocalDateTime? = null,
-    val updatedAt: LocalDateTime? = null,
+
+    val problems: List<Problem> = emptyList(),
 )

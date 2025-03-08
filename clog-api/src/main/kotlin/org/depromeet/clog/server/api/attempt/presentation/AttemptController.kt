@@ -24,7 +24,7 @@ class AttemptController(
     fun registerAttempt(
         @PathVariable problemId: Long,
         @RequestBody @Valid request: AttemptRequest,
-    ): ClogApiResponse<AttemptResponse> {
+    ): ClogApiResponse<SaveAttemptResponse> {
         val result = saveAttempt(problemId, request)
         return ClogApiResponse.from(result)
     }
