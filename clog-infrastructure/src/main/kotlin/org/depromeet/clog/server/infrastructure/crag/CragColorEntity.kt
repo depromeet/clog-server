@@ -1,7 +1,6 @@
 package org.depromeet.clog.server.infrastructure.crag
 
 import jakarta.persistence.*
-import org.depromeet.clog.server.domain.crag.domain.CragColor
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 
 @Table(name = "crag_color_mapping")
