@@ -5,17 +5,21 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import jakarta.transaction.Transactional
-import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
+import mu.KotlinLogging
 import org.depromeet.clog.server.domain.auth.application.dto.LoginDetails
+import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.domain.RefreshToken
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
+import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
+
+private val log = KotlinLogging.logger {}
 
 @Service
 @Transactional
@@ -23,60 +27,74 @@ class TokenService(
     @Value("\${jwt.secret}") private val secret: String,
     @Value("\${jwt.access-token-expiration-millis}") private val accessTokenExpirationMillis: Long,
     @Value("\${jwt.refresh-token-expiration-millis}") private val refreshTokenExpirationMillis: Long,
-    private val refreshTokenRepository: RefreshTokenRepository
+    private val refreshTokenRepository: RefreshTokenRepository,
+    private val userRepository: UserRepository
 ) {
     private val algorithm: Algorithm = Algorithm.HMAC512(secret)
 
-    /**
-     * JWT 액세스 및 리프레시 토큰 생성
-     */
     fun generateTokens(user: User): AuthResponseDto {
-        try {
-            val userId = user.id ?: throw AuthException(
-                ErrorCode.AUTHENTICATION_FAILED,
-                RuntimeException("존재하지 않는 userId")
-            )
+        val userId = user.id ?: throw AuthException(
+            ErrorCode.AUTHENTICATION_FAILED,
+            RuntimeException("존재하지 않는 userId")
+        )
 
-            val accessToken = createToken(
-                userId,
-                user.loginId,
-                user.provider.toString(),
-                accessTokenExpirationMillis
-            )
-            val refreshToken = createToken(
-                userId,
-                user.loginId,
-                user.provider.toString(),
-                refreshTokenExpirationMillis
-            )
+        val accessToken = generateAccessToken(user)
+        val refreshToken = generateRefreshToken(user)
 
-            val refreshTokenValue = refreshToken.removePrefix("Bearer ")
+        saveRefreshToken(userId, user, refreshToken)
 
-            refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
-            refreshTokenRepository.save(
-                RefreshToken(
-                    userId = userId,
-                    loginId = user.loginId,
-                    provider = user.provider,
-                    token = refreshTokenValue
-                )
-            )
-
-            return AuthResponseDto(
-                provider = user.provider.toString(),
-                id = userId,
-                loginId = user.loginId,
-                accessToken = accessToken,
-                refreshToken = refreshToken
-            )
-        } catch (e: Exception) {
-            throw AuthException(ErrorCode.AUTHENTICATION_FAILED, e)
-        }
+        return AuthResponseDto(
+            user.provider.toString(),
+            userId,
+            user.loginId,
+            accessToken,
+            refreshToken
+        )
     }
 
-    /**
-     * JWT 토큰 생성 (sub 추가)
-     */
+    @Suppress("ThrowsCount")
+    fun refreshAccessToken(refreshToken: String): AuthResponseDto {
+        val userId = try {
+            extractUserIdFromToken(refreshToken)
+        } catch (e: AuthException) {
+            log.error(e) { "리프레시 토큰 검증 실패" }
+            throw e
+        }
+
+        refreshTokenRepository.findByUserId(userId)?.takeIf { it.token == refreshToken }
+            ?: throw AuthException(ErrorCode.TOKEN_INVALID)
+
+        val user = userRepository.findByIdAndIsDeletedFalse(userId)
+            ?: throw AuthException(ErrorCode.USER_NOT_FOUND)
+
+        val newAccessToken = generateAccessToken(user)
+        val newRefreshToken = generateRefreshToken(user)
+
+        saveRefreshToken(userId, user, newRefreshToken)
+
+        return AuthResponseDto(
+            user.provider.toString(),
+            user.id!!,
+            user.loginId,
+            newAccessToken,
+            newRefreshToken
+        )
+    }
+
+    private fun generateAccessToken(user: User) = createToken(
+        user.id!!,
+        user.loginId,
+        user.provider.toString(),
+        accessTokenExpirationMillis
+    )
+
+    private fun generateRefreshToken(user: User) = createToken(
+        user.id!!,
+        user.loginId,
+        user.provider.toString(),
+        refreshTokenExpirationMillis
+    )
+
     private fun createToken(
         userId: Long,
         loginId: String,
@@ -84,7 +102,7 @@ class TokenService(
         expirationMillis: Long
     ): String {
         return "Bearer " + JWT.create()
-            .withSubject(userId.toString()) // sub(Subject) 필드 추가
+            .withSubject(userId.toString())
             .withClaim("userId", userId)
             .withClaim("loginId", loginId)
             .withClaim("provider", provider)
@@ -92,37 +110,52 @@ class TokenService(
             .sign(algorithm)
     }
 
-    /**
-     * JWT에서 로그인 정보 추출
-     */
     @Suppress("ThrowsCount")
     fun extractLoginDetails(token: String): LoginDetails {
-        try {
-            val decodedJWT = JWT.require(algorithm)
-                .build()
-                .verify(token.removePrefix("Bearer "))
-
-            val userId = decodedJWT.getClaim("userId").asLong()
-                ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("userId 없음"))
-            val loginId = decodedJWT.getClaim("loginId").asString()
-                ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("loginId 없음"))
-            val providerString = decodedJWT.getClaim("provider").asString()
-                ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("provider 없음"))
-
-            val provider = Provider.valueOf(providerString)
-
-            return LoginDetails(
-                userId = userId,
-                loginId = loginId,
-                provider = provider
+        return try {
+            val decodedJWT = JWT.require(algorithm).build().verify(token.removePrefix("Bearer "))
+            LoginDetails(
+                userId = decodedJWT.getClaim("userId").asLong()
+                    ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("userId 없음")),
+                loginId = decodedJWT.getClaim("loginId").asString()
+                    ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("loginId 없음")),
+                provider = Provider.valueOf(
+                    decodedJWT.getClaim("provider").asString() ?: throw AuthException(
+                        ErrorCode.TOKEN_INVALID,
+                        RuntimeException("provider 없음")
+                    )
+                )
             )
         } catch (e: Exception) {
-            val errorCode = when (e) {
-                is TokenExpiredException -> ErrorCode.TOKEN_EXPIRED
-                is JWTVerificationException, is IllegalArgumentException -> ErrorCode.TOKEN_INVALID
-                else -> ErrorCode.AUTHENTICATION_FAILED
-            }
-            throw AuthException(errorCode, e)
+            log.error(e) { "로그인 정보 추출 실패" }
+            throw AuthException(ErrorCode.TOKEN_INVALID, e)
         }
+    }
+
+    private fun extractUserIdFromToken(token: String): Long {
+        return try {
+            JWT.decode(token).getClaim("userId").asLong()
+                ?: throw AuthException(ErrorCode.TOKEN_INVALID)
+        } catch (e: Exception) {
+            log.error(e) { "토큰에서 userId 추출 실패" }
+            throw when (e) {
+                is TokenExpiredException -> AuthException(ErrorCode.TOKEN_EXPIRED)
+                is JWTVerificationException -> AuthException(ErrorCode.TOKEN_INVALID)
+                else -> AuthException(ErrorCode.AUTHENTICATION_FAILED)
+            }
+        }
+    }
+
+    private fun saveRefreshToken(userId: Long, user: User, refreshToken: String) {
+        val refreshTokenValue = refreshToken.removePrefix("Bearer ")
+        refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
+        refreshTokenRepository.save(
+            RefreshToken(
+                userId,
+                user.loginId,
+                user.provider,
+                refreshTokenValue
+            )
+        )
     }
 }

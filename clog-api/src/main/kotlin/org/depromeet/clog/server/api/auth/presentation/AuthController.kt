@@ -3,10 +3,12 @@ package org.depromeet.clog.server.api.auth.presentation
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.auth.application.AuthService
-import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
-import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.LocalLoginRequest
+import org.depromeet.clog.server.domain.auth.application.TokenService
+import org.depromeet.clog.server.domain.auth.application.dto.request.AppleLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.request.KakaoLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.request.LocalLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.request.RefreshTokenRequest
+import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.springframework.context.annotation.Profile
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("$API_BASE_PATH_V1/auth")
 class AuthController(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val tokenService: TokenService
 ) {
     @PostMapping("/kakao")
     @ApiErrorCodes([ErrorCode.TOKEN_EXPIRED])
@@ -31,6 +34,12 @@ class AuthController(
     fun appleLogin(@RequestBody request: AppleLoginRequest): ClogApiResponse<AuthResponseDto> {
         val authResponse = authService.appleLoginWithCode(request.code, request.codeVerifier)
         return ClogApiResponse.from(authResponse)
+    }
+
+    @PostMapping("/reissue/access-token")
+    fun refreshToken(@RequestBody request: RefreshTokenRequest): ClogApiResponse<AuthResponseDto> {
+        val response = tokenService.refreshAccessToken(request.refreshToken)
+        return ClogApiResponse.from(response)
     }
 
     @Profile("dev", "local")
