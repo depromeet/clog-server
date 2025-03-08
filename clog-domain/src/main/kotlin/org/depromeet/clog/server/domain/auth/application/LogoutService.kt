@@ -10,20 +10,13 @@ import org.springframework.stereotype.Service
 @Service
 @Transactional
 class LogoutService(
-    private val tokenService: TokenService,
     private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository
 ) {
-    fun logout(token: String) {
-        val loginDetails = tokenService.extractLoginDetails(token)
+    fun logout(userId: Long) {
+        val user = userRepository.findByIdAndIsDeletedFalse(userId)
+            ?: throw AuthException(ErrorCode.USER_NOT_FOUND)
 
-        val user =
-            userRepository.findByLoginIdAndProviderAndIsDeletedFalse(
-                loginDetails.loginId,
-                loginDetails.provider
-            )
-                ?: throw AuthException(ErrorCode.USER_NOT_FOUND)
-
-        refreshTokenRepository.deleteByUserIdAndProvider(user.id!!, user.provider)
+        refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
     }
 }
