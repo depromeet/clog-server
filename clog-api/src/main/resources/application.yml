@@ -2,6 +2,9 @@ spring:
   application:
     name: clog-api
     version: 0.0.1
+  config:
+    import:
+      - classpath:/infrastructure/application.yml
   security:
     oauth2:
       client:
