@@ -1,10 +1,10 @@
 package org.depromeet.clog.server.domain.auth.application
 
 import jakarta.transaction.Transactional
-import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
-import org.depromeet.clog.server.domain.auth.application.dto.KakaoLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.LocalLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.request.AppleLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.request.KakaoLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.request.LocalLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.application.strategy.AppleAuthProviderHandler
 import org.depromeet.clog.server.domain.auth.application.strategy.KakaoAuthProviderHandler
 import org.depromeet.clog.server.domain.auth.application.strategy.LocalAuthProviderHandler

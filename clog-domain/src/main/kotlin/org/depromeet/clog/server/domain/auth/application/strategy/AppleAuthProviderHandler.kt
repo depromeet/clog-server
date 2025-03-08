@@ -7,9 +7,9 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AppleUserInfo
-import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
+import org.depromeet.clog.server.domain.auth.application.dto.request.AppleLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
@@ -126,9 +126,8 @@ class AppleAuthProviderHandler(
         val nowMillis = System.currentTimeMillis()
         val expMillis = nowMillis + 180L * 24 * 60 * 60 * 1000
 
-        val formattedKey = "-----BEGIN PRIVATE KEY-----\n" +
-            applePrivateKey.replace("\\\\n", "\n").trim() +
-            "\n-----END PRIVATE KEY-----"
+        val formattedKey = "-----BEGIN PRIVATE KEY-----\n" + applePrivateKey.replace("\\\\n", "\n")
+            .trim() + "\n-----END PRIVATE KEY-----"
         val decodedKey = Base64.getDecoder().decode(
             formattedKey
                 .replace("-----BEGIN PRIVATE KEY-----", "")

@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.domain.auth.application.dto
+package org.depromeet.clog.server.domain.auth.application.dto.response
 
 data class AuthResponseDto(
     val provider: String,

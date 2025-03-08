@@ -2,8 +2,8 @@ package org.depromeet.clog.server.domain.auth.application.strategy
 
 import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.auth.application.dto.AuthResponseDto
-import org.depromeet.clog.server.domain.auth.application.dto.LocalLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.request.LocalLoginRequest
+import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
 import org.depromeet.clog.server.domain.user.domain.UserRepository
