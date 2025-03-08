@@ -1,5 +1,7 @@
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.depromeet.clog.server.domain.crag.domain.*
 import org.springframework.stereotype.Component
@@ -21,10 +23,11 @@ class CragSchedulingTask(
         val meta: KakaoSearchMeta
     )
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class KakaoSearchDocument(
         val id: Long,
-        @JsonProperty("place_name") val placeName: String,
-        @JsonProperty("road_address_name") val roadAddressName: String,
+        val placeName: String,
+        val roadAddressName: String,
         val x: Double,
         val y: Double
     )
