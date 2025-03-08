@@ -4,6 +4,7 @@ import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.*
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
@@ -18,6 +19,7 @@ import java.security.interfaces.RSAPublicKey
 import java.util.concurrent.TimeUnit
 
 @Service
+@Transactional
 class KakaoAuthProviderHandler(
     private val tokenService: TokenService,
     private val userRepository: UserRepository,

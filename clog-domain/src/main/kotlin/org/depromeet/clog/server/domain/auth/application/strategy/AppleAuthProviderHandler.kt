@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.application.dto.AppleLoginRequest
 import org.depromeet.clog.server.domain.auth.application.dto.AppleUserInfo
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit
 
 @Suppress("LongParameterList")
 @Service
+@Transactional
 class AppleAuthProviderHandler(
     private val tokenService: TokenService,
     private val userRepository: UserRepository,
