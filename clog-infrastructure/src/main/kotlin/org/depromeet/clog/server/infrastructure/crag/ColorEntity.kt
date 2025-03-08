@@ -14,17 +14,24 @@ class ColorEntity(
 
     @Comment("암장 색상 이름")
     @Column(nullable = false, length = 50)
-    val name: String
+    val name: String,
+
+    @Comment("암장 색상 HEX 코드")
+    @Column(nullable = false, length = 7)
+    val hex: String,
 ) : BaseEntity() {
 
     fun toDomain(): Color = Color(
         id = this.id,
-        name = this.name
+        name = this.name,
+        hex = this.hex,
     )
 
     companion object {
         fun fromDomain(color: Color): ColorEntity = ColorEntity(
-            name = color.name
+            id = color.id,
+            name = color.name,
+            hex = color.hex,
         )
     }
 }
