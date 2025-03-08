@@ -26,11 +26,18 @@ class LocalAuthProviderHandler(
     }
 
     private fun registerNewLocalUser(loginId: String): User {
-        val newUser = User(
-            loginId = loginId,
-            name = "로컬_$loginId",
-            provider = Provider.LOCAL
-        )
-        return userRepository.save(newUser)
+        val existingUser = userRepository.findByLoginIdAndProvider(loginId, Provider.LOCAL)
+
+        return if (existingUser != null && existingUser.isDeleted) {
+            existingUser.isDeleted = false
+            userRepository.save(existingUser)
+        } else {
+            val newUser = User(
+                loginId = loginId,
+                name = "로컬_$loginId",
+                provider = Provider.LOCAL
+            )
+            userRepository.save(newUser)
+        }
     }
 }
