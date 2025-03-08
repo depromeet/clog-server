@@ -12,7 +12,7 @@ class GetMe(
 ) {
 
     operator fun invoke(userContext: UserContext): UserResponse {
-        val user = userRepository.findById(userContext.userId)
+        val user = userRepository.findByIdAndIsDeletedFalse(userContext.userId)
             ?: throw UserNotFoundException()
 
         return UserResponse(

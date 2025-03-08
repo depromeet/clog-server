@@ -39,7 +39,10 @@ class JwtFilter(
 
         try {
             val loginDetails = tokenService.extractLoginDetails(rawToken)
-            val user = userRepository.findByLoginIdAndProvider(loginDetails.loginId, loginDetails.provider)
+            val user = userRepository.findByLoginIdAndProviderAndIsDeletedFalse(
+                loginDetails.loginId,
+                loginDetails.provider
+            )
 
             if (user == null) {
                 log.warn("사용자 없음: ${loginDetails.loginId}")

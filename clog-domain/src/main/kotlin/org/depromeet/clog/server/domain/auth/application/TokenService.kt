@@ -32,29 +32,39 @@ class TokenService(
      */
     fun generateTokens(user: User): AuthResponseDto {
         try {
-            val accessToken =
-                createToken(user.loginId, user.provider.toString(), accessTokenExpirationMillis)
-            val refreshToken =
-                createToken(user.loginId, user.provider.toString(), refreshTokenExpirationMillis)
-
-            val refreshTokenValue = refreshToken.removePrefix("Bearer ")
             val userId = user.id ?: throw AuthException(
                 ErrorCode.AUTHENTICATION_FAILED,
                 RuntimeException("존재하지 않는 userId")
             )
+
+            val accessToken = createToken(
+                userId,
+                user.loginId,
+                user.provider.toString(),
+                accessTokenExpirationMillis
+            )
+            val refreshToken = createToken(
+                userId,
+                user.loginId,
+                user.provider.toString(),
+                refreshTokenExpirationMillis
+            )
+
+            val refreshTokenValue = refreshToken.removePrefix("Bearer ")
+
             refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
             refreshTokenRepository.save(
                 RefreshToken(
-                    userId,
-                    user.loginId,
-                    user.provider,
-                    refreshTokenValue
+                    userId = userId,
+                    loginId = user.loginId,
+                    provider = user.provider,
+                    token = refreshTokenValue
                 )
             )
 
             return AuthResponseDto(
                 provider = user.provider.toString(),
-                id = user.id,
+                id = userId,
                 loginId = user.loginId,
                 accessToken = accessToken,
                 refreshToken = refreshToken
@@ -65,16 +75,26 @@ class TokenService(
     }
 
     /**
-     * JWT 토큰 생성
+     * JWT 토큰 생성 (sub 추가)
      */
-    private fun createToken(loginId: String, provider: String, expirationMillis: Long): String {
+    private fun createToken(
+        userId: Long,
+        loginId: String,
+        provider: String,
+        expirationMillis: Long
+    ): String {
         return "Bearer " + JWT.create()
+            .withSubject(userId.toString()) // sub(Subject) 필드 추가
+            .withClaim("userId", userId)
             .withClaim("loginId", loginId)
             .withClaim("provider", provider)
             .withExpiresAt(Date(System.currentTimeMillis() + expirationMillis))
             .sign(algorithm)
     }
 
+    /**
+     * JWT에서 로그인 정보 추출
+     */
     @Suppress("ThrowsCount")
     fun extractLoginDetails(token: String): LoginDetails {
         try {
@@ -82,13 +102,17 @@ class TokenService(
                 .build()
                 .verify(token.removePrefix("Bearer "))
 
+            val userId = decodedJWT.getClaim("userId").asLong()
+                ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("userId 없음"))
             val loginId = decodedJWT.getClaim("loginId").asString()
+                ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("loginId 없음"))
             val providerString = decodedJWT.getClaim("provider").asString()
-                ?: throw AuthException(ErrorCode.TOKEN_INVALID)
+                ?: throw AuthException(ErrorCode.TOKEN_INVALID, RuntimeException("provider 없음"))
 
             val provider = Provider.valueOf(providerString)
 
             return LoginDetails(
+                userId = userId,
                 loginId = loginId,
                 provider = provider
             )

@@ -17,7 +17,10 @@ class LocalAuthProviderHandler(
 ) : AuthProviderHandler<LocalLoginRequest> {
 
     override fun login(request: LocalLoginRequest): AuthResponseDto {
-        val user = userRepository.findByLoginIdAndProvider(request.loginId, Provider.LOCAL)
+        val user = userRepository.findByLoginIdAndProviderAndIsDeletedFalse(
+            request.loginId,
+            Provider.LOCAL
+        )
             ?: registerNewLocalUser(request.loginId)
         return tokenService.generateTokens(user)
     }

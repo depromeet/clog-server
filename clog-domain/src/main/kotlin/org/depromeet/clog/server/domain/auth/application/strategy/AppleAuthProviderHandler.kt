@@ -49,8 +49,9 @@ class AppleAuthProviderHandler(
         val idToken = tokenResponse["id_token"] as? String
             ?: throw AuthException(ErrorCode.ID_TOKEN_MISSING)
         val appleUser = validateAndParseAppleIdToken(idToken)
-        val user = userRepository.findByLoginIdAndProvider(appleUser.id, Provider.APPLE)
-            ?: registerNewAppleUser(appleUser)
+        val user =
+            userRepository.findByLoginIdAndProviderAndIsDeletedFalse(appleUser.id, Provider.APPLE)
+                ?: registerNewAppleUser(appleUser)
         return tokenService.generateTokens(user)
     }
 

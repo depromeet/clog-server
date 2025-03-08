@@ -28,8 +28,9 @@ class KakaoAuthProviderHandler(
 
     override fun login(request: KakaoLoginRequest): AuthResponseDto {
         val kakaoUser = validateAndParseKakaoIdToken(request.idToken)
-        val user = userRepository.findByLoginIdAndProvider(kakaoUser.id, Provider.KAKAO)
-            ?: registerNewKakaoUser(kakaoUser)
+        val user =
+            userRepository.findByLoginIdAndProviderAndIsDeletedFalse(kakaoUser.id, Provider.KAKAO)
+                ?: registerNewKakaoUser(kakaoUser)
         return tokenService.generateTokens(user)
     }
 

@@ -1,21 +1,25 @@
-package org.depromeet.clog.server.domain.auth.application
+package org.depromeet.clog.server.domain.user.application
 
 import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
-import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.UserRepository
+import org.depromeet.clog.server.domain.user.presentation.exception.UserException
 import org.springframework.stereotype.Service
 
 @Service
-@Transactional
-class LogoutService(
+class UserService(
     private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository
 ) {
-    fun logout(userId: Long) {
+
+    @Transactional
+    fun withdraw(userId: Long) {
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
-            ?: throw AuthException(ErrorCode.USER_NOT_FOUND)
+            ?: throw UserException(ErrorCode.USER_NOT_FOUND)
+
+        user.isDeleted = true
+        userRepository.save(user)
 
         refreshTokenRepository.deleteByUserIdAndProvider(userId, user.provider)
     }
