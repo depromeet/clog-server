@@ -1,6 +1,5 @@
 package org.depromeet.clog.server.infrastructure.calender
 
-import com.linecorp.kotlinjdsl.dsl.jpql.jpql
 import org.depromeet.clog.server.domain.calender.Calender
 import org.depromeet.clog.server.domain.calender.CalenderRepository
 import org.depromeet.clog.server.domain.video.Video
@@ -47,35 +46,33 @@ class CalenderAdapter(
 
     override fun calculateTotalClimbTime(userId: Long, year: Int, month: Int): Int {
         return storyJpaRepository.findAll {
-            jpql {
-                select(
-                    sum(
-                        path(VideoEntity::durationMs)
-                    )
-                ).from(
-                    entity(UserEntity::class),
-                    join(StoryEntity::class).on(
-                        path(StoryEntity::userId).eq(path(UserEntity::id))
-                    ),
-                    join(ProblemEntity::class).on(
-                        path(ProblemEntity::storyId).eq(path(StoryEntity::id))
-                    ),
-                    join(AttemptEntity::class).on(
-                        path(AttemptEntity::problemId).eq(path(ProblemEntity::id))
-                    ),
-                    join(VideoEntity::class).on(
-                        path(VideoEntity::id).eq(path(AttemptEntity::videoId))
-                    )
-                ).where(
-                    and(
-                        path(UserEntity::id).eq(userId),
-                        path(StoryEntity::date).between(
-                            LocalDate.of(year, month, 1).minusDays(1),
-                            LocalDate.of(year, month, 1).plusMonths(1)
-                        )
+            select(
+                sum(
+                    path(VideoEntity::durationMs)
+                )
+            ).from(
+                entity(UserEntity::class),
+                join(StoryEntity::class).on(
+                    path(StoryEntity::userId).eq(path(UserEntity::id))
+                ),
+                join(ProblemEntity::class).on(
+                    path(ProblemEntity::storyId).eq(path(StoryEntity::id))
+                ),
+                join(AttemptEntity::class).on(
+                    path(AttemptEntity::problemId).eq(path(ProblemEntity::id))
+                ),
+                join(VideoEntity::class).on(
+                    path(VideoEntity::id).eq(path(AttemptEntity::videoId))
+                )
+            ).where(
+                and(
+                    path(UserEntity::id).eq(userId),
+                    path(StoryEntity::date).between(
+                        LocalDate.of(year, month, 1).minusDays(1),
+                        LocalDate.of(year, month, 1).plusMonths(1)
                     )
                 )
-            }
+            )
         }
             .first()
             ?.toInt()
