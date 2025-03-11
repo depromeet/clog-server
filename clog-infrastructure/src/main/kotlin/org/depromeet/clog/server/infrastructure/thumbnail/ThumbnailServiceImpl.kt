@@ -16,7 +16,6 @@ class ThumbnailServiceImpl(
     private val videoRepository: VideoRepository
 ) : ThumbnailService {
 
-    @Transactional
     override fun uploadImage(file: MultipartFile, videoId: Long): ThumbnailUploadResponse {
         val fileUrl = ncpObjectStorageClient.uploadFile(file)
         val thumbnail = Thumbnail(id = null, fileUrl = fileUrl)
