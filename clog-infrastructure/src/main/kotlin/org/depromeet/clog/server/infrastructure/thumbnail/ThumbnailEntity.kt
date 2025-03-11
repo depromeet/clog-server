@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.infrastructure.thumbnail
 
 import jakarta.persistence.*
-import org.depromeet.clog.server.domain.thumbnail.domain.Thumbnail
+import org.depromeet.clog.server.domain.thumbnail.Thumbnail
 
 @Entity
 @Table(name = "thumbnail")

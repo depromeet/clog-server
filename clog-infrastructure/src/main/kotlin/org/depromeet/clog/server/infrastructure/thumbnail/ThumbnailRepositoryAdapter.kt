@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.infrastructure.thumbnail
 
-import org.depromeet.clog.server.domain.thumbnail.domain.Thumbnail
-import org.depromeet.clog.server.domain.thumbnail.infrastructure.thumbnail.ThumbnailRepository
+import org.depromeet.clog.server.domain.thumbnail.Thumbnail
+import org.depromeet.clog.server.domain.thumbnail.ThumbnailRepository
 import org.springframework.stereotype.Component
 
 @Component
