@@ -11,4 +11,8 @@ data class Story(
     val date: LocalDate,
 
     val problems: List<Problem> = emptyList(),
-)
+) {
+
+    val totalDurationMs: Long
+        get() = problems.sumOf { it.attempts.sumOf { at -> at.video?.durationMs ?: 0L } }
+}
