@@ -48,6 +48,7 @@
                                             <th>암장 ID</th>
                                             <th>암장 이름</th>
                                             <th>도로명 주소</th>
+                                            <th>난이도 개수</th>
 <!--                                            <th>경도</th>-->
 <!--                                            <th>위도</th>-->
 <!--                                            <th>카카오 맵 ID</th>-->
@@ -57,10 +58,11 @@
                                     <tbody>
                                         <tr th:each="crag : ${crags}">
                                             <td>
-                                                <a th:href="@{/admin/crags/{id}/details(id=${crag.id})}" th:text="${crag.id}"></a>
+                                                <a th:href="@{/admin/crags/{id}/details(id=${crag.cragResult.id})}" th:text="${crag.cragResult.id}"></a>
                                             </td>
-                                            <td th:text="${crag.name}"></td>
-                                            <td th:text="${crag.roadAddress}"></td>
+                                            <td th:text="${crag.cragResult.name}"></td>
+                                            <td th:text="${crag.cragResult.roadAddress}"></td>
+                                            <td th:text="${crag.gradeCount}"></td>
 <!--                                            <td th:text="${crag.coordinate.latitude}"></td>-->
 <!--                                            <td th:text="${crag.coordinate.longitude}"></td>-->
 <!--                                            <td th:text="${crag.kakaoPlaceId}"></td>-->
@@ -92,31 +94,6 @@
         <i class="fas fa-angle-up"></i>
     </a>
     <th:block th:replace="~{fragments/admin/fragments.html :: admJS}"/>
-
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/datatables/js/jquery.dataTables.min.js}"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-                "url": "/admin/index",
-                "type": "GET",
-                "data": function (d) {
-                    d.page = d.start / d.length; // DataTables가 요청하는 page 계산
-                    d.size = d.length; // DataTables가 요청하는 size
-                }
-            },
-            "columns": [
-                { "data": "id" },
-                { "data": "name" },
-                { "data": "roadAddress" }
-            ]
-        });
-    });
-</script>
 
 </body>
 </html>
