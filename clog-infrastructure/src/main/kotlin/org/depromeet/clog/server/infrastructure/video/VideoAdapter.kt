@@ -11,4 +11,8 @@ class VideoAdapter(
     override fun save(video: Video): Video {
         return videoJpaRepository.save(VideoEntity.fromDomain(video)).toDomain()
     }
+
+    override fun updateThumbnailUrl(videoId: Long, thumbnailUrl: String): Int {
+        return videoJpaRepository.updateThumbnailUrl(videoId, thumbnailUrl)
+    }
 }

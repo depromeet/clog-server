@@ -2,3 +2,10 @@ decorator:
   datasource:
     p6spy:
       enable-logging: false
+ncp:
+  storage:
+    access-key: ${STORAGE_ACCESS_KEY}
+    secret-key: ${STORAGE_SECRET_KEY}
+    end-point: ${STORAGE_END_POINT}
+    bucket-name: ${STORAGE_BUCKET_NAME}
+    region: ${STORAGE_REGION}
