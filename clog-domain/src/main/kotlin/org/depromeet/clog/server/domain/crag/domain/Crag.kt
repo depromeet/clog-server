@@ -5,6 +5,5 @@ data class Crag(
     val name: String,
     val roadAddress: String,
     val coordinate: Coordinate,
-    val kakaoPlaceId: Long,
-    val grades: List<Grade> = emptyList(),
+    val kakaoPlaceId: Long
 )

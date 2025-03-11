@@ -38,6 +38,7 @@ class CragEntity(
 
     companion object {
         fun fromDomain(crag: Crag): CragEntity = CragEntity(
+            id = crag.id,
             name = crag.name,
             roadAddress = crag.roadAddress,
             coordinate = CoordinateEntity.fromDomain(crag.coordinate),
