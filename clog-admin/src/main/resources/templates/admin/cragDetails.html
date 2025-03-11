@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<th:block th:replace="~{fragments/admin/fragments.html :: admHead}"/>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <th:block th:replace="~{fragments/admin/fragments.html :: admLeftNav(nav='cragList')}"/>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+      <!-- Topbar -->
+      <th:block th:replace="~{fragments/admin/fragments.html :: admTopBar}"/>
+      <!-- End of Topbar -->
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">암장 상세 정보</h1>
+        <p class="mb-4">선택한 암장의 상세 정보를 확인하세요.</p>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary" th:text="${crag.name}">암장 이름</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tbody>
+                <tr>
+                  <th>암장 ID</th>
+                  <td th:text="${crag.id}"></td>
+                </tr>
+                <tr>
+                  <th>암장 이름</th>
+                  <td th:text="${crag.name}"></td>
+                </tr>
+                <tr>
+                  <th>도로명 주소</th>
+                  <td th:text="${crag.roadAddress}"></td>
+                </tr>
+                <tr>
+                  <th>경도</th>
+                  <td th:text="${crag.longitude}"></td>
+                </tr>
+                <tr>
+                  <th>위도</th>
+                  <td th:text="${crag.latitude}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">난이도 정보</h6>
+            <a class="btn btn-primary" th:href="@{/admin/crags/{id}/add/grades(id=${crag.id})}" role="button">난이도 추가</a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable">
+                <thead>
+                <tr>
+                  <th>색상 이름</th>
+                  <th>hex 코드</th>
+                  <th>난이도</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="grade : ${grades}">
+                  <td th:text="${grade.colorName}"></td>
+                  <td>
+                    <div style="display: flex; align-items: center;">
+                      <div th:style="'width: 20px; height: 20px; background-color: ' + ${grade.colorHex} + '; border: 1px solid #000; margin-right: 10px;'"></div>
+                      <span th:text="${grade.colorHex}"></span>
+                    </div>
+                  </td>
+                  <td th:text="${grade.gradeOrder}"></td>
+                </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <a th:href="@{/admin/index}" class="btn btn-secondary">목록으로 돌아가기</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <th:block th:replace="~{fragments/admin/fragments.html :: adminFooter}"/>
+    <!-- End of Footer -->
+
+  </div>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+<th:block th:replace="~{fragments/admin/fragments.html :: admJS}"/>
+
+</body>
+
+</html>
