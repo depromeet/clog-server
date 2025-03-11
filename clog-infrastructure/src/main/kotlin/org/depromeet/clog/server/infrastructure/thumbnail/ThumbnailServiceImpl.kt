@@ -1,9 +1,9 @@
 package org.depromeet.clog.server.infrastructure.thumbnail
 
-import org.depromeet.clog.server.domain.thumbnail.application.ThumbnailService
-import org.depromeet.clog.server.domain.thumbnail.application.ThumbnailUploadResponse
 import org.depromeet.clog.server.domain.thumbnail.Thumbnail
 import org.depromeet.clog.server.domain.thumbnail.ThumbnailRepository
+import org.depromeet.clog.server.domain.thumbnail.application.ThumbnailService
+import org.depromeet.clog.server.domain.thumbnail.application.ThumbnailUploadResponse
 import org.depromeet.clog.server.domain.video.VideoRepository
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
