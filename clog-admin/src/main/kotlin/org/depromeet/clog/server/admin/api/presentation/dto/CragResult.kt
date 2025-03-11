@@ -23,4 +23,9 @@ data class CragResult(
             )
         }
     }
+
+    data class WithGradeCount(
+        val cragResult: CragResult,
+        val gradeCount: Int
+    )
 }
