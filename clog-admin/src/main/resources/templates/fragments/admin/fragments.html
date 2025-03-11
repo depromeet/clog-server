@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="adminJS">
+        <!-- jQuery -->
+        <script th:src="@{/plugins/bower_components/jquery/dist/jquery.min.js}"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script th:src="@{/bootstrap/dist/js/bootstrap.min.js}"></script>
+        <!-- Menu Plugin JavaScript -->
+        <script th:src="@{/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js}"></script>
+        <!--slimscroll JavaScript -->
+        <script th:src="@{/admin/js/jquery.slimscroll.js}"></script>
+        <!--Wave Effects -->
+        <script th:src="@{/admin/js/waves.js}"></script>
+        <!-- Custom Theme JavaScript -->
+
+        <script th:src="@{/admin/js/custom.min.js}"></script>
+
+        <!--Counter js -->
+        <script th:src="@{/plugins/bower_components/waypoints/lib/jquery.waypoints.js}"></script>
+        <script th:src="@{/plugins/bower_components/counterup/jquery.counterup.min.js}"></script>
+
+        <script th:src="@{/plugins/bower_components/toast-master/js/jquery.toast.js}"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $.toast({
+                    heading: 'Welcome to Pixel admin',
+                    text: 'Use the predefined ones, or specify a custom position object.',
+                    position: 'top-right',
+                    loaderBg: '#ff6849',
+                    icon: 'info',
+                    hideAfter: 1,
+                    stack: 6
+                })
+            });
+        </script>
+    </div>
+
+    <footer th:fragment="adminFooter" class="footer text-center py-5">
+        Copyright 2025.
+        <a href="https://www.notion.so/depromeet/16b45b4338b38050b45ded96c5c66c42?pvs=4">Team Supershy.</a> All rights reserved.
+    </footer>
+
+    <th:block th:fragment="admLeftNav">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/admin/index}">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">CLOG</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                등록 담당자
+            </div>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item" th:classappend="active">
+                <a class="nav-link" th:href="@{/admin/add/crags}" style="margin: 5px; padding: 5px;">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>암장 등록</span>
+                </a>
+
+                <a class="nav-link" th:href="@{/admin/crags/colors}" style="margin: 5px; padding: 5px;">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>색상 리스트</span>
+                </a>
+
+                <a class="nav-link" th:href="@{/admin/crags/add/colors}" style="margin: 5px; padding: 5px;">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>색상 등록</span>
+                </a>
+            </li>
+        </ul>
+    </th:block>
+
+    <th:block th:fragment="admJS">
+        <!-- Bootstrap core JavaScript-->
+        <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
+        <script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="/bootstrap/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="/bootstrap/js/demo/datatables-demo.js"></script>
+    </th:block>
+
+    <th:block th:fragment="admTopBar">
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+            <!-- Sidebar Toggle (Topbar) -->
+            <form class="form-inline">
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </form>
+
+            <!-- Topbar Search -->
+            <form
+                    class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                           aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="alert('기능 개발 중입니다.')">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
+
+                <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                <li class="nav-item dropdown no-arrow d-sm-none">
+                    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <!-- Dropdown - Messages -->
+                    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                         aria-labelledby="searchDropdown">
+                        <form class="form-inline mr-auto w-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small"
+                                       placeholder="Search for..." aria-label="Search"
+                                       aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+
+                <div class="topbar-divider d-none d-sm-block"></div>
+
+                <!-- Nav Item - User Information -->
+                <li class="nav-item dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">관리자님, 안녕하세요</span>
+                        <img class="img-profile rounded-circle"
+                             src="/bootstrap/img/undraw_profile.svg">
+                    </a>
+                    <!-- Dropdown - User Information -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                         aria-labelledby="userDropdown">
+                        <div class="dropdown-divider"></div>
+                        <div sec:authorize="isAuthenticated()">
+                            <form th:action="@{/logout}" method="post" style="display:inline">
+                                <button type="submit" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+        </nav>
+    </th:block>
+
+    <th:block th:fragment="admHead">
+        <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta name="description" content="">
+            <meta name="author" content="">
+
+            <title>CLOG Admin System</title>
+
+            <!-- Custom fonts for this template-->
+            <link href="/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+            <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+            <!-- Custom styles for this template-->
+            <link href="/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
+            <link href="/bootstrap/css/list-groups.css" rel="stylesheet">
+
+            <!-- Custom fonts for this template -->
+            <link href="/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+            <!-- Custom styles for this page -->
+            <link href="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        </head>
+    </th:block>
+</body>
+</html>
