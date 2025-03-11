@@ -4,9 +4,11 @@ import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.depromeet.clog.server.infrastructure.attempt.AttemptJpaRepository
 import org.depromeet.clog.server.infrastructure.problem.ProblemJpaRepository
+import org.depromeet.clog.server.infrastructure.user.UserEntity
 import org.depromeet.clog.server.infrastructure.video.VideoJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component
 class StoryAdapter(
@@ -43,6 +45,28 @@ class StoryAdapter(
             )
         }.let {
             return story.toDomain(it)
+        }
+    }
+
+    override fun findAllByUserIdAndDateBetween(userId: Long, startDate: LocalDate, endDate: LocalDate): List<Story> {
+        val storyIds = storyJpaRepository.findAll {
+            select(
+                path(StoryEntity::id)
+            ).from(
+                entity(UserEntity::class),
+                join(StoryEntity::class).on(
+                    path(StoryEntity::userId).eq(path(UserEntity::id))
+                ),
+            ).where(
+                and(
+                    path(StoryEntity::userId).eq(userId),
+                    path(StoryEntity::date).between(startDate.minusDays(1), endDate.plusDays(1))
+                )
+            )
+        }.filterNotNull()
+
+        return storyIds.mapNotNull {
+            this.findAggregate(it)
         }
     }
 }
