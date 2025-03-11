@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+spring:
+  mvc:
+    hidden method:
+      filter:
+        enabled: true
+
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
