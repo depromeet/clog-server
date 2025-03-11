@@ -1,3 +1,4 @@
+package org.depromeet.clog.server.domain.crag.application.scheduling
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
