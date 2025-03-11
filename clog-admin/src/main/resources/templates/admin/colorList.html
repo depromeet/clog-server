@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<th:block th:replace="~{fragments/admin/fragments.html :: admHead}"/>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <th:block th:replace="~{fragments/admin/fragments.html :: admLeftNav(nav='cragList')}"/>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <th:block th:replace="~{fragments/admin/fragments.html :: admTopBar}"/>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">색상 관리</h1>
+                    <p class="mb-4"> 색상을 추가하고 관리하세요. </p>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <nav class="navbar navbar-expand navbar-light bg-light mb-1">
+                                <a class="navbar-brand" href="#">색상 정보</a>
+                                <ul class="navbar-nav ml-auto">
+                                    <a class="btn btn-primary" th:href="@{/admin/crags/add/colors}" role="button">색상 추가</a>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="card-body">
+                            <p>total: <span th:text="${#lists.size(colors)}"></span></p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>색상 이름</th>
+                                            <th>hex</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="color : ${colors}">
+                                            <td th:text="${color.name}"></td>
+                                            <td>
+                                                <div style="display: flex; align-items: center;">
+                                                    <div th:style="'width: 20px; height: 20px; background-color: ' + ${color.hex} + '; border: 1px solid #000; margin-right: 10px;'"></div>
+                                                    <span th:text="${color.hex}"></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <th:block th:replace="~{fragments/admin/fragments.html :: adminFooter}"/>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <th:block th:replace="~{fragments/admin/fragments.html :: admJS}"/>
+
+</body>
+
+</html>
