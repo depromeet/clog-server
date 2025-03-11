@@ -18,8 +18,14 @@ class AdminService(
     private val gradeAdminRepository: GradeAdminRepository
 ) {
 
-    fun getAllCrag(): List<Crag> {
-        return cragAdminRepository.findAll()
+    fun getAllCrag(): List<CragResult.WithGradeCount> {
+        return cragAdminRepository.findAll().map { crag ->
+            val gradeCount = gradeAdminRepository.findByCrag(crag).size
+            CragResult.WithGradeCount(
+                cragResult = CragResult.from(crag),
+                gradeCount = gradeCount
+            )
+        }
     }
 
     fun createCrag(
