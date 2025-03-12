@@ -69,4 +69,8 @@ class StoryAdapter(
             this.findAggregate(it)
         }
     }
+
+    override fun deleteById(storyId: Long) {
+        storyJpaRepository.deleteById(storyId)
+    }
 }

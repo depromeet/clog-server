@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.attempt.application
 
-import org.depromeet.clog.server.api.attempt.presentation.AttemptRequest
-import org.depromeet.clog.server.api.attempt.presentation.SaveAttemptResponse
+import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptRequest
+import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptResponse
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
 import org.depromeet.clog.server.domain.video.VideoRepository
 import org.depromeet.clog.server.domain.video.VideoStampRepository

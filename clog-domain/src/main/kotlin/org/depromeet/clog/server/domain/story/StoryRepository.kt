@@ -15,4 +15,6 @@ interface StoryRepository {
         startDate: LocalDate,
         endDate: LocalDate,
     ): List<Story>
+
+    fun deleteById(storyId: Long)
 }

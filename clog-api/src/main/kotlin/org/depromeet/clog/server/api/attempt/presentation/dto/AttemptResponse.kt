@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.api.attempt.presentation
+package org.depromeet.clog.server.api.attempt.presentation.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.depromeet.clog.server.domain.attempt.Attempt

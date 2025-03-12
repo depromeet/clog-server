@@ -5,4 +5,6 @@ interface ProblemRepository {
     fun save(problem: Problem): Problem
 
     fun findByIdOrNull(problemId: Long): Problem?
+
+    fun deleteById(problemId: Long)
 }

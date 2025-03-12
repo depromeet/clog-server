@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.video.presentation
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.depromeet.clog.server.api.attempt.presentation.StampRequest
+import org.depromeet.clog.server.api.attempt.presentation.dto.StampRequest
 
 @Schema(description = "영상 수정 요청 DTO")
 data class VideoUpdateRequest(
