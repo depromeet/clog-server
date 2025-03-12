@@ -15,6 +15,7 @@ enum class ErrorCode(
     TOKEN_EXPIRED("C4011", "토큰이 만료되었습니다.", 401),
     AUTHENTICATION_FAILED("C4012", "인증에 실패하였습니다.", 401),
 
-    // USER
-    USER_NOT_FOUND("C4040", "존재하지 않는 회원입니다.", 404)
+    USER_NOT_FOUND("C4040", "존재하지 않는 회원입니다.", 404),
+    VIDEO_NOT_FOUND("C4041", "존재하지 않는 영상입니다.", 404),
+    ATTEMPT_NOT_FOUND("C4042", "존재하지 않는 시도입니다.", 404),
 }
