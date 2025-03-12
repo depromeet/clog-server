@@ -8,7 +8,7 @@ import org.depromeet.clog.server.api.problem.application.SaveProblem
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.springframework.web.bind.annotation.*
 
-@Tag(name = "문제 API")
+@Tag(name = "문제 API", description = "문제 정보에 관련된 API 목록입니다.")
 @RequestMapping("${ApiConstants.API_BASE_PATH_V1}/stories/{storyId}/problems")
 @RestController
 class ProblemController(

@@ -15,7 +15,7 @@ class GradeEntity(
     @ManyToOne(fetch = FetchType.EAGER)
     val color: ColorEntity,
 
-    @Column(name = "order")
+    @Column(name = "`order`")
     val order: Int? = null,
 ) {
 

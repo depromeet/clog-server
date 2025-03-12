@@ -14,4 +14,8 @@ class VideoStampAdapter(
             videoStamps.map { VideoStampEntity.fromDomain(it) }
         ).map { it.toDomain() }
     }
+
+    override fun deleteAllByVideoId(videoId: Long) {
+        return videoStampJpaRepository.deleteAllByVideoId(videoId)
+    }
 }
