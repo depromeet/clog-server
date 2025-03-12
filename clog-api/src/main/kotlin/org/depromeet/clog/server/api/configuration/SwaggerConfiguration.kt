@@ -11,6 +11,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
+import io.swagger.v3.oas.models.servers.Server
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.common.ErrorResponse
@@ -43,6 +44,7 @@ class SwaggerConfiguration(
             .info(apiInfo())
             .addSecurityItem(securityRequirement)
             .components(components)
+            .servers(accessServerList())
     }
 
     @Bean
@@ -86,5 +88,19 @@ class SwaggerConfiguration(
             .title(appName.uppercase(Locale.getDefault()).replace("-", " "))
             .description("세계 최강의 클라이밍 기록 서비스 CLOG API 문서입니다.")
             .version(appVersion)
+    }
+
+    private fun accessServerList(): List<Server> {
+        val deployHttpsServer = Server().apply {
+            url = "https://dev-api.climb-log.my"
+            description = "배포 HTTPS 서버"
+        }
+
+        val localHttpServer = Server().apply {
+            url = "http://localhost:8080"
+            description = "로컬 HTTP 서버"
+        }
+
+        return listOf(deployHttpsServer, localHttpServer)
     }
 }
