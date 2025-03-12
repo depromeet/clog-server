@@ -10,6 +10,7 @@ import org.depromeet.clog.server.domain.crag.domain.Coordinate
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.crag.domain.Grade
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AdminService(
@@ -18,6 +19,7 @@ class AdminService(
     private val gradeAdminRepository: GradeAdminRepository
 ) {
 
+    @Transactional(readOnly = true)
     fun getAllCrag(): List<CragResult.WithGradeCount> {
         return cragAdminRepository.findAll().map { crag ->
             val gradeCount = gradeAdminRepository.findByCrag(crag).size
@@ -28,6 +30,7 @@ class AdminService(
         }
     }
 
+    @Transactional
     fun createCrag(
         request: SaveCrag.Request
     ) {
@@ -37,6 +40,7 @@ class AdminService(
         cragAdminRepository.save(crag)
     }
 
+    @Transactional(readOnly = true)
     fun getCrag(
         id: Long
     ): CragResult {
@@ -46,10 +50,12 @@ class AdminService(
         return CragResult.from(crag)
     }
 
+    @Transactional(readOnly = true)
     fun getAllColor(): List<ColorResult> {
         return colorAdminRepository.findAll().map { ColorResult.from(it) }
     }
 
+    @Transactional
     fun createColor(
         request: SaveCragColor.Request
     ): SaveCragColor.Response {
@@ -62,6 +68,7 @@ class AdminService(
         )
     }
 
+    @Transactional
     fun createGrade(
         cragId: Long,
         request: SaveCragGrade.Request
@@ -82,6 +89,7 @@ class AdminService(
         )
     }
 
+    @Transactional(readOnly = true)
     fun getGrades(
         id: Long
     ): List<GradeResult> {
