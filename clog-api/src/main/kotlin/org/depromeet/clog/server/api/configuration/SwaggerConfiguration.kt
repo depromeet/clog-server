@@ -96,16 +96,11 @@ class SwaggerConfiguration(
             description = "배포 HTTPS 서버"
         }
 
-        val deployHttpServer = Server().apply {
-            url = "http://dev-api.climb-log.my"
-            description = "배포 HTTP 서버"
-        }
-
         val localHttpServer = Server().apply {
             url = "http://localhost:8080"
             description = "로컬 HTTP 서버"
         }
 
-        return listOf(deployHttpsServer, deployHttpServer, localHttpServer)
+        return listOf(deployHttpsServer, localHttpServer)
     }
 }
