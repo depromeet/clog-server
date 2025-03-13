@@ -36,9 +36,12 @@ class StoryController(
         summary = "기록 삭제",
         description = "기록 삭제에 사용됩니다. 문제와 시도 정보를 함께 삭제합니다.",
     )
-    @DeleteMapping("{storyId}")
-    fun delete(@PathVariable storyId: Long) {
+    @DeleteMapping("/{storyId}")
+    fun delete(
+        @PathVariable storyId: Long
+    ): ClogApiResponse<Unit> {
         deleteStory(storyId)
+        return ClogApiResponse.from(Unit)
     }
 
     @Operation(
