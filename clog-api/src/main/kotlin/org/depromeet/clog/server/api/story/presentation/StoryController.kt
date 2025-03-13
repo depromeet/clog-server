@@ -3,9 +3,8 @@ package org.depromeet.clog.server.api.story.presentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
-import org.depromeet.clog.server.api.story.application.GetStory
-import org.depromeet.clog.server.api.story.application.GetStorySummary
 import org.depromeet.clog.server.api.story.application.SaveStory
+import org.depromeet.clog.server.api.story.application.UpdateStoryMemo
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.springframework.web.bind.annotation.*
@@ -14,32 +13,9 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("${ApiConstants.API_BASE_PATH_V1}/stories")
 @RestController
 class StoryController(
-    private val getStory: GetStory,
-    private val getStorySummary: GetStorySummary,
     private val saveStory: SaveStory,
+    private val updateStoryMemo: UpdateStoryMemo,
 ) {
-
-    @Operation(
-        summary = "기록 조회 API",
-        description = "기록 상세 조회에 사용됩니다. 기록 ID를 통해 기록을 조회합니다.",
-    )
-    @GetMapping("/{storyId}")
-    fun get(@PathVariable storyId: Long): ClogApiResponse<StoryResponse> {
-        val result = getStory(storyId)
-        return ClogApiResponse.from(result)
-    }
-
-    @Operation(
-        summary = "기록 요약 조회 API",
-        description = "기록 요약 조회에 사용됩니다. 기록 ID를 통해 기록을 조회합니다.",
-    )
-    @GetMapping("/{storyId}/summary")
-    fun getSummary(
-        @PathVariable storyId: Long,
-    ): ClogApiResponse<StorySummaryResponse> {
-        val result = getStorySummary(storyId)
-        return ClogApiResponse.from(result)
-    }
 
     @Operation(
         summary = "기록 저장",
@@ -52,5 +28,19 @@ class StoryController(
     ): ClogApiResponse<SaveStoryResponse> {
         val result = saveStory(userContext.userId, request)
         return ClogApiResponse.from(result)
+    }
+
+    @Operation(
+        summary = "기록 메모 수정 API",
+        description = "기록 메모 수정에 사용됩니다.",
+    )
+    @PatchMapping("/{storyId}/memo")
+    fun updateMemo(
+        userContext: UserContext,
+        @PathVariable storyId: Long,
+        @RequestBody request: UpdateStoryMemoRequest,
+    ): ClogApiResponse<Unit> {
+        updateStoryMemo(userContext.userId, storyId, request)
+        return ClogApiResponse.from(Unit)
     }
 }
