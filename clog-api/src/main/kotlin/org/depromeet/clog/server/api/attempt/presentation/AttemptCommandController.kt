@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.depromeet.clog.server.api.attempt.application.DeleteAttemptAndParents
 import org.depromeet.clog.server.api.attempt.application.UpdateAttemptAndParents
+import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptUpdateRequest
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.common.ClogApiResponse
