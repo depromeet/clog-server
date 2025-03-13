@@ -11,6 +11,4 @@ interface StoryJpaRepository : JpaRepository<StoryEntity, Long>, KotlinJdslJpqlE
         startDate: LocalDate,
         endDate: LocalDate,
     ): List<StoryEntity>
-
-    fun findAllByUserId(userId: Long): List<StoryEntity>
 }
