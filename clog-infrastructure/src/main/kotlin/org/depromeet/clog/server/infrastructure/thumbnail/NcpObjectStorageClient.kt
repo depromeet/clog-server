@@ -5,6 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
+import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -36,6 +37,8 @@ class NcpObjectStorageClient(
             contentType = file.contentType
         }
         s3Client.putObject(bucketName, fileName, file.inputStream, metadata)
+        s3Client.setObjectAcl(bucketName, fileName, CannedAccessControlList.PublicRead) // ✅ 추가됨
+
         return s3Client.getUrl(bucketName, fileName).toString()
     }
 
