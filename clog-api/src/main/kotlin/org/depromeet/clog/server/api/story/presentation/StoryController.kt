@@ -3,6 +3,7 @@ package org.depromeet.clog.server.api.story.presentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
+import org.depromeet.clog.server.api.story.application.DeleteStory
 import org.depromeet.clog.server.api.story.application.SaveStory
 import org.depromeet.clog.server.api.story.application.UpdateStoryMemo
 import org.depromeet.clog.server.api.user.UserContext
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class StoryController(
     private val saveStory: SaveStory,
+    private val deleteStory: DeleteStory,
     private val updateStoryMemo: UpdateStoryMemo,
 ) {
 
@@ -28,6 +30,15 @@ class StoryController(
     ): ClogApiResponse<SaveStoryResponse> {
         val result = saveStory(userContext.userId, request)
         return ClogApiResponse.from(result)
+    }
+
+    @Operation(
+        summary = "기록 삭제",
+        description = "기록 삭제에 사용됩니다. 문제와 시도 정보를 함께 삭제합니다.",
+    )
+    @DeleteMapping("{storyId}")
+    fun delete(@PathVariable storyId: Long) {
+        deleteStory(storyId)
     }
 
     @Operation(
