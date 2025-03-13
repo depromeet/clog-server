@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.api.attempt.presentation
+package org.depromeet.clog.server.api.attempt.presentation.dto
 
 import org.depromeet.clog.server.domain.attempt.Attempt
 import org.depromeet.clog.server.domain.attempt.AttemptStatus

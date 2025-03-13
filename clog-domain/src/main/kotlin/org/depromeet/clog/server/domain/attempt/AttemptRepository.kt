@@ -4,4 +4,5 @@ interface AttemptRepository {
 
     fun save(attempt: Attempt): Attempt
     fun findByIdOrNull(attemptId: Long): Attempt?
+    fun deleteById(attemptId: Long)
 }

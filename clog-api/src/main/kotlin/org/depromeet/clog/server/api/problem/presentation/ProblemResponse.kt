@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.problem.presentation
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.depromeet.clog.server.api.attempt.presentation.AttemptResponse
+import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptResponse
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
 import org.depromeet.clog.server.domain.problem.Problem
 

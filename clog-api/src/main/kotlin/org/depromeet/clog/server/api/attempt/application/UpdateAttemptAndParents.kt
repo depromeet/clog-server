@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.api.attempt.application
 
-import org.depromeet.clog.server.api.attempt.presentation.AttemptUpdateRequest
+import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptUpdateRequest
 import org.depromeet.clog.server.domain.attempt.Attempt
 import org.depromeet.clog.server.domain.attempt.AttemptNotFoundException
 import org.depromeet.clog.server.domain.attempt.AttemptRepository

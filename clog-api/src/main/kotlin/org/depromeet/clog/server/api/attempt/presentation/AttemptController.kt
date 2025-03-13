@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.depromeet.clog.server.api.attempt.application.SaveAttempt
+import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptRequest
+import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptResponse
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.springframework.web.bind.annotation.*

@@ -17,4 +17,8 @@ class ProblemAdapter(
     override fun findByIdOrNull(problemId: Long): Problem? {
         return problemJpaRepository.findByIdOrNull(problemId)?.toDomain()
     }
+
+    override fun deleteById(problemId: Long) {
+        return problemJpaRepository.deleteById(problemId)
+    }
 }

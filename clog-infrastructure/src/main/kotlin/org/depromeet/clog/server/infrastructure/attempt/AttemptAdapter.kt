@@ -17,4 +17,8 @@ class AttemptAdapter(
     override fun findByIdOrNull(attemptId: Long): Attempt? {
         return attemptJpaRepository.findByIdOrNull(attemptId)?.toDomain()
     }
+
+    override fun deleteById(attemptId: Long) {
+        attemptJpaRepository.deleteById(attemptId)
+    }
 }
