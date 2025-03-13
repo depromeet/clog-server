@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.api.auth.presentation
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.domain.auth.application.AuthService
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Tag(name = "인증 API", description = "로그인 등 인증에 관련된 작업을 수행합니다.")
 @RestController
 @RequestMapping("$API_BASE_PATH_V1/auth")
 class AuthController(
