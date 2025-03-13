@@ -2,6 +2,7 @@ package org.depromeet.clog.server.api.story.application
 
 import org.depromeet.clog.server.api.story.presentation.StorySummaryResponse
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
+import org.depromeet.clog.server.domain.crag.domain.CragRepository
 import org.depromeet.clog.server.domain.crag.domain.GradeRepository
 import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.domain.story.StoryRepository
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class GetStorySummary(
     private val storyRepository: StoryRepository,
     private val gradeRepository: GradeRepository,
+    private val cragRepository: CragRepository,
 ) {
 
     @Transactional(readOnly = true)
@@ -29,13 +31,16 @@ class GetStorySummary(
             it.attempts.count { attempt -> attempt.status == AttemptStatus.SUCCESS }
         }
         val totalFailCount = calculateFailCount(story)
+        val cragName = story.cragId?.let { cragRepository.findById(it)?.name }
 
         return StorySummaryResponse(
             id = story.id!!,
+            cragName = cragName,
             totalDurationMs = totalDurationMs,
             totalAttemptsCount = totalCount,
             totalSuccessCount = totalSuccessCount,
             totalFailCount = totalFailCount,
+            memo = story.memo,
             problems = problems,
         )
     }
