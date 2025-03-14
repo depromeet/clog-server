@@ -3,7 +3,7 @@ package org.depromeet.clog.server.api.attempt.presentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.attempt.application.GetAttempt
-import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptFilter
+import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptFilterRequest
 import org.depromeet.clog.server.api.attempt.presentation.dto.GetAttemptResponse
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.user.UserContext
@@ -26,7 +26,7 @@ class AttemptQueryController(
     @GetMapping
     fun getFolder(
         userContext: UserContext,
-        @ModelAttribute filter: AttemptFilter
+        @ModelAttribute filter: AttemptFilterRequest
     ): ClogApiResponse<GetAttemptResponse> {
         val result = getAttempt.getAttemptDetail(userContext.userId, filter)
         return ClogApiResponse.from(result)
