@@ -5,12 +5,12 @@ import java.time.LocalDate
 
 data class AttemptFolderView(
     val videoId: Long,
-    val videoLocalPath: String,
-    val videoThumbnailUrl: String,
+    val videoLocalPath: String?,
+    val videoThumbnailUrl: String?,
     val videoDurationMs: Long,
     val date: LocalDate,
-    val cragName: String,
-    val colorName: String,
-    val colorHex: String,
+    val cragName: String?,
+    val colorName: String?,
+    val colorHex: String?,
     val status: AttemptStatus
 )
