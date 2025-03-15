@@ -9,4 +9,10 @@ data class Attempt(
     val status: AttemptStatus,
 
     val video: Video? = null,
-)
+) {
+    val isSuccess: Boolean
+        get() = status == AttemptStatus.SUCCESS
+
+    val isFail: Boolean
+        get() = status == AttemptStatus.FAILURE
+}

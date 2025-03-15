@@ -1,9 +1,9 @@
-package org.depromeet.clog.server.api.calender.controller
+package org.depromeet.clog.server.api.calendar.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.depromeet.clog.server.api.calender.application.CalenderResponse
-import org.depromeet.clog.server.api.calender.application.GetCalender
+import org.depromeet.clog.server.api.calendar.application.CalendarResponse
+import org.depromeet.clog.server.api.calendar.application.GetCalendar
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "캘린더 조회 API", description = "캘린더 관련 정보를 조회합니다.")
-@RequestMapping("${ApiConstants.API_BASE_PATH_V1}/calenders")
+@RequestMapping("${ApiConstants.API_BASE_PATH_V1}/calendars")
 @RestController
-class CalenderController(
-    private val getCalender: GetCalender,
+class CalendarController(
+    private val getCalendar: GetCalendar,
 ) {
 
     @Operation(
@@ -26,9 +26,9 @@ class CalenderController(
     @GetMapping
     fun getAll(
         userContext: UserContext,
-        @ModelAttribute query: CalenderQuery,
-    ): ClogApiResponse<CalenderResponse> {
-        val result = getCalender(
+        @ModelAttribute query: CalendarQuery,
+    ): ClogApiResponse<CalendarResponse> {
+        val result = getCalendar(
             userId = userContext.userId,
             year = query.year,
             month = query.month,

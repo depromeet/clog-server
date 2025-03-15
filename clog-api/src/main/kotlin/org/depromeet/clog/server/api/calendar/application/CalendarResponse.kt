@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.api.calender.application
+package org.depromeet.clog.server.api.calendar.application
 
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
@@ -6,7 +6,7 @@ import java.time.LocalDate
 @Schema(
     description = "캘린더 메인 화면에 보여져야 하는 정보를 총합합니다.",
 )
-data class CalenderResponse(
+data class CalendarResponse(
     @Schema(
         description = "해당 월에 클라이밍을 한 날짜 수",
         example = "5",
@@ -18,6 +18,18 @@ data class CalenderResponse(
         example = "3600000",
     )
     val totalDurationMs: Long,
+
+    @Schema(
+        description = "해당 월에 클라이밍을 한 총 시도 개수",
+        example = "10",
+    )
+    val totalAttemptCount: Int,
+
+    @Schema(description = "시도 성공 횟수", example = "7")
+    val successAttemptCount: Int,
+
+    @Schema(description = "시도 실패 횟수", example = "3")
+    val failAttemptCount: Int,
 
     @Schema(
         description = "해당 월에 클라이밍을 한 날짜별 스토리 리스트",
