@@ -15,7 +15,7 @@ class StoryEntity(
     val id: Long? = null,
 
     @Column(name = "user_id")
-    val userId: Long,
+    val userId: Long? = null,
 
     @Column(name = "crag_id")
     val cragId: Long? = null,
