@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.api.calendar.application
 
+import org.depromeet.clog.server.api.calendar.application.CalendarResponse.Summary
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
 import org.depromeet.clog.server.domain.crag.domain.GradeRepository
 import org.depromeet.clog.server.domain.story.StoryRepository
@@ -28,23 +29,14 @@ class GetCalendar(
         )
 
         val storiesGroupedByDate = stories.groupBy { it.date }
-        val numOfClimbDays = storiesGroupedByDate.size
 
         return CalendarResponse(
-            numOfClimbDays = numOfClimbDays,
-            totalDurationMs = stories.sumOf { it.totalDurationMs },
-            totalAttemptCount = stories.sumOf { it.problems.sumOf { problem -> problem.attempts.size } },
-            successAttemptCount = stories.sumOf {
-                it.problems.sumOf { problem -> problem.attempts.count { attempt -> attempt.isSuccess } }
-            },
-            failAttemptCount = stories.sumOf {
-                it.problems.sumOf { problem -> problem.attempts.count { attempt -> !attempt.isSuccess } }
-            },
+            Summary.from(stories),
             days = storiesGroupedByDate.map { (date, stories) ->
                 CalendarResponse.Day(
                     date = date,
                     stories = stories.map { story ->
-                        CalendarResponse.Story(
+                        CalendarResponse.StoryListItem(
                             id = story.id!!,
                             totalDurationMs = story.totalDurationMs,
                             cragName = cragRepository.findById(story.cragId!!)?.name,
