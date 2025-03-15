@@ -4,6 +4,8 @@ import org.depromeet.clog.server.api.crag.presentation.dto.GetMyCragInfoResponse
 import org.depromeet.clog.server.api.crag.presentation.dto.toGetMyCragInfoResponse
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.story.StoryRepository
+import org.depromeet.clog.server.global.utils.dto.PagedResponse
+import org.depromeet.clog.server.global.utils.dto.PagingMeta
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,8 +14,21 @@ class GetMyCrag(
     private val storyRepository: StoryRepository
 ) {
     @Transactional(readOnly = true)
-    fun getRecordedCrags(userId: Long): List<GetMyCragInfoResponse> {
-        val domainCrags: List<Crag> = storyRepository.findDistinctCragsByUserId(userId)
-        return domainCrags.map { it.toGetMyCragInfoResponse() }
+    fun getRecordedCrags(userId: Long, cursor: Long?): PagedResponse<GetMyCragInfoResponse> {
+        val pageSize = 10
+        val domainCrags: List<Crag> =
+            storyRepository.findDistinctCragsByUserId(userId, cursor, pageSize)
+        val apiResponses = domainCrags.map { it.toGetMyCragInfoResponse() }
+
+        val nextCursor: Long? = if (domainCrags.size == pageSize) {
+            domainCrags.last().id
+        } else {
+            null
+        }
+
+        return PagedResponse(
+            contents = apiResponses,
+            meta = PagingMeta(nextCursor = nextCursor, hasMore = nextCursor != null)
+        )
     }
 }

@@ -7,6 +7,7 @@ import org.depromeet.clog.server.infrastructure.attempt.AttemptJpaRepository
 import org.depromeet.clog.server.infrastructure.problem.ProblemJpaRepository
 import org.depromeet.clog.server.infrastructure.user.UserEntity
 import org.depromeet.clog.server.infrastructure.video.VideoJpaRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -79,8 +80,9 @@ class StoryAdapter(
         storyJpaRepository.deleteById(storyId)
     }
 
-    override fun findDistinctCragsByUserId(userId: Long): List<Crag> {
-        return storyJpaRepository.findDistinctCragsByUserId(userId)
+    override fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag> {
+        val pageable = PageRequest.of(0, pageSize)
+        return storyJpaRepository.findDistinctCragsByUserIdWithCursor(userId, cursor, pageable)
             .map { it.toDomain() }
     }
 }

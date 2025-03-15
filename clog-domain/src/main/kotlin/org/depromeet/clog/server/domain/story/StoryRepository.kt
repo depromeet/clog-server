@@ -19,5 +19,5 @@ interface StoryRepository {
 
     fun deleteById(storyId: Long)
 
-    fun findDistinctCragsByUserId(userId: Long): List<Crag>
+    fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag>
 }
