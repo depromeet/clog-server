@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.infrastructure.story
 
-import org.depromeet.clog.server.domain.crag.dto.GetMyCragInfo
+import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.depromeet.clog.server.infrastructure.attempt.AttemptJpaRepository
@@ -79,7 +79,8 @@ class StoryAdapter(
         storyJpaRepository.deleteById(storyId)
     }
 
-    override fun findDistinctCragsByUserId(userId: Long): List<GetMyCragInfo> {
+    override fun findDistinctCragsByUserId(userId: Long): List<Crag> {
         return storyJpaRepository.findDistinctCragsByUserId(userId)
+            .map { it.toDomain() }
     }
 }

@@ -23,8 +23,7 @@ class CragQueryController(
     )
     @GetMapping("/me")
     fun getRecordedCrags(userContext: UserContext): ClogApiResponse<List<GetMyCragInfoResponse>> {
-        val crags = getCrag.getRecordedCrags(userContext.userId)
-        val response = crags.map { GetMyCragInfoResponse(it.id, it.name, it.roadAddress) }
+        val response = getCrag.getRecordedCrags(userContext.userId)
         return ClogApiResponse.from(response)
     }
 }

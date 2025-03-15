@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 @Table(name = "story")
 @Entity
-class StoryEntity(
+open class StoryEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

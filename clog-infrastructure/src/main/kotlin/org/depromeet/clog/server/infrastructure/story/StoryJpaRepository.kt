@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.infrastructure.story
 
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
-import org.depromeet.clog.server.domain.crag.dto.GetMyCragInfo
+import org.depromeet.clog.server.infrastructure.crag.CragEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -17,15 +17,11 @@ interface StoryJpaRepository : JpaRepository<StoryEntity, Long>, KotlinJdslJpqlE
 
     @Query(
         """
-        SELECT DISTINCT new org.depromeet.clog.server.domain.crag.dto.GetMyCragInfo(
-            c.id,
-            c.name,
-            c.roadAddress
-        )
-        FROM StoryEntity s
-        JOIN CragEntity c ON s.cragId = c.id
-        WHERE s.userId = :userId
+    SELECT DISTINCT c
+    FROM StoryEntity s
+    JOIN CragEntity c ON s.cragId = c.id
+    WHERE s.userId = :userId
     """
     )
-    fun findDistinctCragsByUserId(@Param("userId") userId: Long): List<GetMyCragInfo>
+    fun findDistinctCragsByUserId(@Param("userId") userId: Long): List<CragEntity>
 }
