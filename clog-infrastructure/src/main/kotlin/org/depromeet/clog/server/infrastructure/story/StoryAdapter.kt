@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.infrastructure.story
 
+import org.depromeet.clog.server.domain.crag.dto.GetMyCragInfo
 import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.depromeet.clog.server.infrastructure.attempt.AttemptJpaRepository
@@ -48,7 +49,11 @@ class StoryAdapter(
         }
     }
 
-    override fun findAllByUserIdAndDateBetween(userId: Long, startDate: LocalDate, endDate: LocalDate): List<Story> {
+    override fun findAllByUserIdAndDateBetween(
+        userId: Long,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<Story> {
         val storyIds = storyJpaRepository.findAll {
             select(
                 path(StoryEntity::id)
@@ -72,5 +77,9 @@ class StoryAdapter(
 
     override fun deleteById(storyId: Long) {
         storyJpaRepository.deleteById(storyId)
+    }
+
+    override fun findDistinctCragsByUserId(userId: Long): List<GetMyCragInfo> {
+        return storyJpaRepository.findDistinctCragsByUserId(userId)
     }
 }
