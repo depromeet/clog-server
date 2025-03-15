@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.api.calender.application
+package org.depromeet.clog.server.api.calendar.application
 
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
 import org.depromeet.clog.server.domain.crag.domain.GradeRepository
@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-class GetCalender(
+class GetCalendar(
     private val storyRepository: StoryRepository,
     private val gradeRepository: GradeRepository,
     private val cragRepository: CragRepository,
@@ -20,7 +20,7 @@ class GetCalender(
         userId: Long,
         year: Int,
         month: Int,
-    ): CalenderResponse {
+    ): CalendarResponse {
         val stories = storyRepository.findAllByUserIdAndDateBetween(
             userId = userId,
             startDate = LocalDate.of(year, month, 1),
@@ -30,21 +30,28 @@ class GetCalender(
         val storiesGroupedByDate = stories.groupBy { it.date }
         val numOfClimbDays = storiesGroupedByDate.size
 
-        return CalenderResponse(
+        return CalendarResponse(
             numOfClimbDays = numOfClimbDays,
             totalDurationMs = stories.sumOf { it.totalDurationMs },
+            totalAttemptCount = stories.sumOf { it.problems.sumOf { problem -> problem.attempts.size } },
+            successAttemptCount = stories.sumOf {
+                it.problems.sumOf { problem -> problem.attempts.count { attempt -> attempt.isSuccess } }
+            },
+            failAttemptCount = stories.sumOf {
+                it.problems.sumOf { problem -> problem.attempts.count { attempt -> !attempt.isSuccess } }
+            },
             days = storiesGroupedByDate.map { (date, stories) ->
-                CalenderResponse.Day(
+                CalendarResponse.Day(
                     date = date,
                     stories = stories.map { story ->
-                        CalenderResponse.Story(
+                        CalendarResponse.Story(
                             id = story.id!!,
                             totalDurationMs = story.totalDurationMs,
                             cragName = cragRepository.findById(story.cragId!!)?.name,
                             problems = story.problems.let { problems ->
                                 problems.groupBy { problem -> problem.gradeId }.map { (gradeId, problems) ->
                                     val grade = gradeRepository.findById(gradeId!!)
-                                    CalenderResponse.Problem(
+                                    CalendarResponse.Problem(
                                         colorHex = grade?.color?.hex,
                                         count = problems.size,
                                     )
