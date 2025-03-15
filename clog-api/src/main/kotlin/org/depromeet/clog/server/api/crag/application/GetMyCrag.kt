@@ -14,8 +14,11 @@ class GetMyCrag(
     private val storyRepository: StoryRepository
 ) {
     @Transactional(readOnly = true)
-    fun getRecordedCrags(userId: Long, cursor: Long?): PagedResponse<GetMyCragInfoResponse> {
-        val pageSize = 10
+    fun getRecordedCrags(
+        userId: Long,
+        cursor: Long?,
+        pageSize: Int
+    ): PagedResponse<GetMyCragInfoResponse> {
         val domainCrags: List<Crag> =
             storyRepository.findDistinctCragsByUserId(userId, cursor, pageSize)
         val apiResponses = domainCrags.map { it.toGetMyCragInfoResponse() }
