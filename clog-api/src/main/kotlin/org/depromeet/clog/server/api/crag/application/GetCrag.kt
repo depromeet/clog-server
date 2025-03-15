@@ -12,6 +12,6 @@ class GetCrag(
     @Transactional(readOnly = true)
     fun getRecordedCrags(userId: Long): List<GetMyCragInfoResponse> {
         val domainCrags = storyRepository.findDistinctCragsByUserId(userId)
-        return domainCrags.map { GetMyCragInfoResponse(it.id, it.name) }
+        return domainCrags.map { GetMyCragInfoResponse(it.id, it.name, it.roadAddress) }
     }
 }

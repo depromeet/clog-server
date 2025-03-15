@@ -19,7 +19,8 @@ interface StoryJpaRepository : JpaRepository<StoryEntity, Long>, KotlinJdslJpqlE
         """
         SELECT DISTINCT new org.depromeet.clog.server.domain.crag.dto.GetMyCragInfo(
             c.id,
-            c.name
+            c.name,
+            c.roadAddress
         )
         FROM StoryEntity s
         JOIN CragEntity c ON s.cragId = c.id
