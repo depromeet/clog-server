@@ -12,7 +12,7 @@ fun AttemptFolderView.toGetAttemptDetailResponse(): GetAttemptDetailResponse {
         date = this.date,
         cragName = this.cragName ?: "",
         colorName = this.colorName ?: "",
-        colorHEX = this.colorHex ?: "",
+        colorHex = this.colorHex ?: "",
         status = this.status
     )
 }

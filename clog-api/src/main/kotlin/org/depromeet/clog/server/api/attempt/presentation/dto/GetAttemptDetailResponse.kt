@@ -22,7 +22,7 @@ data class GetAttemptDetailResponse(
     @Schema(description = "난이도 색상 이름", example = "블루")
     val colorName: String?,
     @Schema(description = "난이도 색상 HEX", example = "#0000ff")
-    val colorHEX: String?,
+    val colorHex: String?,
     @Schema(description = "완등 성공/실패 여부", example = "SUCCESS")
     val status: AttemptStatus
 )
