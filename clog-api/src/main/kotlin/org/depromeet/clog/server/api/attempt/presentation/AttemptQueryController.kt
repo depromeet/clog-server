@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "폴더 API", description = "폴더(나의 클라이밍 기록)에 쓰이는 API입니다.")
-@RequestMapping("${ApiConstants.API_BASE_PATH_V1}/folders")
+@RequestMapping("${ApiConstants.API_BASE_PATH_V1}/attempts")
 @RestController
 class AttemptQueryController(
     private val getAttempt: GetAttempt,
