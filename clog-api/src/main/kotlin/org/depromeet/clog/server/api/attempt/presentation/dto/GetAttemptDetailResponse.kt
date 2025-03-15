@@ -7,14 +7,8 @@ import java.time.LocalDate
 data class GetAttemptDetailResponse(
     @Schema(description = "시도 id", example = "1")
     val attemptId: Long,
-    @Schema(description = "비디오 id", example = "1")
-    val videoId: Long,
-    @Schema(description = "비디오 로컬 경로", example = "/videos/record_001.mp4")
-    val videoLocalPath: String,
-    @Schema(description = "비디오 썸네일 URL", example = "https://example.com/thumbnail.jpg")
-    val videoThumbnailUrl: String,
-    @Schema(description = "비디오 길이 (ms)", example = "12000")
-    val videoDurationMs: Long,
+    @Schema(description = "비디오 정보")
+    val video: AttemptVideoResponse,
     @Schema(description = "기록 날짜", example = "2025-03-13")
     val date: LocalDate,
     @Schema(description = "암장명", example = "강남 클라이밍 파크")
