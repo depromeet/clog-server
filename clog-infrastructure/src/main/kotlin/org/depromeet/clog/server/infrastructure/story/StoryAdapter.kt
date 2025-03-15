@@ -1,11 +1,13 @@
 package org.depromeet.clog.server.infrastructure.story
 
+import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.depromeet.clog.server.infrastructure.attempt.AttemptJpaRepository
 import org.depromeet.clog.server.infrastructure.problem.ProblemJpaRepository
 import org.depromeet.clog.server.infrastructure.user.UserEntity
 import org.depromeet.clog.server.infrastructure.video.VideoJpaRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -48,7 +50,11 @@ class StoryAdapter(
         }
     }
 
-    override fun findAllByUserIdAndDateBetween(userId: Long, startDate: LocalDate, endDate: LocalDate): List<Story> {
+    override fun findAllByUserIdAndDateBetween(
+        userId: Long,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<Story> {
         val storyIds = storyJpaRepository.findAll {
             select(
                 path(StoryEntity::id)
@@ -72,5 +78,11 @@ class StoryAdapter(
 
     override fun deleteById(storyId: Long) {
         storyJpaRepository.deleteById(storyId)
+    }
+
+    override fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag> {
+        val pageable = PageRequest.of(0, pageSize)
+        return storyJpaRepository.findDistinctCragsByUserIdWithCursor(userId, cursor, pageable)
+            .map { it.toDomain() }
     }
 }
