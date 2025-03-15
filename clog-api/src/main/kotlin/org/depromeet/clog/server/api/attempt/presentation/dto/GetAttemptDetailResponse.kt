@@ -5,6 +5,8 @@ import org.depromeet.clog.server.domain.attempt.AttemptStatus
 import java.time.LocalDate
 
 data class GetAttemptDetailResponse(
+    @Schema(description = "시도 id", example = "1")
+    val attemptId: Long,
     @Schema(description = "비디오 id", example = "1")
     val videoId: Long,
     @Schema(description = "비디오 로컬 경로", example = "/videos/record_001.mp4")

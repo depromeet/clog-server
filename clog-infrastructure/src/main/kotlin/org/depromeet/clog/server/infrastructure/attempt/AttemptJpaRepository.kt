@@ -13,6 +13,7 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
     @Query(
         """
         SELECT new org.depromeet.clog.server.domain.attempt.dto.AttemptFolderView(
+            a.id,            
             v.id,
             v.localPath,
             v.thumbnailUrl,
