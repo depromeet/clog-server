@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.domain.story
 
 import org.depromeet.clog.server.domain.crag.domain.Crag
+import org.depromeet.clog.server.domain.crag.domain.Grade
 import java.time.LocalDate
 
 interface StoryRepository {
@@ -20,4 +21,6 @@ interface StoryRepository {
     fun deleteById(storyId: Long)
 
     fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag>
+
+    fun findDistinctGradesByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Grade>
 }
