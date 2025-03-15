@@ -3,7 +3,7 @@ package org.depromeet.clog.server.api.crag.presentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
-import org.depromeet.clog.server.api.crag.application.GetCrag
+import org.depromeet.clog.server.api.crag.application.GetMyCrag
 import org.depromeet.clog.server.api.crag.presentation.dto.GetMyCragInfoResponse
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("${ApiConstants.API_BASE_PATH_V1}/crags")
 @RestController
 class CragQueryController(
-    private val getCrag: GetCrag
+    private val getMyCrag: GetMyCrag
 ) {
     @Operation(
         summary = "암장 정보 조회",
@@ -23,7 +23,7 @@ class CragQueryController(
     )
     @GetMapping("/me")
     fun getRecordedCrags(userContext: UserContext): ClogApiResponse<List<GetMyCragInfoResponse>> {
-        val response = getCrag.getRecordedCrags(userContext.userId)
+        val response = getMyCrag.getRecordedCrags(userContext.userId)
         return ClogApiResponse.from(response)
     }
 }
