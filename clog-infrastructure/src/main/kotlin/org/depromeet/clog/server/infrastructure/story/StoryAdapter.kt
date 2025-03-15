@@ -81,7 +81,11 @@ class StoryAdapter(
         storyJpaRepository.deleteById(storyId)
     }
 
-    override fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag> {
+    override fun findDistinctCragsByUserId(
+        userId: Long,
+        cursor: Long?,
+        pageSize: Int
+    ): List<Crag> {
         val pageable = PageRequest.of(0, pageSize + 1)
         return storyJpaRepository.findDistinctCragsByUserIdWithCursor(userId, cursor, pageable)
             .map { it.toDomain() }
