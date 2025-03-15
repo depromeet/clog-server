@@ -22,7 +22,7 @@ class GradeQueryController(
 ) {
     @Operation(
         summary = "내 난이도 정보 조회",
-        description = "현재 사용자가 기록한 난이도 정보를 cursor 기반 페이지네이션으로 조회합니다. (gradeId, colorName, colorHex)"
+        description = "현재 사용자가 기록한 난이도 정보를 조회합니다. (gradeId, colorName, colorHex)"
     )
     @GetMapping("/me")
     fun getRecordedGrades(
