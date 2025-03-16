@@ -8,8 +8,6 @@ import org.springframework.data.repository.query.Param
 
 interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
 
-    fun findAllByProblemIdIn(problemIds: List<Long>): List<AttemptEntity>
-
     @Query(
         """
         SELECT new org.depromeet.clog.server.domain.attempt.dto.AttemptFolderView(

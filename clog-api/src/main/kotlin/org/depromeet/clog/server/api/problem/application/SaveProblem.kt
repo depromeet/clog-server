@@ -16,6 +16,6 @@ class SaveProblem(
         val problem = problemRepository.save(
             request.toDomain(storyId)
         )
-        return SaveProblemResponse(problem.id!!)
+        return SaveProblemResponse(problem.id)
     }
 }

@@ -54,19 +54,19 @@ class DeleteAttemptAndParents(
         return story
     }
 
-    private fun deleteAttempt(attemptQuery: AttemptQuery) {
-        attemptRepository.deleteById(attemptQuery.id!!)
+    private fun deleteAttempt(attempt: AttemptQuery) {
+        attemptRepository.deleteById(attempt.id)
     }
 
-    private fun deleteProblemIfEmpty(problemQuery: ProblemQuery) {
-        if (problemQuery.attempts.isEmpty()) {
-            problemRepository.deleteById(problemQuery.id!!)
+    private fun deleteProblemIfEmpty(problem: ProblemQuery) {
+        if (problem.attempts.isEmpty()) {
+            problemRepository.deleteById(problem.id)
         }
     }
 
-    private fun deleteStoryIfEmpty(storyQuery: StoryQuery) {
-        if (storyQuery.problems.isEmpty()) {
-            storyRepository.deleteById(storyQuery.id!!)
+    private fun deleteStoryIfEmpty(story: StoryQuery) {
+        if (story.problems.isEmpty()) {
+            storyRepository.deleteById(story.id)
         }
     }
 }

@@ -6,8 +6,6 @@ enum class ErrorCode(
     val httpStatus: Int
 ) {
 
-    EXAMPLE_ERROR_CODE("C9999", "Example error message", 400),
-
     ID_TOKEN_MISSING("C4000", "id_token이 누락되었습니다.", 400),
     ID_TOKEN_VALIDATION_FAILED("C4001", "id_token 검증에 실패하였습니다.", 400),
 

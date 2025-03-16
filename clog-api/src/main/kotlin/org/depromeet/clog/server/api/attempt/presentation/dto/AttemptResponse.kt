@@ -18,7 +18,7 @@ data class AttemptResponse(
         fun from(attemptQuery: AttemptQuery): AttemptResponse {
             return AttemptResponse(
                 status = attemptQuery.status,
-                video = VideoResponse.from(attemptQuery.video!!),
+                video = VideoResponse.from(attemptQuery.video),
             )
         }
     }

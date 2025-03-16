@@ -22,13 +22,13 @@ data class VideoResponse(
 ) {
 
     companion object {
-        fun from(videoQuery: VideoQuery): VideoResponse {
+        fun from(video: VideoQuery): VideoResponse {
             return VideoResponse(
-                id = videoQuery.id!!,
-                localPath = videoQuery.localPath,
-                thumbnailUrl = videoQuery.thumbnailUrl,
-                durationMs = videoQuery.durationMs,
-                stamps = videoQuery.stamps.map(VideoStampResponse.Companion::from),
+                id = video.id,
+                localPath = video.localPath,
+                thumbnailUrl = video.thumbnailUrl,
+                durationMs = video.durationMs,
+                stamps = video.stamps.map(VideoStampResponse.Companion::from),
             )
         }
     }

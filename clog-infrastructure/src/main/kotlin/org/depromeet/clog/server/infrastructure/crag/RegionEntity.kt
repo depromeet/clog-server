@@ -25,11 +25,4 @@ class RegionEntity(
         regionName = this.regionName,
         district = this.district
     )
-
-    companion object {
-        fun fromDomain(region: Region): RegionEntity = RegionEntity(
-            regionName = region.regionName,
-            district = region.district
-        )
-    }
 }
