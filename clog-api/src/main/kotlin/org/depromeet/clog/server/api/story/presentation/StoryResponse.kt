@@ -15,7 +15,7 @@ data class StoryResponse(
     companion object {
         fun from(storyQuery: StoryQuery): StoryResponse {
             return StoryResponse(
-                id = storyQuery.id!!,
+                id = storyQuery.id,
                 problems = storyQuery.problems.map { ProblemResponse.from(it) },
             )
         }
