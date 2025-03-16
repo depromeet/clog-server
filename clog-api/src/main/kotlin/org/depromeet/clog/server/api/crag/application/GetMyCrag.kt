@@ -14,7 +14,7 @@ class GetMyCrag(
     private val storyRepository: StoryRepository
 ) {
     @Transactional(readOnly = true)
-    fun getRecordedCrags(
+    fun getMyCrags(
         userId: Long,
         cursor: Long?,
         pageSize: Int

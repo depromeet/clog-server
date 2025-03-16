@@ -22,7 +22,7 @@ class GradeQueryController(
 ) {
     @Operation(
         summary = "내 난이도 정보 조회",
-        description = "현재 사용자가 기록한 난이도 정보를 조회합니다. (gradeId, colorName, colorHex)"
+        description = "현재 사용자가 기록한 난이도 정보를 조회합니다."
     )
     @GetMapping("/me")
     fun getRecordedGrades(
@@ -30,7 +30,7 @@ class GradeQueryController(
         @ModelAttribute pageRequest: CursorPageRequest
     ): ClogApiResponse<PagedResponse<GetMyGradeInfoResponse>> {
         val pagedResponse: PagedResponse<GetMyGradeInfoResponse> =
-            getMyGrade.getRecordedGrades(
+            getMyGrade.getMyGrades(
                 userContext.userId,
                 pageRequest.cursor,
                 pageRequest.pageSize

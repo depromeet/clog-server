@@ -14,7 +14,7 @@ class GetMyGrade(
     private val storyRepository: StoryRepository
 ) {
     @Transactional(readOnly = true)
-    fun getRecordedGrades(
+    fun getMyGrades(
         userId: Long,
         cursor: Long?,
         pageSize: Int
