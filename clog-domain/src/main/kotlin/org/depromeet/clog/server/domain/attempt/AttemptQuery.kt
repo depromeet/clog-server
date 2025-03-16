@@ -1,14 +1,11 @@
 package org.depromeet.clog.server.domain.attempt
 
-import org.depromeet.clog.server.domain.video.Video
+import org.depromeet.clog.server.domain.video.VideoQuery
 
-data class Attempt(
-    val id: Long? = null,
-    val problemId: Long,
-    val videoId: Long,
+data class AttemptQuery(
+    val id: Long,
+    val video: VideoQuery,
     val status: AttemptStatus,
-
-    val video: Video? = null,
 ) {
     val isSuccess: Boolean
         get() = status == AttemptStatus.SUCCESS

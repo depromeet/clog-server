@@ -1,8 +1,13 @@
 package org.depromeet.clog.server.api.attempt.application
 
 import org.depromeet.clog.server.domain.attempt.AttemptNotFoundException
+import org.depromeet.clog.server.domain.attempt.AttemptQuery
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
+import org.depromeet.clog.server.domain.problem.ProblemNotFoundException
+import org.depromeet.clog.server.domain.problem.ProblemQuery
 import org.depromeet.clog.server.domain.problem.ProblemRepository
+import org.depromeet.clog.server.domain.story.StoryNotFoundException
+import org.depromeet.clog.server.domain.story.StoryQuery
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,37 +21,52 @@ class DeleteAttemptAndParents(
 
     @Transactional
     operator fun invoke(attemptId: Long) {
-        val problemId = deleteAttempt(attemptId)
-        val storyId = deleteProblemIfEmpty(problemId)
-        storyId?.let { deleteStoryIfEmpty(it) }
+        val story = fetchStory(attemptId)
+        val problem = fetchProblem(story, attemptId)
+        val attempt = fetchAttempt(problem, attemptId)
+
+        deleteAttempt(attempt)
+        deleteProblemIfEmpty(problem)
+        deleteStoryIfEmpty(story)
     }
 
-    private fun deleteAttempt(attemptId: Long): Long {
-        val attempt = attemptRepository.findByIdOrNull(attemptId)
-            ?: throw AttemptNotFoundException()
-
-        attemptRepository.deleteById(attemptId)
-        return attempt.problemId
+    private fun fetchAttempt(
+        problem: ProblemQuery,
+        attemptId: Long
+    ): AttemptQuery {
+        val attempt = problem.attempts.firstOrNull { it.id == attemptId }
+            ?: throw AttemptNotFoundException("Attempt not found with id: $attemptId")
+        return attempt
     }
 
-    private fun deleteProblemIfEmpty(problemId: Long): Long? {
-        val problem = problemRepository.findByIdOrNull(problemId)
-            ?: throw IllegalStateException("Problem not found with id: $problemId")
+    private fun fetchProblem(
+        story: StoryQuery,
+        attemptId: Long
+    ): ProblemQuery {
+        val problem = story.problems.firstOrNull { it.attempts.any { attempt -> attempt.id == attemptId } }
+            ?: throw ProblemNotFoundException("Problem not found for attemptId: $attemptId")
+        return problem
+    }
 
-        if (problem.attempts.isEmpty()) {
-            problemRepository.deleteById(problemId)
-            return problem.storyId
+    private fun fetchStory(attemptId: Long): StoryQuery {
+        val story = storyRepository.findByAttemptId(attemptId)
+            ?: throw StoryNotFoundException("Story not found for attemptId: $attemptId")
+        return story
+    }
+
+    private fun deleteAttempt(attemptQuery: AttemptQuery) {
+        attemptRepository.deleteById(attemptQuery.id!!)
+    }
+
+    private fun deleteProblemIfEmpty(problemQuery: ProblemQuery) {
+        if (problemQuery.attempts.isEmpty()) {
+            problemRepository.deleteById(problemQuery.id!!)
         }
-
-        return null
     }
 
-    private fun deleteStoryIfEmpty(storyId: Long) {
-        val story = storyRepository.findByIdOrNull(storyId)
-            ?: throw IllegalStateException("Story not found with id: $storyId")
-
-        if (story.problems.isEmpty()) {
-            storyRepository.deleteById(storyId)
+    private fun deleteStoryIfEmpty(storyQuery: StoryQuery) {
+        if (storyQuery.problems.isEmpty()) {
+            storyRepository.deleteById(storyQuery.id!!)
         }
     }
 }

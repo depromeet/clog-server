@@ -1,8 +1,8 @@
 package org.depromeet.clog.server.infrastructure.crag
 
-import org.depromeet.clog.server.domain.crag.domain.Region
-import org.depromeet.clog.server.domain.crag.domain.RegionName
-import org.depromeet.clog.server.domain.crag.domain.RegionRepository
+import org.depromeet.clog.server.domain.crag.domain.region.Region
+import org.depromeet.clog.server.domain.crag.domain.region.RegionName
+import org.depromeet.clog.server.domain.crag.domain.region.RegionRepository
 import org.springframework.stereotype.Repository
 
 @Repository

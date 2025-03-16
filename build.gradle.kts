@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
 
     kotlin("jvm") version "2.0.10"
+    kotlin("kapt") version "2.0.10"
     kotlin("plugin.spring") version "2.0.10"
     kotlin("plugin.jpa") version "2.0.10"
 
@@ -38,6 +39,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "io.gitlab.arturbosch.detekt")
     apply(plugin = "org.jetbrains.kotlinx.kover")
+    apply(plugin = "kotlin-kapt")
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect")

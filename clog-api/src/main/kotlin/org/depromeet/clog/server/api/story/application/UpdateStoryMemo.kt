@@ -2,6 +2,7 @@ package org.depromeet.clog.server.api.story.application
 
 import org.depromeet.clog.server.api.story.presentation.UpdateStoryMemoRequest
 import org.depromeet.clog.server.domain.auth.domain.ForbiddenException
+import org.depromeet.clog.server.domain.story.StoryCommand
 import org.depromeet.clog.server.domain.story.StoryNotFoundException
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.springframework.stereotype.Service
@@ -26,7 +27,11 @@ class UpdateStoryMemo(
         }
 
         storyRepository.save(
-            story.copy(
+            StoryCommand(
+                id = story.id,
+                userId = story.userId,
+                cragId = story.crag?.id,
+                date = story.date,
                 memo = request.memo,
             )
         )

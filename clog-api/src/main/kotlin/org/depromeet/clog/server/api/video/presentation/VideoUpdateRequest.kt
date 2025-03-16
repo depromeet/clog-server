@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.video.presentation
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.depromeet.clog.server.api.attempt.presentation.dto.StampRequest
+import org.depromeet.clog.server.api.attempt.presentation.dto.SaveStampRequest
 
 @Schema(description = "영상 수정 요청 DTO")
 data class VideoUpdateRequest(
@@ -16,5 +16,5 @@ data class VideoUpdateRequest(
     val durationMs: Long,
 
     @Schema(description = "영상 스탬프 목록")
-    val stamps: List<StampRequest>,
+    val stamps: List<SaveStampRequest>,
 )

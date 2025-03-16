@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.api.story.application
 
-import org.depromeet.clog.server.domain.story.Story
+import org.depromeet.clog.server.domain.story.StoryCommand
+import org.depromeet.clog.server.domain.story.StoryNotFoundException
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,11 +15,17 @@ class DeleteStory(
     operator fun invoke(
         storyId: Long,
     ) {
-        val story: Story = storyRepository.findAggregate(storyId)
-            ?: throw IllegalArgumentException("Story not found with id: $storyId")
+        val story = storyRepository.findByIdOrNull(storyId)
+            ?: throw StoryNotFoundException()
 
         storyRepository.save(
-            story.copy(userId = null)
+            StoryCommand(
+                id = story.id,
+                userId = null,
+                cragId = story.crag?.id,
+                date = story.date,
+                memo = story.memo,
+            )
         )
     }
 }

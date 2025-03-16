@@ -13,7 +13,7 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
     @Query(
         """
         SELECT new org.depromeet.clog.server.domain.attempt.dto.AttemptFolderView(
-            a.id,            
+            a.id,
             v.id,
             v.localPath,
             v.thumbnailUrl,
@@ -25,16 +25,16 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
             a.status
         )
         FROM AttemptEntity a
-        JOIN ProblemEntity p ON a.problemId = p.id
-        JOIN StoryEntity s ON p.storyId = s.id
-        JOIN VideoEntity v ON a.videoId = v.id
-        LEFT JOIN GradeEntity g ON p.gradeId = g.id
+        JOIN a.problem p
+        JOIN p.story s
+        JOIN a.video v
+        LEFT JOIN p.grade g
         LEFT JOIN g.color col
-        LEFT JOIN CragEntity c ON s.cragId = c.id
+        LEFT JOIN s.crag c
         WHERE s.userId = :userId
           AND (:attemptStatus IS NULL OR a.status = :attemptStatus)
-          AND (:cragId IS NULL OR s.cragId = :cragId)
-          AND (:gradeId IS NULL OR p.gradeId = :gradeId)
+          AND (:cragId IS NULL OR c.id = :cragId)
+          AND (:gradeId IS NULL OR g.id = :gradeId)
         ORDER BY a.id DESC
     """
     )
@@ -44,4 +44,6 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
         @Param("cragId") cragId: Long?,
         @Param("gradeId") gradeId: Long?
     ): List<AttemptFolderView>
+
+    fun findAllByProblemId(problemId: Long): List<AttemptEntity>
 }

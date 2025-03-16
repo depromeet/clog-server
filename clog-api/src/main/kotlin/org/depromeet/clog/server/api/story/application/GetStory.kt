@@ -14,7 +14,7 @@ class GetStory(
     operator fun invoke(
         storyId: Long,
     ): StoryResponse {
-        val story = storyRepository.findAggregate(storyId)
+        val story = storyRepository.findByIdOrNull(storyId)
             ?: throw IllegalArgumentException("Story not found with id: $storyId")
 
         return StoryResponse.from(story)

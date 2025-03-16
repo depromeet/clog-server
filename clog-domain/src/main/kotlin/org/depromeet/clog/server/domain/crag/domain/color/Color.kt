@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.domain.crag.domain
+package org.depromeet.clog.server.domain.crag.domain.color
 
 data class Color(
     val id: Long? = null,

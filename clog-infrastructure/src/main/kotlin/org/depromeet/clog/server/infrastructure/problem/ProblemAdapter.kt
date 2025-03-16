@@ -1,21 +1,20 @@
 package org.depromeet.clog.server.infrastructure.problem
 
-import org.depromeet.clog.server.domain.problem.Problem
+import org.depromeet.clog.server.domain.problem.ProblemCommand
+import org.depromeet.clog.server.domain.problem.ProblemQuery
 import org.depromeet.clog.server.domain.problem.ProblemRepository
-import org.springframework.data.repository.findByIdOrNull
+import org.depromeet.clog.server.infrastructure.mappers.ProblemMapper
 import org.springframework.stereotype.Component
 
 @Component
 class ProblemAdapter(
+    private val problemMapper: ProblemMapper,
     private val problemJpaRepository: ProblemJpaRepository,
 ) : ProblemRepository {
 
-    override fun save(problem: Problem): Problem {
-        return problemJpaRepository.save(ProblemEntity.fromDomain(problem)).toDomain()
-    }
-
-    override fun findByIdOrNull(problemId: Long): Problem? {
-        return problemJpaRepository.findByIdOrNull(problemId)?.toDomain()
+    override fun save(problem: ProblemCommand): ProblemQuery {
+        val entity = problemJpaRepository.save(problemMapper.toEntity(problem))
+        return problemMapper.toDomain(entity)
     }
 
     override fun deleteById(problemId: Long) {

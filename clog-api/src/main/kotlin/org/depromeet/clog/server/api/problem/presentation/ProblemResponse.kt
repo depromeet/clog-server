@@ -3,7 +3,7 @@ package org.depromeet.clog.server.api.problem.presentation
 import io.swagger.v3.oas.annotations.media.Schema
 import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptResponse
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
-import org.depromeet.clog.server.domain.problem.Problem
+import org.depromeet.clog.server.domain.problem.ProblemQuery
 
 @Schema(description = "문제 응답 DTO")
 data class ProblemResponse(
@@ -20,13 +20,13 @@ data class ProblemResponse(
     val failCount: Int,
 ) {
     companion object {
-        fun from(problem: Problem): ProblemResponse {
-            val attempts = problem.attempts.map { AttemptResponse.from(it) }
+        fun from(problemQuery: ProblemQuery): ProblemResponse {
+            val attempts = problemQuery.attempts.map { AttemptResponse.from(it) }
             val successCount = attempts.count { it.status == AttemptStatus.SUCCESS }
             val failCount = attempts.count { it.status == AttemptStatus.FAILURE }
 
             return ProblemResponse(
-                id = problem.id!!,
+                id = problemQuery.id!!,
                 attempts = attempts,
                 successCount = successCount,
                 failCount = failCount,

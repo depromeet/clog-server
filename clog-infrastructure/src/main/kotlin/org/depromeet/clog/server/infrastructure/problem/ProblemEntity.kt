@@ -1,9 +1,10 @@
 package org.depromeet.clog.server.infrastructure.problem
 
 import jakarta.persistence.*
-import org.depromeet.clog.server.domain.attempt.Attempt
-import org.depromeet.clog.server.domain.problem.Problem
+import org.depromeet.clog.server.infrastructure.attempt.AttemptEntity
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
+import org.depromeet.clog.server.infrastructure.crag.GradeEntity
+import org.depromeet.clog.server.infrastructure.story.StoryEntity
 
 @Table(name = "problem")
 @Entity
@@ -14,29 +15,14 @@ class ProblemEntity(
     @Column(name = "id")
     val id: Long? = null,
 
-    @Column(name = "story_id")
-    val storyId: Long,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "story_id")
+    val story: StoryEntity,
 
-    @Column(name = "grade_id")
-    val gradeId: Long? = null,
-) : BaseEntity() {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "grade_id")
+    val grade: GradeEntity? = null,
 
-    fun toDomain(attempts: List<Attempt> = emptyList()): Problem {
-        return Problem(
-            id = id,
-            storyId = storyId,
-            gradeId = gradeId,
-            attempts = attempts,
-        )
-    }
-
-    companion object {
-        fun fromDomain(domain: Problem): ProblemEntity {
-            return ProblemEntity(
-                id = domain.id,
-                storyId = domain.storyId,
-                gradeId = domain.gradeId,
-            )
-        }
-    }
-}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "problem")
+    val attempts: List<AttemptEntity> = emptyList(),
+) : BaseEntity()

@@ -1,8 +1,8 @@
 package org.depromeet.clog.server.infrastructure.crag
 
 import jakarta.persistence.*
-import org.depromeet.clog.server.domain.crag.domain.Region
-import org.depromeet.clog.server.domain.crag.domain.RegionName
+import org.depromeet.clog.server.domain.crag.domain.region.Region
+import org.depromeet.clog.server.domain.crag.domain.region.RegionName
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 
 @Table(name = "region")

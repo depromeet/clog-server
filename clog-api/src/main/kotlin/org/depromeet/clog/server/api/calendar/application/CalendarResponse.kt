@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.calendar.application
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.depromeet.clog.server.domain.story.Story
+import org.depromeet.clog.server.domain.story.StoryQuery
 import java.time.LocalDate
 
 @Schema(
@@ -46,7 +46,7 @@ data class CalendarResponse(
         val failAttemptCount: Int,
     ) {
         companion object {
-            fun from(stories: List<Story>): Summary {
+            fun from(stories: List<StoryQuery>): Summary {
                 val storiesGroupedByDate = stories.groupBy { it.date }
 
                 return Summary(

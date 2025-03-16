@@ -2,8 +2,8 @@
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
 import org.depromeet.clog.server.domain.crag.domain.ExternalMapAdapter
-import org.depromeet.clog.server.domain.crag.domain.RegionName
-import org.depromeet.clog.server.domain.crag.domain.RegionRepository
+import org.depromeet.clog.server.domain.crag.domain.region.RegionName
+import org.depromeet.clog.server.domain.crag.domain.region.RegionRepository
 import org.depromeet.clog.server.domain.crag.dto.KakaoSearchResponseDto
 import org.springframework.stereotype.Component
 
