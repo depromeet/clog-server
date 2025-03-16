@@ -14,24 +14,21 @@ class GetMyCrag(
     private val storyRepository: StoryRepository
 ) {
     @Transactional(readOnly = true)
-    fun getRecordedCrags(
+    fun getMyCrags(
         userId: Long,
         cursor: Long?,
         pageSize: Int
     ): PagedResponse<GetMyCragInfoResponse> {
         val domainCrags: List<Crag> =
-            storyRepository.findDistinctCragsByUserId(userId, cursor, pageSize)
-        val apiResponses = domainCrags.map { it.toGetMyCragInfoResponse() }
-
-        val nextCursor: Long? = if (domainCrags.size == pageSize) {
-            domainCrags.last().id
-        } else {
-            null
-        }
+            storyRepository.findDistinctCragsByUserId(userId, cursor, pageSize + 1)
+        val hasMore = domainCrags.size > pageSize
+        val trimmedCrags = if (hasMore) domainCrags.subList(0, pageSize) else domainCrags
+        val apiResponses = trimmedCrags.map { it.toGetMyCragInfoResponse() }
+        val nextCursor: Long? = if (hasMore) trimmedCrags.last().id else null
 
         return PagedResponse(
             contents = apiResponses,
-            meta = PagingMeta(nextCursor = nextCursor, hasMore = nextCursor != null)
+            meta = PagingMeta(nextCursor = nextCursor, hasMore = hasMore)
         )
     }
 }

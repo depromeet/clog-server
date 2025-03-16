@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.story
 
 import org.depromeet.clog.server.domain.crag.domain.Crag
+import org.depromeet.clog.server.domain.crag.domain.Grade
 import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.depromeet.clog.server.infrastructure.attempt.AttemptJpaRepository
@@ -80,9 +81,23 @@ class StoryAdapter(
         storyJpaRepository.deleteById(storyId)
     }
 
-    override fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag> {
-        val pageable = PageRequest.of(0, pageSize)
+    override fun findDistinctCragsByUserId(
+        userId: Long,
+        cursor: Long?,
+        pageSize: Int
+    ): List<Crag> {
+        val pageable = PageRequest.of(0, pageSize + 1)
         return storyJpaRepository.findDistinctCragsByUserIdWithCursor(userId, cursor, pageable)
+            .map { it.toDomain() }
+    }
+
+    override fun findDistinctGradesByUserId(
+        userId: Long,
+        cursor: Long?,
+        pageSize: Int
+    ): List<Grade> {
+        val pageable = PageRequest.of(0, pageSize + 1)
+        return storyJpaRepository.findDistinctGradesByUserIdWithCursor(userId, cursor, pageable)
             .map { it.toDomain() }
     }
 }

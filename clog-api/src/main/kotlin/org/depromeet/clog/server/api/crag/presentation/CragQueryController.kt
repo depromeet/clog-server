@@ -22,7 +22,7 @@ class CragQueryController(
 ) {
     @Operation(
         summary = "내 암장 정보 조회",
-        description = "현재 사용자가 기록한 암장 정보를 조회합니다. (id, name, roadAddress)"
+        description = "현재 사용자가 기록한 암장 정보를 조회합니다."
     )
     @GetMapping("/me")
     fun getRecordedCrags(
@@ -30,7 +30,7 @@ class CragQueryController(
         @ModelAttribute pageRequest: CursorPageRequest
     ): ClogApiResponse<PagedResponse<GetMyCragInfoResponse>> {
         val pagedResponse: PagedResponse<GetMyCragInfoResponse> =
-            getMyCrag.getRecordedCrags(userContext.userId, pageRequest.cursor, pageRequest.pageSize)
+            getMyCrag.getMyCrags(userContext.userId, pageRequest.cursor, pageRequest.pageSize)
         return ClogApiResponse.from(pagedResponse)
     }
 }

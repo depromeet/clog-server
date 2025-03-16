@@ -31,4 +31,21 @@ interface StoryJpaRepository : JpaRepository<StoryEntity, Long>, KotlinJdslJpqlE
         @Param("cursor") cursor: Long?,
         pageable: Pageable
     ): List<CragEntity>
+
+    @Query(
+        """
+        SELECT DISTINCT g
+        FROM StoryEntity s
+        JOIN ProblemEntity p ON p.storyId = s.id
+        JOIN GradeEntity g ON p.gradeId = g.id
+        WHERE s.userId = :userId
+          AND (:cursor IS NULL OR g.id < :cursor)
+        ORDER BY g.id DESC
+        """
+    )
+    fun findDistinctGradesByUserIdWithCursor(
+        @Param("userId") userId: Long,
+        @Param("cursor") cursor: Long?,
+        pageable: Pageable
+    ): List<org.depromeet.clog.server.infrastructure.crag.GradeEntity>
 }
