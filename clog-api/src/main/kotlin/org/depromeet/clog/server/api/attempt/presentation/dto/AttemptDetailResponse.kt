@@ -5,7 +5,7 @@ import org.depromeet.clog.server.domain.attempt.AttemptQuery
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
 
 @Schema(description = "문제 시도 응답 DTO")
-data class AttemptResponse(
+data class AttemptDetailResponse(
     @Schema(description = "성공/실패 여부", example = "SUCCESS")
     val status: AttemptStatus,
 
@@ -15,8 +15,8 @@ data class AttemptResponse(
 
     companion object {
 
-        fun from(attemptQuery: AttemptQuery): AttemptResponse {
-            return AttemptResponse(
+        fun from(attemptQuery: AttemptQuery): AttemptDetailResponse {
+            return AttemptDetailResponse(
                 status = attemptQuery.status,
                 video = VideoResponse.from(attemptQuery.video),
             )
