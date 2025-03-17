@@ -7,8 +7,8 @@ import org.depromeet.clog.server.api.grade.application.GetMyGrade
 import org.depromeet.clog.server.api.grade.presentation.dto.GetMyGradeInfoResponse
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
-import org.depromeet.clog.server.global.utils.dto.CursorPageRequest
-import org.depromeet.clog.server.global.utils.dto.PagedResponse
+import org.depromeet.clog.server.global.utils.dto.CursorPagination.Request
+import org.depromeet.clog.server.global.utils.dto.CursorPagination.Response
 import org.springdoc.core.annotations.ParameterObject
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -28,9 +28,9 @@ class GradeQueryController(
     @GetMapping("/me")
     fun getRecordedGrades(
         userContext: UserContext,
-        @ModelAttribute @ParameterObject pageRequest: CursorPageRequest
-    ): ClogApiResponse<PagedResponse<GetMyGradeInfoResponse>> {
-        val pagedResponse: PagedResponse<GetMyGradeInfoResponse> =
+        @ModelAttribute @ParameterObject pageRequest: Request
+    ): ClogApiResponse<Response<GetMyGradeInfoResponse>> {
+        val pagedResponse =
             getMyGrade.getMyGrades(
                 userContext.userId,
                 pageRequest.cursor,

@@ -4,8 +4,8 @@ import org.depromeet.clog.server.api.grade.presentation.dto.GetMyGradeInfoRespon
 import org.depromeet.clog.server.api.grade.presentation.dto.toGetMyGradeInfoResponse
 import org.depromeet.clog.server.domain.crag.domain.grade.Grade
 import org.depromeet.clog.server.domain.crag.domain.grade.GradeRepository
-import org.depromeet.clog.server.global.utils.dto.PagedResponse
-import org.depromeet.clog.server.global.utils.dto.PagingMeta
+import org.depromeet.clog.server.global.utils.dto.CursorPagination.Response
+import org.depromeet.clog.server.global.utils.dto.CursorPagination.Response.Meta
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,12 +13,13 @@ import org.springframework.transaction.annotation.Transactional
 class GetMyGrade(
     private val gradeRepository: GradeRepository,
 ) {
+
     @Transactional(readOnly = true)
     fun getMyGrades(
         userId: Long,
         cursor: Long?,
         pageSize: Int
-    ): PagedResponse<GetMyGradeInfoResponse> {
+    ): Response<GetMyGradeInfoResponse> {
         val domainGrades: List<Grade> =
             gradeRepository.findDistinctGradesByUserId(userId, cursor, pageSize)
         val hasMore = domainGrades.size > pageSize
@@ -31,9 +32,9 @@ class GetMyGrade(
             null
         }
 
-        return PagedResponse(
+        return Response(
             contents = apiResponses,
-            meta = PagingMeta(nextCursor = nextCursor, hasMore = hasMore)
+            meta = Meta(nextCursor = nextCursor, hasMore = hasMore)
         )
     }
 }
