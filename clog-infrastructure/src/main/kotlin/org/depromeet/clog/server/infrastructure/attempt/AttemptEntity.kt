@@ -1,10 +1,10 @@
 package org.depromeet.clog.server.infrastructure.attempt
 
 import jakarta.persistence.*
-import org.depromeet.clog.server.domain.attempt.Attempt
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
-import org.depromeet.clog.server.domain.video.Video
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
+import org.depromeet.clog.server.infrastructure.problem.ProblemEntity
+import org.depromeet.clog.server.infrastructure.video.VideoEntity
 
 @Table(name = "attempt")
 @Entity
@@ -14,34 +14,15 @@ class AttemptEntity(
     @Column(name = "id")
     val id: Long? = null,
 
-    @Column(name = "problem_id")
-    val problemId: Long,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "problem_id")
+    val problem: ProblemEntity,
 
-    @Column(name = "video_id")
-    val videoId: Long,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id")
+    val video: VideoEntity,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     val status: AttemptStatus,
-) : BaseEntity() {
-    fun toDomain(video: Video? = null): Attempt {
-        return Attempt(
-            id = id,
-            problemId = problemId,
-            videoId = videoId,
-            status = status,
-            video = video,
-        )
-    }
-
-    companion object {
-        fun fromDomain(domain: Attempt): AttemptEntity {
-            return AttemptEntity(
-                id = domain.id,
-                problemId = domain.problemId,
-                videoId = domain.videoId,
-                status = domain.status,
-            )
-        }
-    }
-}
+) : BaseEntity()

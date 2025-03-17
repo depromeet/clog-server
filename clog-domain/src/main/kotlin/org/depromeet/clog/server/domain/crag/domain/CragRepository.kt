@@ -8,4 +8,6 @@ interface CragRepository {
     fun saveAll(crags: List<Crag>): List<Crag>
 
     fun existsByKakaoPlaceId(kakaoPlaceId: Long): Boolean
+
+    fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag>
 }

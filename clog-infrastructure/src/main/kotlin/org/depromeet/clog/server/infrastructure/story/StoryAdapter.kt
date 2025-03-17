@@ -1,103 +1,63 @@
 package org.depromeet.clog.server.infrastructure.story
 
-import org.depromeet.clog.server.domain.crag.domain.Crag
-import org.depromeet.clog.server.domain.crag.domain.Grade
-import org.depromeet.clog.server.domain.story.Story
+import org.depromeet.clog.server.domain.story.StoryCommand
+import org.depromeet.clog.server.domain.story.StoryQuery
 import org.depromeet.clog.server.domain.story.StoryRepository
-import org.depromeet.clog.server.infrastructure.attempt.AttemptJpaRepository
-import org.depromeet.clog.server.infrastructure.problem.ProblemJpaRepository
-import org.depromeet.clog.server.infrastructure.user.UserEntity
-import org.depromeet.clog.server.infrastructure.video.VideoJpaRepository
-import org.springframework.data.domain.PageRequest
+import org.depromeet.clog.server.infrastructure.attempt.AttemptEntity
+import org.depromeet.clog.server.infrastructure.mappers.StoryMapper
+import org.depromeet.clog.server.infrastructure.problem.ProblemEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @Component
 class StoryAdapter(
+    private val storyMapper: StoryMapper,
     private val storyJpaRepository: StoryJpaRepository,
-    private val problemJpaRepository: ProblemJpaRepository,
-    private val attemptJpaRepository: AttemptJpaRepository,
-    private val videoJpaRepository: VideoJpaRepository,
 ) : StoryRepository {
 
-    override fun save(story: Story): Story {
-        return storyJpaRepository.save(StoryEntity.from(story)).toDomain()
+    override fun save(story: StoryCommand): StoryQuery {
+        return storyMapper.toEntity(story)
+            .let { storyJpaRepository.save(it) }
+            .let { storyMapper.toDomain(it) }
     }
 
-    override fun findByIdOrNull(storyId: Long): Story? {
-        return storyJpaRepository.findByIdOrNull(storyId)?.toDomain()
-    }
-
-    override fun findAggregate(storyId: Long): Story? {
-        val story = storyJpaRepository.findByIdOrNull(storyId)
-            ?: return null
-
-        val problems = problemJpaRepository.findAllByStoryId(story.id!!)
-        val attempts = attemptJpaRepository.findAllByProblemIdIn(problems.map { it.id!! })
-        val videos = videoJpaRepository.findAllById(attempts.map { it.videoId })
-
-        problems.map {
-            it.toDomain(
-                attempts = attempts.filter { attempt -> attempt.problemId == it.id }
-                    .map { attempt ->
-                        attempt.toDomain(
-                            video = videos.find { video -> video.id == attempt.videoId }?.toDomain()
-                        )
-                    }
-            )
-        }.let {
-            return story.toDomain(it)
-        }
+    override fun findByIdOrNull(storyId: Long): StoryQuery? {
+        return storyJpaRepository.findByIdOrNull(storyId)
+            ?.let { storyMapper.toDomain(it) }
     }
 
     override fun findAllByUserIdAndDateBetween(
         userId: Long,
         startDate: LocalDate,
-        endDate: LocalDate
-    ): List<Story> {
-        val storyIds = storyJpaRepository.findAll {
-            select(
-                path(StoryEntity::id)
-            ).from(
-                entity(UserEntity::class),
-                join(StoryEntity::class).on(
-                    path(StoryEntity::userId).eq(path(UserEntity::id))
-                ),
-            ).where(
-                and(
-                    path(StoryEntity::userId).eq(userId),
-                    path(StoryEntity::date).between(startDate.minusDays(1), endDate.plusDays(1))
-                )
-            )
-        }.filterNotNull()
+        endDate: LocalDate,
+    ): List<StoryQuery> {
+        return storyJpaRepository.findAllByUserIdAndDateBetween(
+            userId = userId,
+            startDate = startDate.minusDays(1),
+            endDate = endDate.plusDays(1),
+        ).map { storyMapper.toDomain(it) }
+    }
 
-        return storyIds.mapNotNull {
-            this.findAggregate(it)
+    override fun findByAttemptId(attemptId: Long): StoryQuery? {
+        val entity = storyJpaRepository.findAll {
+            select(
+                entity(StoryEntity::class)
+            ).from(
+                entity(StoryEntity::class),
+                fetchJoin(StoryEntity::problems),
+                fetchJoin(ProblemEntity::attempts),
+            ).where(
+                path(AttemptEntity::id).eq(attemptId),
+            )
         }
+            .filterNotNull()
+            .firstOrNull()
+
+        return entity?.let { storyMapper.toDomain(it) }
     }
 
     override fun deleteById(storyId: Long) {
         storyJpaRepository.deleteById(storyId)
-    }
-
-    override fun findDistinctCragsByUserId(
-        userId: Long,
-        cursor: Long?,
-        pageSize: Int
-    ): List<Crag> {
-        val pageable = PageRequest.of(0, pageSize + 1)
-        return storyJpaRepository.findDistinctCragsByUserIdWithCursor(userId, cursor, pageable)
-            .map { it.toDomain() }
-    }
-
-    override fun findDistinctGradesByUserId(
-        userId: Long,
-        cursor: Long?,
-        pageSize: Int
-    ): List<Grade> {
-        val pageable = PageRequest.of(0, pageSize + 1)
-        return storyJpaRepository.findDistinctGradesByUserIdWithCursor(userId, cursor, pageable)
-            .map { it.toDomain() }
     }
 }

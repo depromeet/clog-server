@@ -2,7 +2,7 @@ package org.depromeet.clog.server.api.calendar.application
 
 import org.depromeet.clog.server.api.calendar.application.CalendarResponse.Summary
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
-import org.depromeet.clog.server.domain.crag.domain.GradeRepository
+import org.depromeet.clog.server.domain.crag.domain.grade.GradeRepository
 import org.depromeet.clog.server.domain.story.StoryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -37,11 +37,11 @@ class GetCalendar(
                     date = date,
                     stories = stories.map { story ->
                         CalendarResponse.StoryListItem(
-                            id = story.id!!,
+                            id = story.id,
                             totalDurationMs = story.totalDurationMs,
-                            cragName = cragRepository.findById(story.cragId!!)?.name,
+                            cragName = story.crag?.let { cragRepository.findById(it.id!!)?.name },
                             problems = story.problems.let { problems ->
-                                problems.groupBy { problem -> problem.gradeId }.map { (gradeId, problems) ->
+                                problems.groupBy { problem -> problem.grade?.id }.map { (gradeId, problems) ->
                                     val grade = gradeRepository.findById(gradeId!!)
                                     CalendarResponse.Problem(
                                         colorHex = grade?.color?.hex,

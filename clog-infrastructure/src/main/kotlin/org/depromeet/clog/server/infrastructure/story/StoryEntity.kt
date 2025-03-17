@@ -1,9 +1,9 @@
 package org.depromeet.clog.server.infrastructure.story
 
 import jakarta.persistence.*
-import org.depromeet.clog.server.domain.problem.Problem
-import org.depromeet.clog.server.domain.story.Story
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
+import org.depromeet.clog.server.infrastructure.crag.CragEntity
+import org.depromeet.clog.server.infrastructure.problem.ProblemEntity
 import java.time.LocalDate
 
 @Table(name = "story")
@@ -17,36 +17,16 @@ class StoryEntity(
     @Column(name = "user_id")
     val userId: Long? = null,
 
-    @Column(name = "crag_id")
-    val cragId: Long? = null,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "crag_id")
+    val crag: CragEntity? = null,
 
     @Column(name = "memo")
     val memo: String? = null,
 
     @Column(name = "date")
     val date: LocalDate,
-) : BaseEntity() {
 
-    fun toDomain(problems: List<Problem> = emptyList()): Story {
-        return Story(
-            id = id,
-            userId = userId,
-            cragId = cragId,
-            date = date,
-            memo = memo,
-            problems = problems,
-        )
-    }
-
-    companion object {
-        fun from(story: Story): StoryEntity {
-            return StoryEntity(
-                id = story.id,
-                userId = story.userId,
-                cragId = story.cragId,
-                date = story.date,
-                memo = story.memo,
-            )
-        }
-    }
-}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "story")
+    val problems: List<ProblemEntity>,
+) : BaseEntity()

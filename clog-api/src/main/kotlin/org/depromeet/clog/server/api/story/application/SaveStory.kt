@@ -29,7 +29,7 @@ class SaveStory(
         )
 
         val problem = problemRepository.save(
-            request.problem.toDomain(story.id!!)
+            request.problem.toDomain(story.id)
         )
 
         val video = videoRepository.save(
@@ -37,16 +37,16 @@ class SaveStory(
         )
 
         videoStampRepository.saveAll(
-            request.attempt.video.stamps.map { it.toDomain(video.id!!) }
+            request.attempt.video.stamps.map { it.toDomain(video.id) }
         )
 
         attemptRepository.save(
-            request.attempt.toDomain(problem.id!!, video.id!!)
+            request.attempt.toDomain(video.id, problem.id)
         )
 
         return SaveStoryResponse(
-            storyId = story.id!!,
-            problemId = problem.id!!,
+            storyId = story.id,
+            problemId = problem.id,
         )
     }
 }

@@ -5,8 +5,9 @@ import org.depromeet.clog.server.domain.attempt.dto.AttemptFolderView
 
 interface AttemptRepository {
 
-    fun save(attempt: Attempt): Attempt
-    fun findByIdOrNull(attemptId: Long): Attempt?
-    fun deleteById(attemptId: Long)
+    fun save(attempt: AttemptCommand): AttemptQuery
+
     fun findAttemptsByUserAndFilter(userId: Long, filter: AttemptFilter): List<AttemptFolderView>
+
+    fun deleteById(attemptId: Long)
 }

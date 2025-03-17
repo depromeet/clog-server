@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.api.grade.presentation.dto
 
-import org.depromeet.clog.server.domain.crag.domain.Grade
+import org.depromeet.clog.server.domain.crag.domain.grade.Grade
 
 fun Grade.toGetMyGradeInfoResponse(): GetMyGradeInfoResponse {
     return GetMyGradeInfoResponse(

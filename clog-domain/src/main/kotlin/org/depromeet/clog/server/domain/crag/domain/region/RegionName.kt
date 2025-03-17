@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.domain.crag.domain
+package org.depromeet.clog.server.domain.crag.domain.region
 
 enum class RegionName(val regionName: String) {
     SEOUL("서울특별시"),

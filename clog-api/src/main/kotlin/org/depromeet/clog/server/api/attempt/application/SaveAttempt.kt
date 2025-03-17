@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.api.attempt.application
 
-import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptRequest
+import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptRequest
 import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptResponse
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
 import org.depromeet.clog.server.domain.video.VideoRepository
@@ -16,15 +16,13 @@ class SaveAttempt(
 ) {
 
     @Transactional
-    operator fun invoke(problemId: Long, request: AttemptRequest): SaveAttemptResponse {
+    operator fun invoke(request: SaveAttemptRequest): SaveAttemptResponse {
         val video = videoRepository.save(request.video.toDomain())
         videoStampRepository.saveAll(
-            request.video.stamps.map { it.toDomain(video.id!!) }
+            request.video.stamps.map { it.toDomain(video.id) }
         )
-        val attempt = attemptRepository.save(
-            request.toDomain(problemId, video.id!!)
-        )
+        val attempt = attemptRepository.save(request.toDomain(video.id))
 
-        return SaveAttemptResponse(attempt.id!!)
+        return SaveAttemptResponse(attempt.id)
     }
 }

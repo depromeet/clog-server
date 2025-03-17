@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.api.problem.application
 
-import org.depromeet.clog.server.api.problem.presentation.ProblemRequest
+import org.depromeet.clog.server.api.problem.presentation.SaveProblemRequest
 import org.depromeet.clog.server.api.problem.presentation.SaveProblemResponse
 import org.depromeet.clog.server.domain.problem.ProblemRepository
 import org.springframework.stereotype.Service
@@ -12,10 +12,10 @@ class SaveProblem(
 ) {
 
     @Transactional
-    operator fun invoke(storyId: Long, request: ProblemRequest): SaveProblemResponse {
+    operator fun invoke(storyId: Long, request: SaveProblemRequest): SaveProblemResponse {
         val problem = problemRepository.save(
             request.toDomain(storyId)
         )
-        return SaveProblemResponse(problem.id!!)
+        return SaveProblemResponse(problem.id)
     }
 }

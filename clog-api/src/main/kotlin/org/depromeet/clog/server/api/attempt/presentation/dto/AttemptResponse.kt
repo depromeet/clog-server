@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.attempt.presentation.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.depromeet.clog.server.domain.attempt.Attempt
+import org.depromeet.clog.server.domain.attempt.AttemptQuery
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
 
 @Schema(description = "문제 시도 응답 DTO")
@@ -15,10 +15,10 @@ data class AttemptResponse(
 
     companion object {
 
-        fun from(attempt: Attempt): AttemptResponse {
+        fun from(attemptQuery: AttemptQuery): AttemptResponse {
             return AttemptResponse(
-                status = attempt.status,
-                video = VideoResponse.from(attempt.video!!),
+                status = attemptQuery.status,
+                video = VideoResponse.from(attemptQuery.video),
             )
         }
     }

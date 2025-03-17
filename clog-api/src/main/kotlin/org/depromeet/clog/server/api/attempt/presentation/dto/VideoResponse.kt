@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.attempt.presentation.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.depromeet.clog.server.domain.video.Video
+import org.depromeet.clog.server.domain.video.VideoQuery
 
 @Schema(description = "영상 응답 DTO")
 data class VideoResponse(
@@ -22,9 +22,9 @@ data class VideoResponse(
 ) {
 
     companion object {
-        fun from(video: Video): VideoResponse {
+        fun from(video: VideoQuery): VideoResponse {
             return VideoResponse(
-                id = video.id!!,
+                id = video.id,
                 localPath = video.localPath,
                 thumbnailUrl = video.thumbnailUrl,
                 durationMs = video.durationMs,

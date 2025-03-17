@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
 
 @Schema(description = "시도 수정 요청 DTO")
-data class AttemptUpdateRequest(
+data class UpdateAttemptRequest(
 
     @Schema(description = "암장 ID", example = "1")
     val cragId: Long? = null,

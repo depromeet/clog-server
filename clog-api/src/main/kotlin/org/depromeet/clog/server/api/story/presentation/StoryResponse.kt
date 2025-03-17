@@ -2,7 +2,7 @@ package org.depromeet.clog.server.api.story.presentation
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.depromeet.clog.server.api.problem.presentation.ProblemResponse
-import org.depromeet.clog.server.domain.story.Story
+import org.depromeet.clog.server.domain.story.StoryQuery
 
 @Schema(description = "스토리 응답 DTO")
 data class StoryResponse(
@@ -13,10 +13,10 @@ data class StoryResponse(
     val problems: List<ProblemResponse>,
 ) {
     companion object {
-        fun from(story: Story): StoryResponse {
+        fun from(storyQuery: StoryQuery): StoryResponse {
             return StoryResponse(
-                id = story.id!!,
-                problems = story.problems.map { ProblemResponse.from(it) },
+                id = storyQuery.id,
+                problems = storyQuery.problems.map { ProblemResponse.from(it) },
             )
         }
     }

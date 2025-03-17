@@ -6,8 +6,6 @@ enum class ErrorCode(
     val httpStatus: Int
 ) {
 
-    EXAMPLE_ERROR_CODE("C9999", "Example error message", 400),
-
     ID_TOKEN_MISSING("C4000", "id_token이 누락되었습니다.", 400),
     ID_TOKEN_VALIDATION_FAILED("C4001", "id_token 검증에 실패하였습니다.", 400),
 
@@ -20,5 +18,8 @@ enum class ErrorCode(
     USER_NOT_FOUND("C4040", "존재하지 않는 회원입니다.", 404),
     VIDEO_NOT_FOUND("C4041", "존재하지 않는 영상입니다.", 404),
     ATTEMPT_NOT_FOUND("C4042", "존재하지 않는 시도입니다.", 404),
-    STORY_NOT_FOUND("C4043", "존재하지 않는 스토리입니다.", 404),
+    STORY_NOT_FOUND("C4043", "존재하지 않는 기록입니다.", 404),
+    CRAG_NOT_FOUND("C4044", "존재하지 않는 암장입니다.", 404),
+    PROBLEM_NOT_FOUND("C4045", "존재하지 않는 문제입니다.", 404),
+    GRADE_NOT_FOUND("C4046", "존재하지 않는 난이도입니다.", 404),
 }
