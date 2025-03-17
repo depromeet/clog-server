@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.domain.crag.domain
 
-data class Coordinate(
+data class Location(
     val longitude: Double,
     val latitude: Double
 )

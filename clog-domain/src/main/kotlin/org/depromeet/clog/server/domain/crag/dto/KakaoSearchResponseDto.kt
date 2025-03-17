@@ -2,8 +2,8 @@ package org.depromeet.clog.server.domain.crag.dto
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import org.depromeet.clog.server.domain.crag.domain.Coordinate
 import org.depromeet.clog.server.domain.crag.domain.Crag
+import org.depromeet.clog.server.domain.crag.domain.Location
 
 data class KakaoSearchResponseDto(
     val documents: List<KakaoSearchDocument>,
@@ -21,7 +21,7 @@ data class KakaoSearchResponseDto(
         fun toDomain(): Crag = Crag(
             name = this.placeName,
             roadAddress = this.roadAddressName,
-            coordinate = Coordinate(
+            location = Location(
                 longitude = this.x,
                 latitude = this.y
             ),
