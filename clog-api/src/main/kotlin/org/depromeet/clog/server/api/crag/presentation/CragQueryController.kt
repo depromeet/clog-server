@@ -30,10 +30,10 @@ class CragQueryController(
     @GetMapping("/me")
     fun getRecordedCrags(
         userContext: UserContext,
-        @ModelAttribute @ParameterObject pageRequest: Request
+        @ModelAttribute @ParameterObject request: Request
     ): ClogApiResponse<Response<CragResponse>> {
         val pagedResponse =
-            getMyCrag.getMyCrags(userContext.userId, pageRequest.cursor, pageRequest.pageSize)
+            getMyCrag.getMyCrags(userContext.userId, request.cursor, request.pageSize)
         return ClogApiResponse.from(pagedResponse)
     }
 
@@ -43,9 +43,9 @@ class CragQueryController(
     )
     @GetMapping("/nearby")
     fun getNearByCrags(
-        @ModelAttribute @ParameterObject pageRequest: Request
+        @ModelAttribute @ParameterObject request: Request
     ): ClogApiResponse<Response<CragResponse>> {
-        val pagedResponse = getNearByCrag(pageRequest.cursor, pageRequest.pageSize)
+        val pagedResponse = getNearByCrag(request.cursor, request.pageSize, request.latitude, request.longitude)
         return ClogApiResponse.from(pagedResponse)
     }
 }
