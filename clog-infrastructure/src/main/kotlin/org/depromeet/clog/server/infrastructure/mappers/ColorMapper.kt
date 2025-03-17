@@ -5,9 +5,9 @@ import org.depromeet.clog.server.infrastructure.crag.ColorEntity
 import org.springframework.stereotype.Component
 
 @Component
-class ColorMapper {
+class ColorMapper : DomainEntityMapper<Color, Color, ColorEntity> {
 
-    fun toDomain(entity: ColorEntity): Color {
+    override fun toDomain(entity: ColorEntity): Color {
         return Color(
             id = entity.id!!,
             name = entity.name,
@@ -15,7 +15,7 @@ class ColorMapper {
         )
     }
 
-    fun toEntity(domain: Color): ColorEntity {
+    override fun toEntity(domain: Color): ColorEntity {
         return ColorEntity(
             id = domain.id,
             name = domain.name,

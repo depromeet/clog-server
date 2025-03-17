@@ -5,9 +5,9 @@ import org.depromeet.clog.server.infrastructure.user.UserEntity
 import org.springframework.stereotype.Component
 
 @Component
-class UserMapper {
+class UserMapper : DomainEntityMapper<User, User, UserEntity> {
 
-    fun toDomain(entity: UserEntity): User {
+    override fun toDomain(entity: UserEntity): User {
         return User(
             id = entity.id,
             loginId = entity.loginId,
@@ -17,7 +17,7 @@ class UserMapper {
         )
     }
 
-    fun toEntity(domain: User): UserEntity {
+    override fun toEntity(domain: User): UserEntity {
         return UserEntity(
             id = domain.id,
             loginId = domain.loginId,

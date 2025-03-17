@@ -13,9 +13,9 @@ class AttemptMapper(
     private val videoMapper: VideoMapper,
     private val videoJpaRepository: VideoJpaRepository,
     private val problemJpaRepository: ProblemJpaRepository,
-) {
+) : DomainEntityMapper<AttemptQuery, AttemptCommand, AttemptEntity> {
 
-    fun toDomain(entity: AttemptEntity): AttemptQuery {
+    override fun toDomain(entity: AttemptEntity): AttemptQuery {
         return AttemptQuery(
             id = entity.id!!,
             video = videoMapper.toDomain(entity.video),
@@ -23,7 +23,7 @@ class AttemptMapper(
         )
     }
 
-    fun toEntity(domain: AttemptCommand): AttemptEntity {
+    override fun toEntity(domain: AttemptCommand): AttemptEntity {
         val videoEntity = videoJpaRepository.findByIdOrNull(domain.videoId)
             ?: throw IllegalArgumentException("Video not found")
 

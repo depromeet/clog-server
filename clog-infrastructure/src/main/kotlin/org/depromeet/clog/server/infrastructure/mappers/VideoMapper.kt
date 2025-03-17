@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component
 @Component
 class VideoMapper(
     private val videoStampMapper: VideoStampMapper,
-) {
+) : DomainEntityMapper<VideoQuery, VideoCommand, VideoEntity> {
 
-    fun toDomain(entity: VideoEntity): VideoQuery {
+    override fun toDomain(entity: VideoEntity): VideoQuery {
         return VideoQuery(
             id = entity.id!!,
             localPath = entity.localPath,
@@ -20,7 +20,7 @@ class VideoMapper(
         )
     }
 
-    fun toEntity(domain: VideoCommand): VideoEntity {
+    override fun toEntity(domain: VideoCommand): VideoEntity {
         return VideoEntity(
             id = domain.id,
             localPath = domain.localPath,

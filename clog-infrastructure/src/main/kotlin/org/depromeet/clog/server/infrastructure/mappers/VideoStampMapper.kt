@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component
 @Component
 class VideoStampMapper(
     private val videoJpaRepository: VideoJpaRepository
-) {
+) : DomainEntityMapper<VideoStampQuery, VideoStampCommand, VideoStampEntity> {
 
-    fun toDomain(entity: VideoStampEntity): VideoStampQuery {
+    override fun toDomain(entity: VideoStampEntity): VideoStampQuery {
         return VideoStampQuery(
             id = entity.id,
             timeMs = entity.timeMs,
         )
     }
 
-    fun toEntity(domain: VideoStampCommand): VideoStampEntity {
+    override fun toEntity(domain: VideoStampCommand): VideoStampEntity {
         val videoEntity = videoJpaRepository.findByIdOrNull(domain.videoId)
             ?: throw IllegalArgumentException("Video not found")
 

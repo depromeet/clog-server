@@ -14,9 +14,9 @@ class StoryMapper(
     private val cragMapper: CragMapper,
     private val cragJpaRepository: CragJpaRepository,
     private val problemJpaRepository: ProblemJpaRepository,
-) {
+) : DomainEntityMapper<StoryQuery, StoryCommand, StoryEntity> {
 
-    fun toDomain(entity: StoryEntity): StoryQuery {
+    override fun toDomain(entity: StoryEntity): StoryQuery {
         return StoryQuery(
             id = entity.id!!,
             userId = entity.userId,
@@ -27,7 +27,7 @@ class StoryMapper(
         )
     }
 
-    fun toEntity(domain: StoryCommand): StoryEntity {
+    override fun toEntity(domain: StoryCommand): StoryEntity {
         val cragEntity = cragJpaRepository.findByIdOrNull(domain.cragId)
             ?: throw IllegalArgumentException("Crag not found")
 

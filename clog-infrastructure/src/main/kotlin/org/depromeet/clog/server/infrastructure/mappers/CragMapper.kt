@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component
 @Component
 class CragMapper(
     private val gradeMapper: GradeMapper,
-) {
+) : DomainEntityMapper<Crag, Crag, CragEntity> {
 
-    fun toDomain(entity: CragEntity): Crag {
+    override fun toDomain(entity: CragEntity): Crag {
         return Crag(
             id = entity.id!!,
             name = entity.name,
@@ -23,7 +23,7 @@ class CragMapper(
         )
     }
 
-    fun toEntity(domain: Crag): CragEntity {
+    override fun toEntity(domain: Crag): CragEntity {
         return CragEntity(
             id = domain.id,
             name = domain.name,

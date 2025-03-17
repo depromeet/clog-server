@@ -16,9 +16,9 @@ class ProblemMapper(
     private val storyJpaRepository: StoryJpaRepository,
     private val gradeJpaRepository: GradeJpaRepository,
     private val attemptJpaRepository: AttemptJpaRepository,
-) {
+) : DomainEntityMapper<ProblemQuery, ProblemCommand, ProblemEntity> {
 
-    fun toDomain(entity: ProblemEntity): ProblemQuery {
+    override fun toDomain(entity: ProblemEntity): ProblemQuery {
         return ProblemQuery(
             id = entity.id!!,
             grade = entity.grade?.let { gradeMapper.toDomain(it) },
@@ -26,7 +26,7 @@ class ProblemMapper(
         )
     }
 
-    fun toEntity(domain: ProblemCommand): ProblemEntity {
+    override fun toEntity(domain: ProblemCommand): ProblemEntity {
         val storyEntity = storyJpaRepository.findByIdOrNull(domain.storyId)
             ?: throw IllegalArgumentException("Story not found")
 

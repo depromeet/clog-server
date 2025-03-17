@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component
 class GradeMapper(
     private val colorMapper: ColorMapper,
     private val cragJpaRepository: CragJpaRepository,
-) {
+) : DomainEntityMapper<Grade, Grade, GradeEntity> {
 
-    fun toDomain(entity: GradeEntity): Grade {
+    override fun toDomain(entity: GradeEntity): Grade {
         return Grade(
             id = entity.id!!,
             color = colorMapper.toDomain(entity.color),
@@ -21,7 +21,7 @@ class GradeMapper(
         )
     }
 
-    fun toEntity(domain: Grade): GradeEntity {
+    override fun toEntity(domain: Grade): GradeEntity {
         val cragEntity = cragJpaRepository.findByIdOrNull(domain.cragId)
             ?: throw IllegalArgumentException("Crag not found with id: ${domain.cragId}")
 
