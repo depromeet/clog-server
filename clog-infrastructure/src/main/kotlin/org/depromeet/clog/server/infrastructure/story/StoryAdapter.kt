@@ -46,7 +46,7 @@ class StoryAdapter(
             ).from(
                 entity(StoryEntity::class),
                 fetchJoin(StoryEntity::problems),
-                fetchJoin(ProblemEntity::attempts),
+                join(ProblemEntity::attempts),
             ).where(
                 path(AttemptEntity::id).eq(attemptId),
             )

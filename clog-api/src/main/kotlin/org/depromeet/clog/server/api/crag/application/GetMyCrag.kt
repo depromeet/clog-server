@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.api.crag.application
 
-import org.depromeet.clog.server.api.crag.presentation.dto.GetMyCragInfoResponse
+import org.depromeet.clog.server.api.crag.presentation.dto.CragResponse
 import org.depromeet.clog.server.api.crag.presentation.dto.toGetMyCragInfoResponse
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
@@ -18,7 +18,7 @@ class GetMyCrag(
         userId: Long,
         cursor: Long?,
         pageSize: Int
-    ): PagedResponse<GetMyCragInfoResponse> {
+    ): PagedResponse<CragResponse> {
         val domainCrags: List<Crag> =
             cragRepository.findDistinctCragsByUserId(userId, cursor, pageSize + 1)
         val hasMore = domainCrags.size > pageSize

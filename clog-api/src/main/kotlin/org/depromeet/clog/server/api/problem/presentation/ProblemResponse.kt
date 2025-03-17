@@ -1,7 +1,7 @@
 package org.depromeet.clog.server.api.problem.presentation
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptResponse
+import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptDetailResponse
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
 import org.depromeet.clog.server.domain.problem.ProblemQuery
 
@@ -11,7 +11,7 @@ data class ProblemResponse(
     val id: Long,
 
     @Schema(description = "문제 시도 목록")
-    val attempts: List<AttemptResponse>,
+    val attempts: List<AttemptDetailResponse>,
 
     @Schema(description = "문제 성공 횟수", example = "3")
     val successCount: Int,
@@ -24,7 +24,7 @@ data class ProblemResponse(
 ) {
     companion object {
         fun from(problem: ProblemQuery): ProblemResponse {
-            val attempts = problem.attempts.map { AttemptResponse.from(it) }
+            val attempts = problem.attempts.map { AttemptDetailResponse.from(it) }
             val successCount = attempts.count { it.status == AttemptStatus.SUCCESS }
             val failCount = attempts.count { it.status == AttemptStatus.FAILURE }
             val colorHex = problem.grade?.color?.hex
