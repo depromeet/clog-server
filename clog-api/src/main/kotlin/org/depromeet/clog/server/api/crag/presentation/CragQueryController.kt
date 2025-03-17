@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("${ApiConstants.API_BASE_PATH_V1}/crags")
 @RestController
 class CragQueryController(
-    private val getMyCrag: GetMyCrag
+    private val getMyCrag: GetMyCrag,
+    private val getNearByCrag: GetNearByCrag
 ) {
 
     @Operation(
@@ -33,6 +34,18 @@ class CragQueryController(
     ): ClogApiResponse<Response<CragResponse>> {
         val pagedResponse =
             getMyCrag.getMyCrags(userContext.userId, pageRequest.cursor, pageRequest.pageSize)
+        return ClogApiResponse.from(pagedResponse)
+    }
+
+    @Operation(
+        summary = "가까운 암장 정보 조회",
+        description = "첫 촬영을 끝내고 가까운 암장 정보를 조회합니다."
+    )
+    @GetMapping("/nearby")
+    fun getNearByCrags(
+        @ModelAttribute @ParameterObject pageRequest: Request
+    ): ClogApiResponse<Response<CragResponse>> {
+        val pagedResponse = getNearByCrag(pageRequest.cursor, pageRequest.pageSize)
         return ClogApiResponse.from(pagedResponse)
     }
 }
