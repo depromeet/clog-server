@@ -23,11 +23,9 @@ class ThumbnailController(
     @PostMapping("/upload")
     fun uploadImage(
         @RequestParam("file")
-        file: MultipartFile,
-        @RequestParam("videoId")
-        videoId: Long
+        file: MultipartFile
     ): ClogApiResponse<ThumbnailUploadResponse> {
-        val response = thumbnailService.uploadImage(file, videoId)
+        val response = thumbnailService.uploadImage(file)
         return ClogApiResponse.from(response)
     }
 }

@@ -17,10 +17,6 @@ class VideoAdapter(
         return videoMapper.toDomain(videoJpaRepository.save(entity))
     }
 
-    override fun updateThumbnailUrl(videoId: Long, thumbnailUrl: String): Int {
-        return videoJpaRepository.updateThumbnailUrl(videoId, thumbnailUrl)
-    }
-
     override fun findByIdOrNull(videoId: Long): VideoQuery? {
         return videoJpaRepository.findByIdOrNull(videoId)?.let {
             videoMapper.toDomain(it)
