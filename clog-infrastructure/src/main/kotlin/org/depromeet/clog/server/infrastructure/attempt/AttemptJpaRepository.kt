@@ -17,7 +17,10 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
             v.thumbnailUrl,
             v.durationMs,
             s.date,
+            c.id,
             c.name,
+            c.roadAddress,
+            col.id,
             col.name,
             col.hex,
             a.status
