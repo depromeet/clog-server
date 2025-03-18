@@ -8,7 +8,7 @@ import org.depromeet.clog.server.domain.thumbnail.application.ThumbnailService
 import org.depromeet.clog.server.domain.thumbnail.application.ThumbnailUploadResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
@@ -22,7 +22,7 @@ class ThumbnailController(
     @Operation(summary = "썸네일 업로드")
     @PostMapping("/upload")
     fun uploadImage(
-        @RequestParam("file")
+        @RequestPart("file")
         file: MultipartFile
     ): ClogApiResponse<ThumbnailUploadResponse> {
         val response = thumbnailService.uploadImage(file)
