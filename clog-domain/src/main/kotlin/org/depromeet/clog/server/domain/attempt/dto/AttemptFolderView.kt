@@ -10,7 +10,10 @@ data class AttemptFolderView(
     val videoThumbnailUrl: String?,
     val videoDurationMs: Long,
     val date: LocalDate,
+    val cragId: Long?,
     val cragName: String?,
+    val cragRoadAddress: String?,
+    val colorId: Long?,
     val colorName: String?,
     val colorHex: String?,
     val status: AttemptStatus
