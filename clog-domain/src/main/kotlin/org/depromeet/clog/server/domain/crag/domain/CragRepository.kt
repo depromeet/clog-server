@@ -10,4 +10,6 @@ interface CragRepository {
     fun existsByKakaoPlaceId(kakaoPlaceId: Long): Boolean
 
     fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag>
+
+    fun findNearCragsByLocation(location: Location, cursor: Long?, pageSize: Int): List<Crag>
 }
