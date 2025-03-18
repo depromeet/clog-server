@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile
 
 @Transactional
 interface ThumbnailService {
-    fun uploadImage(file: MultipartFile, videoId: Long): ThumbnailUploadResponse
+    fun uploadImage(file: MultipartFile): ThumbnailUploadResponse
 }
