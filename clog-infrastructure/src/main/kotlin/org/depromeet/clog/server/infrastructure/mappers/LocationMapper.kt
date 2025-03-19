@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class LocationMapper {
 
-    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
+    private val geometryFactory = GeometryFactory(PrecisionModel(), SRID)
 
     fun toPoint(location: Location): Point {
         return geometryFactory.createPoint(Coordinate(location.longitude, location.latitude))
@@ -21,5 +21,9 @@ class LocationMapper {
             longitude = point.coordinate.x,
             latitude = point.coordinate.y
         )
+    }
+
+    companion object {
+        private const val SRID = 5181
     }
 }

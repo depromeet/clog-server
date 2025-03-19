@@ -4,9 +4,12 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.crag.application.GetMyCrag
+import org.depromeet.clog.server.api.crag.application.GetNearByCrag
 import org.depromeet.clog.server.api.crag.presentation.dto.CragResponse
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
+import org.depromeet.clog.server.global.utils.dto.CursorPagination.PointRequest
+import org.depromeet.clog.server.global.utils.dto.CursorPagination.PointResponse
 import org.depromeet.clog.server.global.utils.dto.CursorPagination.Request
 import org.depromeet.clog.server.global.utils.dto.CursorPagination.Response
 import org.springdoc.core.annotations.ParameterObject
@@ -43,9 +46,9 @@ class CragQueryController(
     )
     @GetMapping("/nearby")
     fun getNearByCrags(
-        @ModelAttribute @ParameterObject request: Request
-    ): ClogApiResponse<Response<CragResponse>> {
-        val pagedResponse = getNearByCrag(request.cursor, request.pageSize, request.latitude, request.longitude)
-        return ClogApiResponse.from(pagedResponse)
+        @ModelAttribute @ParameterObject request: PointRequest
+    ): ClogApiResponse<PointResponse<CragResponse>> {
+        val result = getNearByCrag(request.cursor, request.pageSize, request.longitude, request.latitude)
+        return ClogApiResponse.from(result)
     }
 }

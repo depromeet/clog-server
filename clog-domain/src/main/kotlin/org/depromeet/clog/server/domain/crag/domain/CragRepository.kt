@@ -11,5 +11,5 @@ interface CragRepository {
 
     fun findDistinctCragsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Crag>
 
-    fun findNearCragsByLocation(location: Location, cursor: Long?, pageSize: Int): List<Crag>
+    fun findNearCragsByLocation(location: Location, cursor: Double?, pageSize: Int): List<Pair<Crag, Double>>
 }
