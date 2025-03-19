@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "유저 API", description = "유저 관련 작업을 수행합니다.")
 @RestController
-@RequestMapping("$API_BASE_PATH_V1/user")
+@RequestMapping("$API_BASE_PATH_V1/users")
 class UserController(
     private val userService: UserService,
     private val logoutService: LogoutService
