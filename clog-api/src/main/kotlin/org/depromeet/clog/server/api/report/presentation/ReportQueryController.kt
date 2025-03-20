@@ -29,11 +29,11 @@ class ReportQueryController(
     }
 
     @Operation(
-        summary = "상세 사용자 리포트 조회",
+        summary = "사용자 리포트 통계 조회",
         description = "가장 많이 도전한 문제(암장, 난이도, 도전 횟수 및 시도 영상)와 가장 많이 방문한 암장 정보를 제공합니다."
     )
     @GetMapping("/statistics")
-    fun getDetailedReport(userContext: UserContext): ClogApiResponse<DetailedReportResponse> {
+    fun getStatisticsReport(userContext: UserContext): ClogApiResponse<DetailedReportResponse> {
         val report = getReport.getReportStatistic(userContext.userId)
         return ClogApiResponse.from(report)
     }

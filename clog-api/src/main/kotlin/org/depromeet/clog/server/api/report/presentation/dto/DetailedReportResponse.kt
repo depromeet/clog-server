@@ -3,7 +3,7 @@ package org.depromeet.clog.server.api.report.presentation.dto
 import io.swagger.v3.oas.annotations.media.Schema
 import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptVideoResponse
 
-@Schema(description = "상세 사용자 리포트 응답 DTO")
+@Schema(description = "사용자 리포트 통계 응답 DTO")
 data class DetailedReportResponse(
     @Schema(description = "가장 많이 도전한 문제의 암장 이름", example = "클라이밍 파크 강남점")
     val mostAttemptedProblemCrag: String,
