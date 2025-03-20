@@ -14,6 +14,6 @@ data class ReportResponse(
     val successAttemptCount: Long,
     @Schema(description = "완등률 (%)", example = "75.0")
     val completionRate: Double,
-    @Schema(description = "사용자 닉네임", example = "climber123")
-    val userNickname: String,
+    @Schema(description = "사용자 닉네임", example = "김클로그")
+    val userNickname: String
 )

@@ -6,4 +6,6 @@ interface UserRepository {
     fun findByLoginIdAndProviderAndIsDeletedFalse(loginId: String, provider: Provider): User?
     fun findByLoginIdAndProvider(loginId: String, provider: Provider): User?
     fun findByIdAndIsDeletedFalse(id: Long): User?
+
+    fun findAllActiveUsers(): List<User>
 }
