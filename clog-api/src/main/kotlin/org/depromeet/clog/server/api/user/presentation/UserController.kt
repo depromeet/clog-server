@@ -5,16 +5,13 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.api.user.UserContext
+import org.depromeet.clog.server.api.user.presentation.dto.WithdrawalRequest
 import org.depromeet.clog.server.domain.auth.application.LogoutService
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.application.UserService
 import org.depromeet.clog.server.domain.user.application.dto.UpdateUserNameReauest
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "유저 API", description = "유저 관련 작업을 수행합니다.")
 @RestController
@@ -32,11 +29,14 @@ class UserController(
         return ClogApiResponse.from(null)
     }
 
-    @Operation(summary = "회원탈퇴")
+    @Operation(summary = "회원탈퇴", description = "애플 회원일 경우 authorizationCode를 같이 보내주세요.")
     @DeleteMapping("/leave")
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
-    fun leave(userContext: UserContext): ClogApiResponse<Nothing?> {
-        userService.withdraw(userContext.userId)
+    fun leave(
+        userContext: UserContext,
+        @RequestBody(required = false) request: WithdrawalRequest?
+    ): ClogApiResponse<Nothing?> {
+        userService.withdraw(userContext.userId, request?.authorizationCode)
         return ClogApiResponse.from(null)
     }
 
