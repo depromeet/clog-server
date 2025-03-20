@@ -34,9 +34,11 @@ class GradeAdapter(
             select(
                 entity(GradeEntity::class)
             ).from(
-                entity(GradeEntity::class)
+                entity(GradeEntity::class),
+                fetchJoin(GradeEntity::crag),
+                fetchJoin(GradeEntity::color)
             ).where(
-                path(GradeEntity::crag).path(CragEntity::id).eq(cragId)
+                path(CragEntity::id).eq(cragId)
             )
         }
             .filterNotNull()
