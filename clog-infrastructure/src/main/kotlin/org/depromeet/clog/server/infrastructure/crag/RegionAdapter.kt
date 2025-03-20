@@ -6,9 +6,10 @@ import org.depromeet.clog.server.domain.crag.domain.region.RegionRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class RegionRepositoryAdapter(
+class RegionAdapter(
     private val regionJpaRepository: RegionJpaRepository
 ) : RegionRepository {
+
     override fun findByRegionName(regionName: RegionName): List<Region> =
         regionJpaRepository.findByRegionName(regionName)
             .toList()
