@@ -3,6 +3,7 @@ package org.depromeet.clog.server.api.grade.presentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
+import org.depromeet.clog.server.api.grade.application.GetCragGrade
 import org.depromeet.clog.server.api.grade.application.GetMyGrade
 import org.depromeet.clog.server.api.grade.presentation.dto.GetMyGradeInfoResponse
 import org.depromeet.clog.server.api.grade.presentation.dto.GradesResponse

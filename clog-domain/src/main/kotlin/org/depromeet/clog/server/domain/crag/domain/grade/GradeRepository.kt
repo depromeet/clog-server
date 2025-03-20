@@ -9,4 +9,6 @@ interface GradeRepository {
         cursor: Long?,
         pageSize: Int
     ): List<Grade>
+
+    fun findGradesByCragId(cragId: Long): List<Grade>
 }
