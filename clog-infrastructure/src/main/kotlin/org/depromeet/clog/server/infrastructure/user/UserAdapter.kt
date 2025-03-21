@@ -7,7 +7,7 @@ import org.depromeet.clog.server.infrastructure.mappers.UserMapper
 import org.springframework.stereotype.Component
 
 @Component
-class UserRepositoryAdapter(
+class UserAdapter(
     private val userMapper: UserMapper,
     private val userJpaRepository: UserJpaRepository
 ) : UserRepository {

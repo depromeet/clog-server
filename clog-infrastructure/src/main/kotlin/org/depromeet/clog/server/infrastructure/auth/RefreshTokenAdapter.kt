@@ -6,7 +6,7 @@ import org.depromeet.clog.server.domain.user.domain.Provider
 import org.springframework.stereotype.Component
 
 @Component
-class RefreshTokenRepositoryAdapter(
+class RefreshTokenAdapter(
     private val refreshTokenJpaRepository: RefreshTokenJpaRepository
 ) : RefreshTokenRepository {
 

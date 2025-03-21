@@ -10,7 +10,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
-class CragRepositoryAdapter(
+class CragAdapter(
     private val cragMapper: CragMapper,
     private val locationMapper: LocationMapper,
     private val cragJpaRepository: CragJpaRepository

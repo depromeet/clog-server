@@ -28,4 +28,21 @@ class GradeAdapter(
         return gradeJpaRepository.findDistinctGradesByUserIdWithCursor(userId, cursor, pageable)
             .map { gradeMapper.toDomain(it) }
     }
+
+    override fun findGradesByCragId(cragId: Long): List<Grade> {
+        val entities = gradeJpaRepository.findAll {
+            select(
+                entity(GradeEntity::class)
+            ).from(
+                entity(GradeEntity::class),
+                fetchJoin(GradeEntity::crag),
+                fetchJoin(GradeEntity::color)
+            ).where(
+                path(CragEntity::id).eq(cragId)
+            )
+        }
+            .filterNotNull()
+
+        return entities.map { gradeMapper.toDomain(it) }
+    }
 }
