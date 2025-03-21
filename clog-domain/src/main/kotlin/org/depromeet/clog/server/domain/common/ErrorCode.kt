@@ -6,8 +6,9 @@ enum class ErrorCode(
     val httpStatus: Int
 ) {
 
-    ID_TOKEN_MISSING("C4000", "id_token이 누락되었습니다.", 400),
-    ID_TOKEN_VALIDATION_FAILED("C4001", "id_token 검증에 실패하였습니다.", 400),
+    INVALID_REQUEST("C4000", "잘못된 요청입니다.", 400),
+    ID_TOKEN_MISSING("C4001", "id_token이 누락되었습니다.", 400),
+    ID_TOKEN_VALIDATION_FAILED("C4002", "id_token 검증에 실패하였습니다.", 400),
 
     TOKEN_INVALID("C4010", "토큰이 유효하지 않습니다.", 401),
     TOKEN_EXPIRED("C4011", "토큰이 만료되었습니다.", 401),
@@ -24,4 +25,6 @@ enum class ErrorCode(
     CRAG_NOT_FOUND("C4044", "존재하지 않는 암장입니다.", 404),
     PROBLEM_NOT_FOUND("C4045", "존재하지 않는 문제입니다.", 404),
     GRADE_NOT_FOUND("C4046", "존재하지 않는 난이도입니다.", 404),
+
+    INTERNAL_SERVER_ERROR("C5000", "서버 내부 오류입니다.", 500),
 }

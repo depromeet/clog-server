@@ -4,11 +4,11 @@ data class ErrorResponse(
     val name: String,
     val code: String,
     val message: String? = null,
-    val detail: Map<String, Any>? = null
+    val detail: Map<String, Any?>? = null
 ) {
 
     companion object {
-        fun from(errorCode: ErrorCode, detail: Map<String, Any>? = null): ErrorResponse {
+        fun from(errorCode: ErrorCode, detail: Map<String, Any?>? = null): ErrorResponse {
             return ErrorResponse(
                 name = errorCode.name,
                 code = errorCode.code,
