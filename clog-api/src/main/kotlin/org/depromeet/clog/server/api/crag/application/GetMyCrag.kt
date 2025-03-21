@@ -4,8 +4,7 @@ import org.depromeet.clog.server.api.crag.presentation.dto.CragResponse
 import org.depromeet.clog.server.api.crag.presentation.dto.toGetMyCragInfoResponse
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
-import org.depromeet.clog.server.global.utils.dto.CursorPagination.Response
-import org.depromeet.clog.server.global.utils.dto.CursorPagination.Response.Meta
+import org.depromeet.clog.server.global.utils.dto.CursorPagination
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,7 +17,7 @@ class GetMyCrag(
         userId: Long,
         cursor: Long?,
         pageSize: Int
-    ): Response<CragResponse> {
+    ): CursorPagination.Response<Long, CragResponse> {
         val domainCrags: List<Crag> =
             cragRepository.findDistinctCragsByUserId(userId, cursor, pageSize + 1)
         val hasMore = domainCrags.size > pageSize
@@ -26,9 +25,9 @@ class GetMyCrag(
         val apiResponses = trimmedCrags.map { it.toGetMyCragInfoResponse() }
         val nextCursor: Long? = if (hasMore) trimmedCrags.last().id else null
 
-        return Response(
+        return CursorPagination.Response(
             contents = apiResponses,
-            meta = Meta(nextCursor = nextCursor, hasMore = hasMore)
+            meta = CursorPagination.Response.Meta(nextCursor = nextCursor, hasMore = hasMore)
         )
     }
 }

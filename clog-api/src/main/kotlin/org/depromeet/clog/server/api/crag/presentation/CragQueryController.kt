@@ -8,10 +8,7 @@ import org.depromeet.clog.server.api.crag.application.GetNearByCrag
 import org.depromeet.clog.server.api.crag.presentation.dto.CragResponse
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
-import org.depromeet.clog.server.global.utils.dto.CursorPagination.PointRequest
-import org.depromeet.clog.server.global.utils.dto.CursorPagination.PointResponse
-import org.depromeet.clog.server.global.utils.dto.CursorPagination.Request
-import org.depromeet.clog.server.global.utils.dto.CursorPagination.Response
+import org.depromeet.clog.server.global.utils.dto.CursorPagination
 import org.springdoc.core.annotations.ParameterObject
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -33,8 +30,8 @@ class CragQueryController(
     @GetMapping("/me")
     fun getRecordedCrags(
         userContext: UserContext,
-        @ModelAttribute @ParameterObject request: Request
-    ): ClogApiResponse<Response<CragResponse>> {
+        @ModelAttribute @ParameterObject request: CursorPagination.GeneralRequest<Long>
+    ): ClogApiResponse<CursorPagination.Response<Long, CragResponse>> {
         val pagedResponse =
             getMyCrag.getMyCrags(userContext.userId, request.cursor, request.pageSize)
         return ClogApiResponse.from(pagedResponse)
@@ -46,8 +43,8 @@ class CragQueryController(
     )
     @GetMapping("/nearby")
     fun getNearByCrags(
-        @ModelAttribute @ParameterObject request: PointRequest
-    ): ClogApiResponse<PointResponse<CragResponse>> {
+        @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedRequest<Double>
+    ): ClogApiResponse<CursorPagination.Response<Double, CragResponse>> {
         val result = getNearByCrag(request.cursor, request.pageSize, request.longitude, request.latitude)
         return ClogApiResponse.from(result)
     }
