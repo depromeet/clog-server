@@ -24,4 +24,6 @@ interface GradeJpaRepository : JpaRepository<GradeEntity, Long>, KotlinJdslJpqlE
         @Param("cursor") cursor: Long?,
         pageable: Pageable
     ): List<GradeEntity>
+
+    fun findByCrag(crag: CragEntity): MutableList<GradeEntity>
 }

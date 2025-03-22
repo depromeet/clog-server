@@ -2,22 +2,25 @@ package org.depromeet.clog.server.infrastructure.admin
 
 import org.depromeet.clog.server.admin.domain.crag.GradeAdminRepository
 import org.depromeet.clog.server.domain.crag.domain.Crag
-import org.depromeet.clog.server.domain.crag.domain.Grade
-import org.depromeet.clog.server.infrastructure.crag.CragEntity
-import org.depromeet.clog.server.infrastructure.crag.GradeEntity
+import org.depromeet.clog.server.domain.crag.domain.grade.Grade
 import org.depromeet.clog.server.infrastructure.crag.GradeJpaRepository
+import org.depromeet.clog.server.infrastructure.mappers.CragMapper
+import org.depromeet.clog.server.infrastructure.mappers.GradeMapper
 import org.springframework.stereotype.Component
 
 @Component
 class GradeAdminAdapter(
+    private val cragMapper: CragMapper,
+    private val gradeMapper: GradeMapper,
     private val gradeJpaRepository: GradeJpaRepository
 ) : GradeAdminRepository {
 
     override fun save(grade: Grade): Grade {
-        return gradeJpaRepository.save(GradeEntity.fromDomain(grade)).toDomain()
+        val entity = gradeJpaRepository.save(gradeMapper.toEntity(grade))
+        return gradeMapper.toDomain(entity)
     }
 
     override fun findByCrag(crag: Crag): List<Grade> {
-        return gradeJpaRepository.findByCrag(CragEntity.fromDomain(crag)).map { it.toDomain() }
+        return gradeJpaRepository.findByCrag(cragMapper.toEntity(crag)).map { gradeMapper.toDomain(it) }
     }
 }
