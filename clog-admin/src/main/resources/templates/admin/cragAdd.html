@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<th:block th:replace="~{fragments/admin/fragments.html :: admHead}"/>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/admin/fragments.html :: admLeftNav(nav='cragList')}"/>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <th:block th:replace="~{fragments/admin/fragments.html :: admTopBar}"/>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <div class="row p-5">
+                    <div class="col-6">
+                        <h1 class="h3 text-gray-900 mb-4">암장 등록</h1>
+
+                        <form class="user"
+                              id="content-form"
+                              th:action="@{/admin/add/crags}"
+                              th:object="${crag}"
+                              method="post">
+                            <div class="form-group">
+                                <label for="inputSearchWord" class="form-label">주소 검색</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                           id="inputSearchWord"
+                                           class="form-control form-control-user"
+                                           placeholder="도로명 주소를 입력하세요."/>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" style="border-top-right-radius:30px; border-bottom-right-radius: 30px;" type="button" onclick="findPlace()">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" id="radio-container"></div>
+
+                            <input type="hidden" name="name" id="name">
+                            <input type="hidden" name="roadAddress" id="roadAddress">
+                            <input type="hidden" name="longitude" id="longitude">
+                            <input type="hidden" name="latitude" id="latitude">
+                            <input type="hidden" name="kakaoPlaceId" id="kakaoPlaceId">
+                            <hr class="my-4">
+
+                            <button class="w-100 btn btn-primary btn-lg" type="submit">생성하기</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <th:block th:replace="~{fragments/admin/fragments.html :: adminFooter}"/>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<th:block th:replace="~{fragments/admin/fragments.html :: admJS}"/>
+
+</body>
+<script th:inline="javascript">
+    async function findPlace() {
+        const keyword = document.getElementById('inputSearchWord').value;
+        //<![CDATA[
+        const kakaoKey = [[${kakaoKey}]];
+        //]]>
+        const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${keyword}`;
+
+        try {
+            const response = await axios({
+                url: url,
+                method: 'get',
+                headers: {
+                    Authorization: `KakaoAK ${kakaoKey}`
+                }
+            });
+
+            const data = response.data.documents;
+            const container = document.getElementById('radio-container');
+            container.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const radioItem = document.createElement('div');
+                const checkedAttribute = index === 0 ? 'checked' : '';
+
+                radioItem.innerHTML = `
+                <input class="list-group-item-check pe-none" type="radio" name="listGroupCheckableRadios"
+                       id="listGroupCheckableRadios${index}" data-item='${JSON.stringify(item)}' ${checkedAttribute}>
+                    <label class="list-group-item rounded-3 py-3" for="listGroupCheckableRadios${index}">
+                        ${item.place_name}
+                        <span class="d-block small opacity-50">${item.category_name}</span>
+                        <span class="d-block small opacity-50">${item.road_address_name}</span>
+                        <span class="d-block small opacity-50">${item.x}</span>
+                        <span class="d-block small opacity-50">${item.y}</span>
+                    </label>`;
+                container.appendChild(radioItem);
+            })
+
+        } catch (error) {
+            console.error('Error occurred:', error);
+        }
+    }
+
+    function createHiddenInput(name, value) {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = name;
+        hiddenInput.value = value;
+
+        return hiddenInput;
+    }
+
+    document.getElementById('content-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const selectedRadio = document.querySelector('input[name="listGroupCheckableRadios"]:checked');
+
+        if (selectedRadio) {
+            const selectedItem = JSON.parse(selectedRadio.getAttribute('data-item'));
+
+            const fields = [
+                { name: 'name', value: selectedItem.place_name },
+                { name: 'category', value: selectedItem.category_name },
+                { name: 'roadAddress', value: selectedItem.road_address_name},
+                { name: 'phone', value: selectedItem.phone },
+                { name: 'longitude', value: selectedItem.x },
+                { name: 'latitude', value: selectedItem.y },
+                { name: 'kakaoPlaceId', value: selectedItem.id }
+            ];
+
+            fields.forEach(field => {
+                const hiddenInput = createHiddenInput(field.name, field.value);
+                this.appendChild(hiddenInput);
+            });
+
+            this.submit();
+        } else {
+            alert('장소를 선택하세요.');
+        }
+    });
+
+</script>
+
+</html>
