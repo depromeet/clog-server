@@ -25,7 +25,7 @@ class GetReport(
         val threeMonthsAgo = LocalDate.now().minusMonths(3)
         val reportQuery: ReportQuery = reportRepository.getReport(userId, threeMonthsAgo)
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
-            ?: throw UserNotFoundException("사용자를 찾을 수 없습니다.")
+            ?: throw UserNotFoundException()
         val totalExerciseTime = TotalExerciseTime(
             totalExerciseTimeMs = reportQuery.totalExerciseTimeMs
         )

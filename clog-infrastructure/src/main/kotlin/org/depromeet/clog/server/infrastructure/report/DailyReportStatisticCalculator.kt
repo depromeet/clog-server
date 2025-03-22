@@ -89,13 +89,13 @@ class DailyReportStatisticCalculator(
 
     private fun getDetails(userId: Long, groupDate: LocalDate, problemId: Long): ReportDTO {
         val queryStr = """
-            SELECT new org.depromeet.clog.server.infrastructure.report.ReportDTO(s, p)
-            FROM ProblemEntity p
-            JOIN p.story s
-            WHERE s.userId = :userId 
-              AND s.date = :groupDate 
-              AND p.id = :problemId
-        """
+        SELECT new org.depromeet.clog.server.infrastructure.report.ReportDTO(s, p)
+        FROM ProblemEntity p
+        JOIN p.story s
+        WHERE s.userId = :userId 
+          AND s.date = :groupDate 
+          AND p.id = :problemId
+    """
         return em.createQuery(queryStr, ReportDTO::class.java)
             .setParameter("userId", userId)
             .setParameter("groupDate", groupDate)
