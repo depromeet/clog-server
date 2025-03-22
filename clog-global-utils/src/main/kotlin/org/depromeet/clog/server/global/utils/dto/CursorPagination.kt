@@ -21,12 +21,6 @@ object CursorPagination {
 
         @Parameter(example = "10")
         val pageSize: Int = 10,
-
-        @Parameter(example = "122.4194", description = "사용자의 경도(x)")
-        val longitude: Double? = null,
-
-        @Parameter(example = "37.7749", description = "사용자의 위도(y)")
-        val latitude: Double? = null
     )
 
     @Schema(description = "커서 기반 페이지네이션 응답", name = "CursorPaginationResponse")

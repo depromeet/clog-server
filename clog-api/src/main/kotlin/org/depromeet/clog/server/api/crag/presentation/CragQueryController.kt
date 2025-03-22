@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.api.crag.presentation
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.crag.application.GetMyCrag
@@ -43,9 +44,11 @@ class CragQueryController(
     )
     @GetMapping("/nearby")
     fun getNearByCrags(
-        @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedRequest
+        @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedRequest,
+        @Parameter(description = "사용자의 경도(x)", example = "122.4194") longitude: Double?,
+        @Parameter(description = "사용자의 위도(y)", example = "37.7749") latitude: Double?
     ): ClogApiResponse<CursorPagination.Response<Double, CragResponse>> {
-        val result = getNearByCrag(request.cursor, request.pageSize, request.longitude, request.latitude)
+        val result = getNearByCrag(request.cursor, request.pageSize, longitude, latitude)
         return ClogApiResponse.from(result)
     }
 }
