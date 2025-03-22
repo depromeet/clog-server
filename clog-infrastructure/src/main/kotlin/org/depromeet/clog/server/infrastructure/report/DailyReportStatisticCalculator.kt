@@ -4,16 +4,12 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.depromeet.clog.server.domain.report.DailyReportStatistic
-import org.depromeet.clog.server.domain.video.VideoQuery
-import org.depromeet.clog.server.infrastructure.mappers.VideoMapper
-import org.depromeet.clog.server.infrastructure.video.VideoEntity
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @Component
 class DailyReportStatisticCalculator(
-    @PersistenceContext private val em: EntityManager,
-    private val videoMapper: VideoMapper
+    @PersistenceContext private val em: EntityManager
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -31,7 +27,7 @@ class DailyReportStatisticCalculator(
                 mostAttemptedProblemCrag = "없음",
                 mostAttemptedProblemGrade = "없음",
                 mostAttemptedProblemAttemptCount = 0,
-                attemptVideos = emptyList(),
+                mostAttemptedProblemId = 0,
                 mostVisitedCragName = "없음",
                 mostVisitedCragVisitCount = 0
             )
@@ -43,18 +39,16 @@ class DailyReportStatisticCalculator(
         val mostAttemptedProblemCrag = story.crag?.name ?: "알 수 없음"
         val mostAttemptedProblemGrade = problem.grade?.color?.name ?: "알 수 없음"
 
-        val attemptVideos =
-            getAttemptVideos(userId, groupData.groupDate, groupData.problemId, groupData.cragId)
-        val (mostVisitedCragName, mostVisitedCragVisitCount) = getVisitedData(userId)
+        val visitedData = getVisitedData(userId)
 
         return DailyReportStatistic(
             userId = userId,
             mostAttemptedProblemCrag = mostAttemptedProblemCrag,
             mostAttemptedProblemGrade = mostAttemptedProblemGrade,
             mostAttemptedProblemAttemptCount = groupData.attemptCount,
-            attemptVideos = attemptVideos,
-            mostVisitedCragName = mostVisitedCragName,
-            mostVisitedCragVisitCount = mostVisitedCragVisitCount
+            mostAttemptedProblemId = groupData.problemId,
+            mostVisitedCragName = visitedData.first,
+            mostVisitedCragVisitCount = visitedData.second
         ).also {
             logger.info { "사용자 id $userId 에 대한 통계가 계산되었습니다: $it" }
         }
@@ -89,45 +83,18 @@ class DailyReportStatisticCalculator(
 
     private fun getDetails(userId: Long, groupDate: LocalDate, problemId: Long): ReportDTO {
         val queryStr = """
-        SELECT new org.depromeet.clog.server.infrastructure.report.ReportDTO(s, p)
-        FROM ProblemEntity p
-        JOIN p.story s
-        WHERE s.userId = :userId 
-          AND s.date = :groupDate 
-          AND p.id = :problemId
-    """
+            SELECT new org.depromeet.clog.server.infrastructure.report.ReportDTO(s, p)
+            FROM ProblemEntity p
+            JOIN p.story s
+            WHERE s.userId = :userId 
+              AND s.date = :groupDate 
+              AND p.id = :problemId
+        """
         return em.createQuery(queryStr, ReportDTO::class.java)
             .setParameter("userId", userId)
             .setParameter("groupDate", groupDate)
             .setParameter("problemId", problemId)
             .singleResult
-    }
-
-    private fun getAttemptVideos(
-        userId: Long,
-        groupDate: LocalDate,
-        problemId: Long,
-        cragId: Long
-    ): List<VideoQuery> {
-        val queryStr = """
-            SELECT v
-            FROM AttemptEntity a
-            JOIN a.video v
-            JOIN a.problem p
-            JOIN p.story s
-            WHERE s.userId = :userId 
-              AND s.date = :groupDate 
-              AND p.id = :problemId 
-              AND s.crag.id = :cragId
-            ORDER BY v.id DESC
-        """
-        val videosList = em.createQuery(queryStr, VideoEntity::class.java)
-            .setParameter("userId", userId)
-            .setParameter("groupDate", groupDate)
-            .setParameter("problemId", problemId)
-            .setParameter("cragId", cragId)
-            .resultList
-        return videosList.map { video -> videoMapper.toDomainWithoutStamps(video) }
     }
 
     private fun getVisitedData(userId: Long): Pair<String, Long> {

@@ -14,7 +14,7 @@ class DailyReportStatisticMapper {
             mostAttemptedProblemCrag = entity.mostAttemptedProblemCrag,
             mostAttemptedProblemGrade = entity.mostAttemptedProblemGrade,
             mostAttemptedProblemAttemptCount = entity.mostAttemptedProblemAttemptCount,
-            attemptVideos = entity.attemptVideosJson,
+            mostAttemptedProblemId = entity.mostAttemptedProblemId,
             mostVisitedCragName = entity.mostVisitedCragName,
             mostVisitedCragVisitCount = entity.mostVisitedCragVisitCount
         )
@@ -28,7 +28,7 @@ class DailyReportStatisticMapper {
             mostAttemptedProblemCrag = domain.mostAttemptedProblemCrag,
             mostAttemptedProblemGrade = domain.mostAttemptedProblemGrade,
             mostAttemptedProblemAttemptCount = domain.mostAttemptedProblemAttemptCount,
-            attemptVideosJson = domain.attemptVideos,
+            mostAttemptedProblemId = domain.mostAttemptedProblemId,
             mostVisitedCragName = domain.mostVisitedCragName,
             mostVisitedCragVisitCount = domain.mostVisitedCragVisitCount
         )

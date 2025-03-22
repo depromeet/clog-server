@@ -4,6 +4,7 @@ import org.depromeet.clog.server.domain.report.DailyReportStatistic
 import org.depromeet.clog.server.domain.report.DailyReportStatisticRepository
 import org.depromeet.clog.server.infrastructure.mappers.DailyReportStatisticMapper
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component
 class DailyReportStatisticAdapter(
@@ -23,11 +24,10 @@ class DailyReportStatisticAdapter(
             existingEntity.mostAttemptedProblemGrade = statistic.mostAttemptedProblemGrade
             existingEntity.mostAttemptedProblemAttemptCount =
                 statistic.mostAttemptedProblemAttemptCount
-            existingEntity.attemptVideosJson =
-                dailyReportStatisticMapper.writeAttemptVideos(statistic.attemptVideos)
+            existingEntity.mostAttemptedProblemId = statistic.mostAttemptedProblemId
             existingEntity.mostVisitedCragName = statistic.mostVisitedCragName
             existingEntity.mostVisitedCragVisitCount = statistic.mostVisitedCragVisitCount
-            existingEntity.statDate = java.time.LocalDate.now()
+            existingEntity.statDate = LocalDate.now()
             val saved = dailyReportStatisticJpaRepository.save(existingEntity)
             dailyReportStatisticMapper.toDomain(saved)
         } else {

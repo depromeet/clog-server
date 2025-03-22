@@ -7,6 +7,7 @@ import org.depromeet.clog.server.domain.report.ReportQuery
 import org.depromeet.clog.server.domain.report.ReportRepository
 import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.depromeet.clog.server.domain.user.presentation.exception.UserNotFoundException
+import org.depromeet.clog.server.domain.video.VideoRepository
 import org.depromeet.clog.server.infrastructure.report.DailyReportStatisticCalculator
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,7 +18,8 @@ class GetReport(
     private val reportRepository: ReportRepository,
     private val userRepository: UserRepository,
     private val dailyReportStatisticRepository: DailyReportStatisticRepository,
-    private val calculator: DailyReportStatisticCalculator
+    private val calculator: DailyReportStatisticCalculator,
+    private val videoRepository: VideoRepository
 ) {
 
     @Transactional
@@ -26,9 +28,9 @@ class GetReport(
         val reportQuery: ReportQuery = reportRepository.getReport(userId, threeMonthsAgo)
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
             ?: throw UserNotFoundException()
-        val totalExerciseTime = TotalExerciseTime(
-            totalExerciseTimeMs = reportQuery.totalExerciseTimeMs
-        )
+
+        val totalExerciseTime =
+            TotalExerciseTime(totalExerciseTimeMs = reportQuery.totalExerciseTimeMs)
         val completionRate = if (reportQuery.totalAttemptCount > 0) {
             reportQuery.successAttemptCount.toDouble() / reportQuery.totalAttemptCount.toDouble() * 100
         } else {
@@ -46,7 +48,9 @@ class GetReport(
             statistic = dailyReportStatisticRepository.save(statistic)
         }
 
-        val attemptVideos = statistic.attemptVideos.map { video ->
+        val videoList =
+            videoRepository.findByProblemIdOrderByIdDesc(statistic.mostAttemptedProblemId)
+        val attemptVideos = videoList.map { video ->
             AttemptVideoResponse(
                 id = video.id,
                 localPath = video.localPath,
