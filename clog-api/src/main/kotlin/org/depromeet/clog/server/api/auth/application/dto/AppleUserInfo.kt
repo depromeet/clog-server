@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.domain.auth.application.dto
+package org.depromeet.clog.server.api.auth.application.dto
 
 data class AppleUserInfo(
     val id: String,

@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.domain.auth.application.dto.request
+package org.depromeet.clog.server.api.auth.application.dto.request
 
 data class AppleLoginRequest(
     val code: String,

@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.domain.user.application
+package org.depromeet.clog.server.api.user.application
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm

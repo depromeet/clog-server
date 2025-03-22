@@ -1,13 +1,13 @@
-package org.depromeet.clog.server.domain.auth.application.strategy
+package org.depromeet.clog.server.api.auth.application.strategy
 
-import jakarta.transaction.Transactional
-import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.auth.application.dto.request.LocalLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
+import org.depromeet.clog.server.api.auth.application.TokenService
+import org.depromeet.clog.server.api.auth.application.dto.request.LocalLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.User
 import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional

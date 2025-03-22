@@ -1,15 +1,14 @@
-package org.depromeet.clog.server.domain.auth.application.strategy
+package org.depromeet.clog.server.api.auth.application.strategy
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
-import jakarta.transaction.Transactional
-import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.auth.application.dto.AppleUserInfo
-import org.depromeet.clog.server.domain.auth.application.dto.request.AppleLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
+import org.depromeet.clog.server.api.auth.application.TokenService
+import org.depromeet.clog.server.api.auth.application.dto.AppleUserInfo
+import org.depromeet.clog.server.api.auth.application.dto.request.AppleLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.domain.Provider
@@ -22,6 +21,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 import java.net.URL

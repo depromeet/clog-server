@@ -1,6 +1,5 @@
-package org.depromeet.clog.server.domain.user.application
+package org.depromeet.clog.server.api.user.application
 
-import jakarta.transaction.Transactional
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.application.dto.UpdateUserNameReauest
@@ -9,6 +8,7 @@ import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.depromeet.clog.server.domain.user.presentation.exception.MissingAppleAuthorizationCodeException
 import org.depromeet.clog.server.domain.user.presentation.exception.UserException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional

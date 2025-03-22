@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.domain.auth.application.dto
+package org.depromeet.clog.server.api.auth.application.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
