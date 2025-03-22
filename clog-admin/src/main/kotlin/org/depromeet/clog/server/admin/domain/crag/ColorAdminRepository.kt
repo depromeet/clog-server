@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.admin.domain.crag
 
-import org.depromeet.clog.server.domain.crag.domain.Color
+import org.depromeet.clog.server.domain.crag.domain.color.Color
 
 interface ColorAdminRepository {
 

@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.admin.api.presentation.dto
 
-import org.depromeet.clog.server.domain.crag.domain.Color
+import org.depromeet.clog.server.domain.crag.domain.color.Color
 
 data class ColorResult(
     val name: String,

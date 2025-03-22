@@ -5,10 +5,10 @@ import org.depromeet.clog.server.admin.api.presentation.dto.*
 import org.depromeet.clog.server.admin.domain.crag.ColorAdminRepository
 import org.depromeet.clog.server.admin.domain.crag.CragAdminRepository
 import org.depromeet.clog.server.admin.domain.crag.GradeAdminRepository
-import org.depromeet.clog.server.domain.crag.domain.Color
-import org.depromeet.clog.server.domain.crag.domain.Coordinate
 import org.depromeet.clog.server.domain.crag.domain.Crag
-import org.depromeet.clog.server.domain.crag.domain.Grade
+import org.depromeet.clog.server.domain.crag.domain.Location
+import org.depromeet.clog.server.domain.crag.domain.color.Color
+import org.depromeet.clog.server.domain.crag.domain.grade.Grade
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -34,8 +34,8 @@ class AdminService(
     fun createCrag(
         request: SaveCrag.Request
     ) {
-        val coordinate = Coordinate(request.longitude.toDouble(), request.latitude.toDouble())
-        val crag = Crag(null, request.name, request.roadAddress, coordinate, request.kakaoPlaceId.toLong())
+        val location = Location(request.longitude.toDouble(), request.latitude.toDouble())
+        val crag = Crag(null, request.name, request.roadAddress, location, request.kakaoPlaceId.toLong())
 
         cragAdminRepository.save(crag)
     }
@@ -73,13 +73,13 @@ class AdminService(
         cragId: Long,
         request: SaveCragGrade.Request
     ): SaveCragGrade.Response {
-        val color = colorAdminRepository.findByNameAndHex(request.colorName, request.colorHex)
+        val color: Color = colorAdminRepository.findByNameAndHex(request.colorName, request.colorHex)
             ?: throw EntityNotFoundException("Color ${request.colorName} not found")
 
         val crag: Crag = cragAdminRepository.findById(cragId)
             ?: throw NoSuchElementException("Crag not found with id: $cragId")
 
-        val grade = Grade(null, color, crag, request.gradeOrder.toInt())
+        val grade = Grade(null, crag.id!!, color, request.gradeOrder.toInt())
         val res = gradeAdminRepository.save(grade)
 
         return SaveCragGrade.Response(

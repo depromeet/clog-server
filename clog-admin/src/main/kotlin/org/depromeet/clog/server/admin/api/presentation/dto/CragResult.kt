@@ -17,8 +17,8 @@ data class CragResult(
                 id = crag.id!!,
                 name = crag.name,
                 roadAddress = crag.roadAddress,
-                longitude = crag.coordinate.longitude,
-                latitude = crag.coordinate.latitude,
+                longitude = crag.location.longitude,
+                latitude = crag.location.latitude,
                 kakaoPlaceId = crag.kakaoPlaceId
             )
         }

@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.admin.api.presentation.dto
 
-import org.depromeet.clog.server.domain.crag.domain.Grade
+import org.depromeet.clog.server.domain.crag.domain.grade.Grade
 
 data class GradeResult(
     val colorName: String,
