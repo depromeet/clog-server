@@ -6,8 +6,6 @@ import jakarta.persistence.PersistenceContext
 import org.depromeet.clog.server.domain.report.DailyReportStatistic
 import org.depromeet.clog.server.domain.video.VideoQuery
 import org.depromeet.clog.server.infrastructure.mappers.VideoMapper
-import org.depromeet.clog.server.infrastructure.problem.ProblemEntity
-import org.depromeet.clog.server.infrastructure.story.StoryEntity
 import org.depromeet.clog.server.infrastructure.video.VideoEntity
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -38,7 +36,10 @@ class DailyReportStatisticCalculator(
                 mostVisitedCragVisitCount = 0
             )
 
-        val (story, problem) = getDetails(userId, groupData.groupDate, groupData.problemId)
+        val details: ReportDTO = getDetails(userId, groupData.groupDate, groupData.problemId)
+        val story = details.story
+        val problem = details.problem
+
         val mostAttemptedProblemCrag = story.crag?.name ?: "알 수 없음"
         val mostAttemptedProblemGrade = problem.grade?.color?.name ?: "알 수 없음"
 
@@ -61,13 +62,13 @@ class DailyReportStatisticCalculator(
 
     private fun getGroupData(userId: Long): GroupData? {
         val queryStr = """
-            SELECT s.date, s.crag.id, p.id, COUNT(a.id) as attemptCount
+            SELECT s.date, s.crag.id, p.id, COUNT(a.id)
             FROM AttemptEntity a
             JOIN a.problem p
             JOIN p.story s
             WHERE s.userId = :userId
             GROUP BY s.date, s.crag.id, p.id
-            ORDER BY attemptCount DESC
+            ORDER BY COUNT(a.id) DESC
         """
         val result = em.createQuery(queryStr)
             .setParameter("userId", userId)
@@ -86,30 +87,20 @@ class DailyReportStatisticCalculator(
         }
     }
 
-    private fun getDetails(
-        userId: Long,
-        groupDate: LocalDate,
-        problemId: Long
-    ): Pair<StoryEntity, ProblemEntity> {
+    private fun getDetails(userId: Long, groupDate: LocalDate, problemId: Long): ReportDTO {
         val queryStr = """
-            SELECT s, p
+            SELECT new org.depromeet.clog.server.infrastructure.report.ReportDTO(s, p)
             FROM ProblemEntity p
             JOIN p.story s
-            WHERE s.userId = :userId AND s.date = :groupDate AND p.id = :problemId
+            WHERE s.userId = :userId 
+              AND s.date = :groupDate 
+              AND p.id = :problemId
         """
-        val result = em.createQuery(queryStr)
+        return em.createQuery(queryStr, ReportDTO::class.java)
             .setParameter("userId", userId)
             .setParameter("groupDate", groupDate)
             .setParameter("problemId", problemId)
-            .resultList
-        if (result.isEmpty()) {
-            throw IllegalStateException("사용자 id: $userId, 날짜: $groupDate, 문제 id: $problemId 에 대한 세부 정보를 찾을 수 없습니다.")
-        }
-        val row = result[0] as Array<Any>
-        val story = row[0] as StoryEntity
-        val problem = row[1] as? ProblemEntity
-            ?: throw IllegalStateException("문제 정보를 찾을 수 없습니다.")
-        return Pair(story, problem)
+            .singleResult
     }
 
     private fun getAttemptVideos(
@@ -136,18 +127,16 @@ class DailyReportStatisticCalculator(
             .setParameter("problemId", problemId)
             .setParameter("cragId", cragId)
             .resultList
-        return videosList.map { video ->
-            videoMapper.toDomainWithoutStamps(video)
-        }
+        return videosList.map { video -> videoMapper.toDomainWithoutStamps(video) }
     }
 
     private fun getVisitedData(userId: Long): Pair<String, Long> {
         val queryStr = """
-            SELECT s.crag.id, s.crag.name, COUNT(DISTINCT s.date) as visitCount
+            SELECT s.crag.name, COUNT(DISTINCT s.date)
             FROM StoryEntity s
             WHERE s.userId = :userId
-            GROUP BY s.crag.id, s.crag.name
-            ORDER BY visitCount DESC
+            GROUP BY s.crag.name
+            ORDER BY COUNT(DISTINCT s.date) DESC
         """
         val result = em.createQuery(queryStr)
             .setParameter("userId", userId)
@@ -157,8 +146,8 @@ class DailyReportStatisticCalculator(
             throw IllegalStateException("사용자 id: $userId 에 대한 방문 암장 데이터를 찾을 수 없습니다.")
         }
         val row = result[0] as Array<Any>
-        val cragName = row[1] as String
-        val visitCount = row[2] as Long
+        val cragName = row[0] as String
+        val visitCount = row[1] as Long
         return Pair(cragName, visitCount)
     }
 }
