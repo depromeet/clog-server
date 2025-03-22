@@ -4,4 +4,5 @@ interface VideoRepository {
 
     fun save(video: VideoCommand): VideoQuery
     fun findByIdOrNull(videoId: Long): VideoQuery?
+    fun findByProblemIdOrderByIdDesc(problemId: Long): List<VideoQuery>
 }

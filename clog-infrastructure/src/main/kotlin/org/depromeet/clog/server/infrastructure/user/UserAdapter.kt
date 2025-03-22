@@ -39,4 +39,7 @@ class UserAdapter(
         return userJpaRepository.save(entity)
             .let { userMapper.toDomain(it) }
     }
+
+    override fun findAllActiveUsers(): List<User> =
+        userJpaRepository.findAllByIsDeletedFalse().map { userMapper.toDomain(it) }
 }

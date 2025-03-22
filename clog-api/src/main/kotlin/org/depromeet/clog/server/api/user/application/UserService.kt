@@ -1,12 +1,11 @@
 package org.depromeet.clog.server.api.user.application
 
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
-import org.depromeet.clog.server.domain.common.ErrorCode
 import org.depromeet.clog.server.domain.user.application.dto.UpdateUserNameReauest
 import org.depromeet.clog.server.domain.user.domain.Provider
 import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.depromeet.clog.server.domain.user.presentation.exception.MissingAppleAuthorizationCodeException
-import org.depromeet.clog.server.domain.user.presentation.exception.UserException
+import org.depromeet.clog.server.domain.user.presentation.exception.UserNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -19,7 +18,7 @@ class UserService(
 ) {
     fun withdraw(userId: Long, appleAuthorizationCode: String?) {
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
-            ?: throw UserException(ErrorCode.USER_NOT_FOUND)
+            ?: throw UserNotFoundException()
         if (user.provider == Provider.APPLE) {
             if (appleAuthorizationCode.isNullOrBlank()) {
                 throw MissingAppleAuthorizationCodeException()
@@ -35,7 +34,7 @@ class UserService(
 
     fun updateName(userId: Long, request: UpdateUserNameReauest) {
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
-            ?: throw UserException(ErrorCode.USER_NOT_FOUND)
+            ?: throw UserNotFoundException()
 
         user.name = request.name
         userRepository.save(user)
