@@ -1,8 +1,7 @@
 package org.depromeet.clog.server.api.report.application
 
 import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptVideoResponse
-import org.depromeet.clog.server.api.report.presentation.dto.DetailedReportResponse
-import org.depromeet.clog.server.api.report.presentation.dto.ReportResponse
+import org.depromeet.clog.server.api.report.presentation.dto.*
 import org.depromeet.clog.server.domain.report.DailyReportStatisticRepository
 import org.depromeet.clog.server.domain.report.ReportQuery
 import org.depromeet.clog.server.domain.report.ReportRepository
@@ -21,32 +20,25 @@ class GetReport(
     private val calculator: DailyReportStatisticCalculator
 ) {
 
-    @Transactional(readOnly = true)
+    @Transactional
     fun getMyReport(userId: Long): ReportResponse {
         val threeMonthsAgo = LocalDate.now().minusMonths(3)
         val reportQuery: ReportQuery = reportRepository.getReport(userId, threeMonthsAgo)
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
-            ?: throw UserNotFoundException()
+            ?: throw UserNotFoundException("사용자를 찾을 수 없습니다.")
+        val totalExerciseTime = TotalExerciseTime(
+            totalExerciseTimeMs = reportQuery.totalExerciseTimeMs
+        )
         val completionRate = if (reportQuery.totalAttemptCount > 0) {
             reportQuery.successAttemptCount.toDouble() / reportQuery.totalAttemptCount.toDouble() * 100
         } else {
             0.0
         }
-
-        return ReportResponse(
-            recentAttemptCount = reportQuery.recentAttemptCount,
-            totalExerciseTimeMs = reportQuery.totalExerciseTimeMs,
-            totalAttemptCount = reportQuery.totalAttemptCount,
+        val totalAttemptCount = TotalAttemptCount(
             successAttemptCount = reportQuery.successAttemptCount,
-            completionRate = completionRate,
-            userName = user.name
+            totalAttemptCount = reportQuery.totalAttemptCount,
+            completionRate = completionRate
         )
-    }
-
-    @Transactional
-    fun getReportStatistic(userId: Long): DetailedReportResponse {
-        userRepository.findByIdAndIsDeletedFalse(userId)
-            ?: throw UserNotFoundException()
 
         var statistic = dailyReportStatisticRepository.findByUserId(userId)
         if (statistic == null) {
@@ -54,7 +46,7 @@ class GetReport(
             statistic = dailyReportStatisticRepository.save(statistic)
         }
 
-        val videoResponses = statistic.attemptVideos.map { video ->
+        val attemptVideos = statistic.attemptVideos.map { video ->
             AttemptVideoResponse(
                 id = video.id,
                 localPath = video.localPath,
@@ -63,13 +55,21 @@ class GetReport(
             )
         }
 
-        return DetailedReportResponse(
-            mostAttemptedProblemCrag = statistic.mostAttemptedProblemCrag,
-            mostAttemptedProblemGrade = statistic.mostAttemptedProblemGrade,
-            mostAttemptedProblemAttemptCount = statistic.mostAttemptedProblemAttemptCount,
-            attemptVideos = videoResponses,
-            mostVisitedCragName = statistic.mostVisitedCragName,
-            mostVisitedCragVisitCount = statistic.mostVisitedCragVisitCount
+        return ReportResponse(
+            userName = user.name,
+            recentAttemptCount = reportQuery.recentAttemptCount,
+            totalExerciseTime = totalExerciseTime,
+            totalAttemptCount = totalAttemptCount,
+            mostAttemptedProblem = MostAttemptedProblem(
+                mostAttemptedProblemCrag = statistic.mostAttemptedProblemCrag,
+                mostAttemptedProblemGrade = statistic.mostAttemptedProblemGrade,
+                mostAttemptedProblemAttemptCount = statistic.mostAttemptedProblemAttemptCount,
+                attemptVideos = attemptVideos
+            ),
+            mostVisitedCrag = MostVisitedCrag(
+                mostVisitedCragName = statistic.mostVisitedCragName,
+                mostVisitedCragVisitCount = statistic.mostVisitedCragVisitCount
+            )
         )
     }
 }
