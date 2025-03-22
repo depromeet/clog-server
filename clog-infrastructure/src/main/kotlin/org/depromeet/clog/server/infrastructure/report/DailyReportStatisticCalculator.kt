@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.depromeet.clog.server.domain.report.DailyReportStatistic
+import org.depromeet.clog.server.infrastructure.report.dto.ReportDTO
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -83,7 +84,7 @@ class DailyReportStatisticCalculator(
 
     private fun getDetails(userId: Long, groupDate: LocalDate, problemId: Long): ReportDTO {
         val queryStr = """
-            SELECT new org.depromeet.clog.server.infrastructure.report.ReportDTO(s, p)
+            SELECT new org.depromeet.clog.server.infrastructure.report.dto.ReportDTO(s, p)
             FROM ProblemEntity p
             JOIN p.story s
             WHERE s.userId = :userId 
