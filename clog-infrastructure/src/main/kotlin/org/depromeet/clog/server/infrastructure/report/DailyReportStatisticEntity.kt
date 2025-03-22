@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.report
 
 import jakarta.persistence.*
+import org.depromeet.clog.server.domain.video.VideoQuery
 import java.time.LocalDate
 
 @Entity
@@ -28,8 +29,9 @@ class DailyReportStatisticEntity(
     @Column(nullable = false)
     var mostAttemptedProblemAttemptCount: Long,
 
-    @Column(columnDefinition = "TEXT")
-    var attemptVideosJson: String,
+    @Convert(converter = VideoQueryListConverter::class)
+    @Column(name = "attempt_videos_json", columnDefinition = "TEXT")
+    var attemptVideosJson: List<VideoQuery>,
 
     @Column(nullable = false)
     var mostVisitedCragName: String,
