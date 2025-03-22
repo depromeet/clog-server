@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<th:block th:replace="~{fragments/admin/fragments.html :: admHead}"/>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/admin/fragments.html :: admLeftNav(nav='cragList')}"/>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <th:block th:replace="~{fragments/admin/fragments.html :: admTopBar}"/>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <div class="row p-5">
+                    <div class="col-6">
+                        <h1 class="h3 text-gray-900 mb-4">난이도 등록</h1>
+
+                        <form class="user"
+                              id="content-form"
+                              th:action="@{/admin/crags/{id}/add/grades(id=${cragId})}"
+                              th:object="${grade}"
+                              method="post">
+                            <div class="form-group">
+                                <label for="inputColorName" class="form-label">색상 선택</label>
+                                <select id="inputColorName" class="form-control" th:field="*{colorName}">
+                                    <option value="">색상을 선택하세요. (없으면 추가)</option>
+                                    <option th:each="color : ${colors}"
+                                            th:value="${color.name}"
+                                            th:text="${color.name}"
+                                            th:attr="data-hex=${color.hex}">
+                                    </option>
+                                </select>
+                            </div>
+                            <input type="hidden" id="inputColorHex" name="colorHex" />
+                            <div id="colorPreview" style="width: 20px; height: 20px; display: none; margin-left: 10px; border: 1px solid black;"></div>
+
+                            <div class="form-group">
+                                <label for="inputGradeOrder" class="form-label">난이도</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                           id="inputGradeOrder"
+                                           class="form-control form-control-user"
+                                           placeholder="난이도를 입력하세요. (1, 2, 3, ...)"
+                                           th:field="*{gradeOrder}"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-group" id="radio-container"></div>
+
+                            <hr class="my-4">
+
+                            <button class="w-100 btn btn-primary btn-lg" type="submit">생성하기</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <th:block th:replace="~{fragments/admin/fragments.html :: adminFooter}"/>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<th:block th:replace="~{fragments/admin/fragments.html :: admJS}"/>
+
+</body>
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const colorSelect = document.getElementById("inputColorName");
+        const colorPreview = document.getElementById("colorPreview");
+        const colorHexInput = document.getElementById("inputColorHex"); // 숨겨진 input 필드
+
+        function isValidHex(hex) {
+            return /^#([0-9A-F]{3}){1,2}$/i.test(hex);
+        }
+
+        function updateColorPreview() {
+            const selectedOption = colorSelect.options[colorSelect.selectedIndex];
+            const hexColor = selectedOption.getAttribute("data-hex");
+
+            if (selectedOption.value && hexColor && isValidHex(hexColor)) {
+                colorPreview.style.backgroundColor = hexColor;
+                colorPreview.style.display = "inline-block";
+                colorHexInput.value = hexColor; // 숨겨진 input에 값 설정
+            } else {
+                colorPreview.style.backgroundColor = "";
+                colorPreview.style.display = "none";
+                colorHexInput.value = ""; // 선택이 없을 경우 빈 값
+            }
+        }
+
+        colorSelect.addEventListener("change", updateColorPreview);
+    });
+</script>

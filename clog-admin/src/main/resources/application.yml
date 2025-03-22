@@ -1,13 +1,26 @@
 server:
   port: 8081
 
+  servlet:
+    session:
+      timeout: 60m
+
 spring:
   mvc:
     hidden method:
       filter:
         enabled: true
 
+  devtools:
+    livereload:
+      enabled: true
+
   thymeleaf:
     prefix: classpath:templates/
     suffix: .html
     cache: false
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration-millis: 3600000
+  refresh-token-expiration-millis: 604800000

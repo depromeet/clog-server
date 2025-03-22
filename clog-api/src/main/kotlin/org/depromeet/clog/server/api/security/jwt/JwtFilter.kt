@@ -7,7 +7,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.depromeet.clog.server.domain.auth.application.TokenService
+import org.depromeet.clog.server.api.auth.application.TokenService
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
 import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

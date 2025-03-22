@@ -20,6 +20,7 @@ class AttemptMapper(
             id = entity.id!!,
             video = videoMapper.toDomain(entity.video),
             status = entity.status,
+            createdAt = entity.createdAt
         )
     }
 

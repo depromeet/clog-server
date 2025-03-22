@@ -3,7 +3,10 @@ dependencies {
     implementation(project(":clog-domain"))
     implementation(project(":clog-infrastructure"))
 
-    implementation("org.thymeleaf:thymeleaf:2.0.5")
+    implementation("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 }
 
 tasks {
