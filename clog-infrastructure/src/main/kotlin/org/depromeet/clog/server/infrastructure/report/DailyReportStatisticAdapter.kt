@@ -12,13 +12,28 @@ class DailyReportStatisticAdapter(
 ) : DailyReportStatisticRepository {
 
     override fun findByUserId(userId: Long): DailyReportStatistic? {
-        val entity = dailyReportStatisticJpaRepository.findById(userId).orElse(null) ?: return null
-        return dailyReportStatisticMapper.toDomain(entity)
+        val entity = dailyReportStatisticJpaRepository.findByUserId(userId)
+        return entity?.let { dailyReportStatisticMapper.toDomain(it) }
     }
 
     override fun save(statistic: DailyReportStatistic): DailyReportStatistic {
-        val entity = dailyReportStatisticMapper.toEntity(statistic)
-        val saved = dailyReportStatisticJpaRepository.save(entity)
-        return findByUserId(saved.userId)!!
+        val existingEntity = dailyReportStatisticJpaRepository.findByUserId(statistic.userId)
+        return if (existingEntity != null) {
+            existingEntity.mostAttemptedProblemCrag = statistic.mostAttemptedProblemCrag
+            existingEntity.mostAttemptedProblemGrade = statistic.mostAttemptedProblemGrade
+            existingEntity.mostAttemptedProblemAttemptCount =
+                statistic.mostAttemptedProblemAttemptCount
+            existingEntity.attemptVideosJson =
+                dailyReportStatisticMapper.writeAttemptVideos(statistic.attemptVideos)
+            existingEntity.mostVisitedCragName = statistic.mostVisitedCragName
+            existingEntity.mostVisitedCragVisitCount = statistic.mostVisitedCragVisitCount
+            existingEntity.statDate = java.time.LocalDate.now()
+            val saved = dailyReportStatisticJpaRepository.save(existingEntity)
+            dailyReportStatisticMapper.toDomain(saved)
+        } else {
+            val entity = dailyReportStatisticMapper.toEntity(statistic)
+            val saved = dailyReportStatisticJpaRepository.save(entity)
+            dailyReportStatisticMapper.toDomain(saved)
+        }
     }
 }

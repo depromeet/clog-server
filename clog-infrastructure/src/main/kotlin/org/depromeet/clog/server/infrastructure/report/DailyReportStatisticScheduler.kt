@@ -32,8 +32,10 @@ class DailyReportStatisticScheduler(
                         mostVisitedCragVisitCount = computedStatistic.mostVisitedCragVisitCount
                     )
                     dailyReportStatisticRepository.save(updatedStatistic)
+                    logger.info { "사용자 id ${user.id}의 통계가 업데이트되었습니다." }
                 } else {
                     dailyReportStatisticRepository.save(computedStatistic)
+                    logger.info { "사용자 id ${user.id}의 통계가 새로 저장되었습니다." }
                 }
             } catch (e: Exception) {
                 logger.error(e) { "사용자 id ${user.id}의 통계 계산 중 오류 발생: ${e.message}" }
