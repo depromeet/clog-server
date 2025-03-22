@@ -11,13 +11,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig(
-    private val jwtFilter: JwtFilter
+    private val jwtFilter: JwtFilter,
+    private val clogAuthenticationEntryPoint: ClogAuthenticationEntryPoint,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .exceptionHandling {
+                it.authenticationEntryPoint(clogAuthenticationEntryPoint)
+            }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers(
                     *PERMIT_ALL_PATTERNS.toTypedArray()
