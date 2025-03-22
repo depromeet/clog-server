@@ -2,15 +2,15 @@ package org.depromeet.clog.server.api.auth.presentation
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.depromeet.clog.server.api.auth.application.AuthService
+import org.depromeet.clog.server.api.auth.application.TokenService
+import org.depromeet.clog.server.api.auth.application.dto.request.AppleLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.request.KakaoLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.request.LocalLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.request.RefreshTokenRequest
+import org.depromeet.clog.server.api.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
-import org.depromeet.clog.server.domain.auth.application.AuthService
-import org.depromeet.clog.server.domain.auth.application.TokenService
-import org.depromeet.clog.server.domain.auth.application.dto.request.AppleLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.request.KakaoLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.request.LocalLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.request.RefreshTokenRequest
-import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.springframework.context.annotation.Profile

@@ -1,14 +1,14 @@
-package org.depromeet.clog.server.domain.auth.application
+package org.depromeet.clog.server.api.auth.application
 
-import jakarta.transaction.Transactional
-import org.depromeet.clog.server.domain.auth.application.dto.request.AppleLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.request.KakaoLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.request.LocalLoginRequest
-import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
-import org.depromeet.clog.server.domain.auth.application.strategy.AppleAuthProviderHandler
-import org.depromeet.clog.server.domain.auth.application.strategy.KakaoAuthProviderHandler
-import org.depromeet.clog.server.domain.auth.application.strategy.LocalAuthProviderHandler
+import org.depromeet.clog.server.api.auth.application.dto.request.AppleLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.request.KakaoLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.request.LocalLoginRequest
+import org.depromeet.clog.server.api.auth.application.dto.response.AuthResponseDto
+import org.depromeet.clog.server.api.auth.application.strategy.AppleAuthProviderHandler
+import org.depromeet.clog.server.api.auth.application.strategy.KakaoAuthProviderHandler
+import org.depromeet.clog.server.api.auth.application.strategy.LocalAuthProviderHandler
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional

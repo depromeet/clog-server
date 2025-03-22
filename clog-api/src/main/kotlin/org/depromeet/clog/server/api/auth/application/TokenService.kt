@@ -1,13 +1,12 @@
-package org.depromeet.clog.server.domain.auth.application
+package org.depromeet.clog.server.api.auth.application
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import io.github.oshai.kotlinlogging.KotlinLogging
-import jakarta.transaction.Transactional
-import org.depromeet.clog.server.domain.auth.application.dto.LoginDetails
-import org.depromeet.clog.server.domain.auth.application.dto.response.AuthResponseDto
+import org.depromeet.clog.server.api.auth.application.dto.LoginDetails
+import org.depromeet.clog.server.api.auth.application.dto.response.AuthResponseDto
 import org.depromeet.clog.server.domain.auth.domain.RefreshToken
 import org.depromeet.clog.server.domain.auth.infrastructure.RefreshTokenRepository
 import org.depromeet.clog.server.domain.auth.presentation.exception.AuthException
@@ -17,6 +16,7 @@ import org.depromeet.clog.server.domain.user.domain.User
 import org.depromeet.clog.server.domain.user.domain.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 private val log = KotlinLogging.logger {}
