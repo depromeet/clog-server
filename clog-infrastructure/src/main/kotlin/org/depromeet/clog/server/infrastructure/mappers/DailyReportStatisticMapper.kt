@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.infrastructure.mappers
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import mu.KotlinLogging
 import org.depromeet.clog.server.domain.report.DailyReportStatistic
@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @Component
-class DailyReportStatisticMapper {
-    private val objectMapper = jacksonObjectMapper()
+class DailyReportStatisticMapper(
+    private val objectMapper: ObjectMapper
+) {
     private val logger = KotlinLogging.logger {}
 
     fun toDomain(entity: DailyReportStatisticEntity): DailyReportStatistic {
