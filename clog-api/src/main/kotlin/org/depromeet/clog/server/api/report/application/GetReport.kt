@@ -39,7 +39,7 @@ class GetReport(
         val totalAttemptCount = TotalAttemptCount(
             successAttemptCount = reportQuery.successAttemptCount,
             totalAttemptCount = reportQuery.totalAttemptCount,
-            completionRate = completionRate
+            completionRate = completionRate.toInt()
         )
 
         var statistic = dailyReportStatisticRepository.findByUserId(userId)

@@ -8,6 +8,6 @@ data class TotalAttemptCount(
     val successAttemptCount: Long,
     @Schema(description = "전체 시도 횟수", example = "20")
     val totalAttemptCount: Long,
-    @Schema(description = "완등률 (%)", example = "75.0")
-    val completionRate: Double
+    @Schema(description = "완등률 (%)", example = "75")
+    val completionRate: Int
 )
