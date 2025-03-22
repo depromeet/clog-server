@@ -1,25 +1,28 @@
 package org.depromeet.clog.server.infrastructure.admin
 
 import org.depromeet.clog.server.admin.domain.crag.ColorAdminRepository
-import org.depromeet.clog.server.domain.crag.domain.Color
-import org.depromeet.clog.server.infrastructure.crag.ColorEntity
+import org.depromeet.clog.server.domain.crag.domain.color.Color
 import org.depromeet.clog.server.infrastructure.crag.ColorJpaRepository
+import org.depromeet.clog.server.infrastructure.mappers.ColorMapper
 import org.springframework.stereotype.Component
 
 @Component
 class ColorAdminAdapter(
+    private val colorMapper: ColorMapper,
     private val colorJpaRepository: ColorJpaRepository
 ) : ColorAdminRepository {
 
     override fun save(color: Color): Color {
-        return colorJpaRepository.save(ColorEntity.fromDomain(color)).toDomain()
+        val entity = colorJpaRepository.save(colorMapper.toEntity(color))
+        return colorMapper.toDomain(entity)
     }
 
     override fun findAll(): List<Color> {
-        return colorJpaRepository.findAll().map { it.toDomain() }
+        return colorJpaRepository.findAll().map { colorMapper.toDomain(it) }
     }
 
     override fun findByNameAndHex(name: String, hex: String): Color? {
-        return colorJpaRepository.findByNameAndHex(name, hex).toDomain()
+        val entity = colorJpaRepository.findByNameAndHex(name, hex)
+        return colorMapper.toDomain(entity)
     }
 }
