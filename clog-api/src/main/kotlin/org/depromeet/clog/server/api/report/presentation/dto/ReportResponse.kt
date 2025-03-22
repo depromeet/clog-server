@@ -15,5 +15,5 @@ data class ReportResponse(
     @Schema(description = "완등률 (%)", example = "75.0")
     val completionRate: Double,
     @Schema(description = "사용자 닉네임", example = "김클로그")
-    val userNickname: String
+    val userName: String
 )

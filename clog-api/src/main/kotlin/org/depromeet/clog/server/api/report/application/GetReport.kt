@@ -39,7 +39,7 @@ class GetReport(
             totalAttemptCount = reportQuery.totalAttemptCount,
             successAttemptCount = reportQuery.successAttemptCount,
             completionRate = completionRate,
-            userNickname = user.name
+            userName = user.name
         )
     }
 
