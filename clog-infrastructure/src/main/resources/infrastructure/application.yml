@@ -2,6 +2,7 @@ decorator:
   datasource:
     p6spy:
       enable-logging: false
+
 ncp:
   storage:
     access-key: ${STORAGE_ACCESS_KEY}
@@ -9,3 +10,8 @@ ncp:
     end-point: ${STORAGE_END_POINT}
     bucket-name: ${STORAGE_BUCKET_NAME}
     region: ${STORAGE_REGION}
+
+kakao:
+  map:
+    rest-api-key: ${KAKAO_MAP_REST_API_KEY}
+    local-search-base-url: ${KAKAO_MAP_LOCAL_SEARCH_BASE_URL}

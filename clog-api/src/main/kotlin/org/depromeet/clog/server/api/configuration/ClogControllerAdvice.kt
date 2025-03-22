@@ -10,6 +10,7 @@ import org.depromeet.clog.server.domain.common.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.authentication.InsufficientAuthenticationException
 import org.springframework.validation.BindException
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -35,6 +36,17 @@ class ClogControllerAdvice {
     fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         logger.error(e) { "Exception 발생: ${e.message}" }
         val errorCode = ErrorCode.INTERNAL_SERVER_ERROR
+
+        return ResponseEntity.status(errorCode.httpStatus)
+            .body(ErrorResponse.from(errorCode, null))
+    }
+
+    @ExceptionHandler(InsufficientAuthenticationException::class)
+    fun handleInsufficientAuthenticationException(
+        e: InsufficientAuthenticationException
+    ): ResponseEntity<ErrorResponse> {
+        logger.error(e) { "InsufficientAuthenticationException 발생: ${e.message}" }
+        val errorCode = ErrorCode.TOKEN_INVALID
 
         return ResponseEntity.status(errorCode.httpStatus)
             .body(ErrorResponse.from(errorCode, null))
