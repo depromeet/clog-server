@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.infrastructure.report
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.depromeet.clog.server.domain.report.DailyReportStatistic
@@ -8,7 +9,6 @@ import org.depromeet.clog.server.infrastructure.mappers.VideoMapper
 import org.depromeet.clog.server.infrastructure.problem.ProblemEntity
 import org.depromeet.clog.server.infrastructure.story.StoryEntity
 import org.depromeet.clog.server.infrastructure.video.VideoEntity
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -17,7 +17,7 @@ class DailyReportStatisticCalculator(
     @PersistenceContext private val em: EntityManager,
     private val videoMapper: VideoMapper
 ) {
-    private val logger = LoggerFactory.getLogger(DailyReportStatisticCalculator::class.java)
+    private val logger = KotlinLogging.logger {}
 
     private data class GroupData(
         val groupDate: LocalDate,
@@ -55,7 +55,7 @@ class DailyReportStatisticCalculator(
             mostVisitedCragName = mostVisitedCragName,
             mostVisitedCragVisitCount = mostVisitedCragVisitCount
         ).also {
-            logger.info("사용자 id $userId 에 대한 통계가 계산되었습니다: $it")
+            logger.info { "사용자 id $userId 에 대한 통계가 계산되었습니다: $it" }
         }
     }
 

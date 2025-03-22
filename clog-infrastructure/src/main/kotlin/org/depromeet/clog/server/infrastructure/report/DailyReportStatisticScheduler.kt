@@ -1,8 +1,8 @@
 package org.depromeet.clog.server.infrastructure.report
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.depromeet.clog.server.domain.report.DailyReportStatisticRepository
 import org.depromeet.clog.server.domain.user.domain.UserRepository
-import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -13,7 +13,7 @@ class DailyReportStatisticScheduler(
     private val dailyReportStatisticRepository: DailyReportStatisticRepository,
     private val calculator: DailyReportStatisticCalculator
 ) {
-    private val logger = LoggerFactory.getLogger(DailyReportStatisticScheduler::class.java)
+    private val logger = KotlinLogging.logger {}
 
     @Scheduled(cron = "0 0 3 * * ?")
     fun calculateDailyStatistics() {
@@ -36,9 +36,9 @@ class DailyReportStatisticScheduler(
                     dailyReportStatisticRepository.save(computedStatistic)
                 }
             } catch (e: Exception) {
-                logger.error("사용자 id ${user.id}의 통계 계산 중 오류 발생: ${e.message}", e)
+                logger.error(e) { "사용자 id ${user.id}의 통계 계산 중 오류 발생: ${e.message}" }
             }
         }
-        logger.info("일일 통계 계산이 ${LocalDateTime.now()}에 완료되었습니다.")
+        logger.info { "일일 통계 계산이 ${LocalDateTime.now()}에 완료되었습니다." }
     }
 }
