@@ -30,8 +30,7 @@ class ProblemMapper(
         val storyEntity = storyJpaRepository.findByIdOrNull(domain.storyId)
             ?: throw IllegalArgumentException("Story not found")
 
-        val gradeEntity = gradeJpaRepository.findByIdOrNull(domain.gradeId)
-            ?: throw IllegalArgumentException("Grade not found")
+        val gradeEntity = domain.gradeId?.let { gradeJpaRepository.findByIdOrNull(domain.gradeId) }
 
         return ProblemEntity(
             id = domain.id,
