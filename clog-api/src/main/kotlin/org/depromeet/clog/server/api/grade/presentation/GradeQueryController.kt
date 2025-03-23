@@ -44,7 +44,7 @@ class GradeQueryController(
     @GetMapping("/grades/me")
     fun getRecordedGrades(
         userContext: UserContext,
-        @ModelAttribute @ParameterObject request: CursorPagination.GeneralRequest<Long>
+        @ModelAttribute @ParameterObject request: CursorPagination.GeneralRequest
     ): ClogApiResponse<CursorPagination.Response<Long, GetMyGradeInfoResponse>> {
         val pagedResponse =
             getMyGrade.getMyGrades(

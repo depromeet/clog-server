@@ -22,4 +22,9 @@ class VideoAdapter(
             videoMapper.toDomain(it)
         }
     }
+
+    override fun findByProblemIdOrderByIdDesc(problemId: Long): List<VideoQuery> {
+        return videoJpaRepository.findByProblemIdOrderByIdDesc(problemId)
+            .map { videoMapper.toDomain(it) }
+    }
 }
