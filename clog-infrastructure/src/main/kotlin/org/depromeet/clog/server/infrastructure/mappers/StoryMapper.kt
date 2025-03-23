@@ -28,8 +28,7 @@ class StoryMapper(
     }
 
     override fun toEntity(domain: StoryCommand): StoryEntity {
-        val cragEntity = cragJpaRepository.findByIdOrNull(domain.cragId)
-            ?: throw IllegalArgumentException("Crag not found")
+        val cragEntity = domain.cragId?.let { cragJpaRepository.findByIdOrNull(domain.cragId) }
 
         val problemEntities = domain.id?.let { problemJpaRepository.findAllByStoryId(it) }
             ?: emptyList()
