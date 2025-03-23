@@ -16,7 +16,7 @@ jobs:
 
       - name: Set Image Tag
         run: |
-          IMAGE_TAG="${{ github.run_number }}-${GITHUB_SHA::8}"
+          IMAGE_TAG="${{ github.run_number }}-$(echo ${{ github.sha }} | cut -c1-7)"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
       - name: Set up JDK 21
