@@ -47,12 +47,17 @@
                             <div class="form-group">
                                 <label for="inputColorHex" class="form-label">hex 코드</label>
                                 <div class="input-group">
-                                    <input type="text"
-                                           id="inputColorHex"
-                                           class="form-control form-control-user"
-                                           placeholder="hex 코드를 입력하세요."
-                                           th:field="*{hex}"
-                                    />
+                                    <div class="input-group">
+                                        <div id="colorPreview"
+                                             th:style="'width: 40px; height: 40px; background-color: ' +
+                                             *{hex} +
+                                             '; border: 1px solid #000; margin-right: 10px;'">
+                                        </div>
+                                        <input type="text" id="inputColorHex" class="form-control form-control-user"
+                                               placeholder="hex 코드를 입력하세요." th:field="*{hex}"
+                                               oninput="updateColorPreview(this.value)" />
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="form-group" id="radio-container"></div>
@@ -88,3 +93,9 @@
 
 </body>
 </html>
+
+<script>
+    function updateColorPreview(hex) {
+        document.getElementById("colorPreview").style.backgroundColor = hex;
+    }
+</script>
