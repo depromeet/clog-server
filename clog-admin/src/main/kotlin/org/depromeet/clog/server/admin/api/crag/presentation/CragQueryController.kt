@@ -83,7 +83,7 @@ class CragQueryController(
     ): String {
         model.addAttribute("cragId", id)
         model.addAttribute("grade", SaveCragGradeDto.initForm())
-        model.addAttribute("colors", getAllColors)
+        model.addAttribute("colors", getAllColors())
 
         return "admin/cragGradeAdd"
     }
