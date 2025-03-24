@@ -1,12 +1,19 @@
 spring:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    database-type: mysql
+    baseline-version: 1
+    locations: classpath:infrastructure/db/migration
+    encoding: UTF-8
+    validate-on-migrate: true
   jpa:
     hibernate:
       ddl-auto: validate
 
 decorator:
   datasource:
-    p6spy:
-      enable-logging: false
+    enabled: false
 
 ncp:
   storage:
