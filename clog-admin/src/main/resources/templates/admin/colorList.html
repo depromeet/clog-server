@@ -52,7 +52,12 @@
                                     <tbody>
                                         <tr th:each="color : ${colors}">
                                             <td th:text="${color.name}"></td>
-                                            <td th:text="${color.hex}"></td>
+                                            <td>
+                                                <div style="display: flex; align-items: center;">
+                                                    <div th:style="'width: 20px; height: 20px; background-color: ' + ${color.hex} + '; border: 1px solid #000; margin-right: 10px;'"></div>
+                                                    <span th:text="${color.hex}"></span>
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
