@@ -5,6 +5,7 @@ import org.springframework.boot.runApplication
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
+import java.util.TimeZone
 
 @SpringBootApplication
 @ComponentScan(
@@ -17,5 +18,6 @@ import org.springframework.context.annotation.FilterType
 class ClogApplication
 
 fun main(args: Array<String>) {
+    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"))
     runApplication<ClogApplication>(*args)
 }

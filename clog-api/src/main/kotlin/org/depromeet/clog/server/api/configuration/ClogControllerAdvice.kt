@@ -45,7 +45,7 @@ class ClogControllerAdvice {
     fun handleInsufficientAuthenticationException(
         e: InsufficientAuthenticationException
     ): ResponseEntity<ErrorResponse> {
-        logger.error(e) { "InsufficientAuthenticationException 발생: ${e.message}" }
+        logger.error { "InsufficientAuthenticationException 발생: ${e.message}" }
         val errorCode = ErrorCode.TOKEN_INVALID
 
         return ResponseEntity.status(errorCode.httpStatus)

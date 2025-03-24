@@ -1,3 +1,8 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
 decorator:
   datasource:
     p6spy:

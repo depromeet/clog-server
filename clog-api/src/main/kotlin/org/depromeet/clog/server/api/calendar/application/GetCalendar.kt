@@ -42,9 +42,10 @@ class GetCalendar(
                             cragName = story.crag?.let { cragRepository.findById(it.id!!)?.name },
                             problems = story.problems.let { problems ->
                                 problems.groupBy { problem -> problem.grade?.id }.map { (gradeId, problems) ->
-                                    val grade = gradeRepository.findById(gradeId!!)
+                                    val gradeColorHex = gradeId?.let { gradeRepository.findById(it)?.color?.hex }
+
                                     CalendarResponse.Problem(
-                                        colorHex = grade?.color?.hex,
+                                        colorHex = gradeColorHex,
                                         count = problems.size,
                                     )
                                 }
