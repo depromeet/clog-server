@@ -15,8 +15,18 @@ class SaveColor(
     operator fun invoke(
         request: SaveCragColorDto.Request
     ): SaveCragColorDto.Response {
-        val color = Color(null, request.name, request.hex)
-        val res = colorAdminRepository.save(color)
+        val existing = colorAdminRepository.findByNameOrHex(request.name, request.hex)
+        existing?.let {
+            throw IllegalArgumentException("색상 이름 혹은 hex code가 이미 존재합니다")
+        }
+
+        val res = colorAdminRepository.save(
+            Color(
+                null,
+                request.name,
+                request.hex
+            )
+        )
 
         return SaveCragColorDto.Response(
             name = res.name,

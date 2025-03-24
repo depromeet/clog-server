@@ -25,7 +25,9 @@ class CragQueryController(
 ) {
 
     @GetMapping("/index")
-    fun index(model: Model): String {
+    fun index(
+        model: Model
+    ): String {
         val result = getAllCrags()
         model.addAttribute("crags", result)
 
@@ -33,7 +35,9 @@ class CragQueryController(
     }
 
     @GetMapping("/add/crags")
-    fun addCragPage(model: Model): String {
+    fun addCragPage(
+        model: Model
+    ): String {
         model.addAttribute("crag", SaveCragDto.Request())
         model.addAttribute("kakaoKey", kakaoMapProperties.restApiKey)
 
@@ -41,7 +45,10 @@ class CragQueryController(
     }
 
     @GetMapping("/crags/{id}/details")
-    fun cragDetailsPage(@PathVariable id: Long, model: Model): String {
+    fun cragDetailsPage(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
         val crag = getCrag(id)
         val grades = getGrades(id)
         model.addAttribute("crag", crag)
@@ -51,7 +58,9 @@ class CragQueryController(
     }
 
     @GetMapping("/crags/colors")
-    fun getCragColors(model: Model): String {
+    fun getCragColors(
+        model: Model
+    ): String {
         val result = getAllColors()
         model.addAttribute("colors", result)
 
@@ -59,14 +68,19 @@ class CragQueryController(
     }
 
     @GetMapping("/crags/add/colors")
-    fun addCragColorPage(model: Model): String {
+    fun addCragColorPage(
+        model: Model
+    ): String {
         model.addAttribute("color", SaveCragColorDto.initForm())
 
         return "admin/cragColorAdd"
     }
 
     @GetMapping("/crags/{id}/add/grades")
-    fun addCragGradePage(@PathVariable id: Long, model: Model): String {
+    fun addCragGradePage(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
         model.addAttribute("cragId", id)
         model.addAttribute("grade", SaveCragGradeDto.initForm())
         model.addAttribute("colors", getAllColors)

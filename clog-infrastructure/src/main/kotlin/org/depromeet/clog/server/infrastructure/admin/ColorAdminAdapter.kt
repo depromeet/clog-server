@@ -25,4 +25,9 @@ class ColorAdminAdapter(
         val entity = colorJpaRepository.findByNameAndHex(name, hex)
         return colorMapper.toDomain(entity)
     }
+
+    override fun findByNameOrHex(name: String, hex: String): Color? {
+        val entity = colorJpaRepository.findByNameOrHex(name, hex)
+        return entity?.let { colorMapper.toDomain(it) }
+    }
 }

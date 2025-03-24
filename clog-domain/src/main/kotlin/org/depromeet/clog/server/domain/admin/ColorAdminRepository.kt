@@ -9,4 +9,6 @@ interface ColorAdminRepository {
     fun findAll(): List<Color>
 
     fun findByNameAndHex(name: String, hex: String): Color?
+
+    fun findByNameOrHex(name: String, hex: String): Color?
 }
