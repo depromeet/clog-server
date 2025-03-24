@@ -1,10 +1,15 @@
 package org.depromeet.clog.server.admin.api.presentation.dto
 
+import jakarta.validation.constraints.NotBlank
+
 object SaveCragColor {
 
     data class Request(
-        val name: String = "",
-        val hex: String = ""
+        @field:NotBlank(message = "crag color name must not be blank")
+        val name: String?,
+
+        @field:NotBlank(message = "crag color hex must not be blank")
+        val hex: String?
     )
 
     data class Response(

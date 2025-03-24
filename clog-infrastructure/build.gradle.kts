@@ -1,7 +1,6 @@
 dependencies {
     implementation(project(":clog-global-utils"))
     implementation(project(":clog-domain"))
-    implementation(project(":clog-admin"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0")

@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.infrastructure.admin
 
-import org.depromeet.clog.server.admin.domain.crag.ColorAdminRepository
+import org.depromeet.clog.server.domain.admin.ColorAdminRepository
 import org.depromeet.clog.server.domain.crag.domain.color.Color
 import org.depromeet.clog.server.infrastructure.crag.ColorJpaRepository
 import org.depromeet.clog.server.infrastructure.mappers.ColorMapper

@@ -2,9 +2,9 @@ package org.depromeet.clog.server.admin.api.application
 
 import jakarta.persistence.EntityNotFoundException
 import org.depromeet.clog.server.admin.api.presentation.dto.*
-import org.depromeet.clog.server.admin.domain.crag.ColorAdminRepository
-import org.depromeet.clog.server.admin.domain.crag.CragAdminRepository
-import org.depromeet.clog.server.admin.domain.crag.GradeAdminRepository
+import org.depromeet.clog.server.domain.admin.ColorAdminRepository
+import org.depromeet.clog.server.domain.admin.CragAdminRepository
+import org.depromeet.clog.server.domain.admin.GradeAdminRepository
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.crag.domain.Location
 import org.depromeet.clog.server.domain.crag.domain.color.Color
@@ -59,7 +59,7 @@ class AdminService(
     fun createColor(
         request: SaveCragColor.Request
     ): SaveCragColor.Response {
-        val color = Color(null, request.name, request.hex)
+        val color = Color(null, request.name!!, request.hex!!)
         val res = colorAdminRepository.save(color)
 
         return SaveCragColor.Response(
@@ -73,13 +73,13 @@ class AdminService(
         cragId: Long,
         request: SaveCragGrade.Request
     ): SaveCragGrade.Response {
-        val color: Color = colorAdminRepository.findByNameAndHex(request.colorName, request.colorHex)
+        val color: Color = colorAdminRepository.findByNameAndHex(request.colorName!!, request.colorHex!!)
             ?: throw EntityNotFoundException("Color ${request.colorName} not found")
 
         val crag: Crag = cragAdminRepository.findById(cragId)
             ?: throw NoSuchElementException("Crag not found with id: $cragId")
 
-        val grade = Grade(null, crag.id!!, color, request.gradeOrder.toInt())
+        val grade = Grade(null, crag.id!!, color, request.gradeOrder!!.toInt())
         val res = gradeAdminRepository.save(grade)
 
         return SaveCragGrade.Response(
