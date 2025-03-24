@@ -67,7 +67,7 @@ class AdminController(
 
     @GetMapping("/crags/add/colors")
     fun saveCragColorPage(model: Model): String {
-        model.addAttribute("color", SaveCragColor.Request())
+        model.addAttribute("color", SaveCragColor.initForm())
 
         return "admin/cragColorAdd"
     }
@@ -82,7 +82,7 @@ class AdminController(
     @GetMapping("/crags/{id}/add/grades")
     fun saveCragGradePage(@PathVariable id: Long, model: Model): String {
         model.addAttribute("cragId", id)
-        model.addAttribute("grade", SaveCragGrade.Request())
+        model.addAttribute("grade", SaveCragGrade.initForm())
         model.addAttribute("colors", adminService.getAllColor())
 
         return "admin/cragGradeAdd"
