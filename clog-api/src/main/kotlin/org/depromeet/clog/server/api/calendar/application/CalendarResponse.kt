@@ -1,7 +1,9 @@
 package org.depromeet.clog.server.api.calendar.application
 
 import io.swagger.v3.oas.annotations.media.Schema
+import org.depromeet.clog.server.domain.problem.ProblemQuery
 import org.depromeet.clog.server.domain.story.StoryQuery
+import org.depromeet.clog.server.domain.story.getRandomThumbnailUrl
 import java.time.LocalDate
 
 @Schema(
@@ -52,13 +54,9 @@ data class CalendarResponse(
                 return Summary(
                     numOfClimbDays = storiesGroupedByDate.size,
                     totalDurationMs = stories.sumOf { it.totalDurationMs },
-                    totalAttemptCount = stories.sumOf { it.problems.sumOf { problem -> problem.attempts.size } },
-                    successAttemptCount = stories.sumOf {
-                        it.problems.sumOf { problem -> problem.attempts.count { attempt -> attempt.isSuccess } }
-                    },
-                    failAttemptCount = stories.sumOf {
-                        it.problems.sumOf { problem -> problem.attempts.count { attempt -> !attempt.isFail } }
-                    },
+                    totalAttemptCount = stories.sumOf { it.attempts.size },
+                    successAttemptCount = stories.sumOf { it.attempts.count { attempt -> attempt.isSuccess } },
+                    failAttemptCount = stories.sumOf { it.attempts.count { attempt -> attempt.isFail } }
                 )
             }
         }
@@ -82,7 +80,17 @@ data class CalendarResponse(
             description = "각 날짜에 표시될 기록 목록",
         )
         val stories: List<StoryListItem>,
-    )
+    ) {
+        companion object {
+            fun from(stories: List<StoryQuery>): Day {
+                return Day(
+                    date = stories.first().date,
+                    thumbnailUrl = stories.getRandomThumbnailUrl(),
+                    stories = stories.map { StoryListItem.from(it) }
+                )
+            }
+        }
+    }
 
     @Schema(name = "CalendarResponse.StoryListItem", description = "각 날짜에 표시될 기록 목록의 아이템")
     data class StoryListItem(
@@ -107,11 +115,20 @@ data class CalendarResponse(
         @Schema(
             description = "해당 스토리의 문제 리스트",
         )
-        val problems: List<Problem>,
-    )
+        val problems: List<ProblemGradeSummary>,
+    ) {
+        companion object {
+            fun from(story: StoryQuery) = StoryListItem(
+                id = story.id,
+                totalDurationMs = story.totalDurationMs,
+                cragName = story.crag?.name,
+                problems = story.problems.map { ProblemGradeSummary.from(it) }
+            )
+        }
+    }
 
     @Schema(name = "CalendarResponse.Problem", description = "해당 기록의 문제 리스트")
-    data class Problem(
+    data class ProblemGradeSummary(
         @Schema(
             description = "문제의 색상 HEX 코드",
             example = "#FF5733",
@@ -123,5 +140,12 @@ data class CalendarResponse(
             example = "3",
         )
         val count: Int,
-    )
+    ) {
+        companion object {
+            fun from(problem: ProblemQuery) = ProblemGradeSummary(
+                colorHex = problem.colorHexWithDefault,
+                count = problem.attempts.size
+            )
+        }
+    }
 }
