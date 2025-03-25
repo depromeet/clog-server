@@ -44,15 +44,22 @@
                                     />
                                 </div>
                             </div>
+
+                            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
                             <div class="form-group">
                                 <label for="inputColorHex" class="form-label">hex 코드</label>
                                 <div class="input-group">
-                                    <input type="text"
-                                           id="inputColorHex"
-                                           class="form-control form-control-user"
-                                           placeholder="hex 코드를 입력하세요."
-                                           th:field="*{hex}"
-                                    />
+                                    <div class="input-group">
+                                        <div id="colorPreview"
+                                             th:style="'width: 40px; height: 40px; background-color: ' +
+                                             *{hex} +
+                                             '; border: 1px solid #000; margin-right: 10px;'">
+                                        </div>
+                                        <input type="text" id="inputColorHex" class="form-control form-control-user"
+                                               placeholder="hex 코드를 입력하세요." th:field="*{hex}"
+                                               oninput="updateColorPreview(this.value)" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group" id="radio-container"></div>
@@ -61,6 +68,22 @@
 
                             <button class="w-100 btn btn-primary btn-lg" type="submit">생성하기</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+            <!-- 에러 모달 추가 -->
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title">⚠️ 에러 발생</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p th:text="${error} ?: '알 수 없는 오류'"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,3 +111,17 @@
 
 </body>
 </html>
+
+<script>
+    function updateColorPreview(hex) {
+        document.getElementById("colorPreview").style.backgroundColor = hex;
+    }
+</script>
+<script th:inline="javascript">
+    window.onload = function() {
+        const error = null;
+        if(error) {
+            $('#errorModal').modal('show');
+        }
+    };
+</script>

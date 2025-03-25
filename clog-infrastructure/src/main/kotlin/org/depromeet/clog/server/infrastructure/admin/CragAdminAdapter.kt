@@ -1,6 +1,6 @@
 package org.depromeet.clog.server.infrastructure.admin
 
-import org.depromeet.clog.server.admin.domain.crag.CragAdminRepository
+import org.depromeet.clog.server.domain.admin.CragAdminRepository
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.infrastructure.crag.CragJpaRepository
 import org.depromeet.clog.server.infrastructure.mappers.CragMapper

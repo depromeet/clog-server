@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.admin.api.presentation.dto
+package org.depromeet.clog.server.admin.api.crag.presentation.dto
 
 import org.depromeet.clog.server.domain.crag.domain.grade.Grade
 
