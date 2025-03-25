@@ -13,7 +13,8 @@ spring:
 
 decorator:
   datasource:
-    enabled: false
+    p6spy:
+      enable-logging: true
 
 ncp:
   storage:
