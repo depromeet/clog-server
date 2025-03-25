@@ -1,4 +1,4 @@
--- V1__init.sql (snake_case 버전)
+-- V1__init.sql
 
 -- 1. crag_color: 암장 색상 테이블
 CREATE TABLE IF NOT EXISTS crag_color (
@@ -135,4 +135,14 @@ CREATE TABLE IF NOT EXISTS daily_report_statistic (
                                                       most_visited_crag_name VARCHAR(255) NOT NULL,
                                                       most_visited_crag_visit_count BIGINT NOT NULL,
                                                       UNIQUE KEY uniq_user_stat_date (user_id, stat_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 14. 어드민 사용자 테이블
+
+CREATE TABLE IF NOT EXISTS admin_user (
+                                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                          login_id VARCHAR(255) NOT NULL COMMENT '어드민 로그인 아이디',
+                                          password VARCHAR(255) NOT NULL COMMENT '어드민 로그인 비밀번호',
+                                          created_at DATETIME NOT NULL,
+                                          modified_at DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
