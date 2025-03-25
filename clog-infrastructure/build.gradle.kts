@@ -17,6 +17,8 @@ dependencies {
     implementation("org.hibernate:hibernate-spatial:6.6.11.Final")
     runtimeOnly("org.locationtech.jts:jts-core:1.20.0")
     runtimeOnly("com.mysql:mysql-connector-j")
+    implementation("org.flywaydb:flyway-core")
+    runtimeOnly("org.flywaydb:flyway-mysql:9.1.6")
 }
 
 tasks {
