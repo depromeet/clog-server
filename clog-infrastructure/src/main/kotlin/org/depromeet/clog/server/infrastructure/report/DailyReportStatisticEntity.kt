@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.report
 
 import jakarta.persistence.*
+import org.depromeet.clog.server.infrastructure.common.BaseEntity
 import java.time.LocalDate
 
 @Entity
@@ -36,4 +37,4 @@ class DailyReportStatisticEntity(
 
     @Column(nullable = false)
     var mostVisitedCragVisitCount: Long
-)
+) : BaseEntity()
