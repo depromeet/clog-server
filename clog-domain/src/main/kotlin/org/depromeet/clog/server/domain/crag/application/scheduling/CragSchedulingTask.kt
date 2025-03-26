@@ -6,6 +6,7 @@ import org.depromeet.clog.server.domain.crag.domain.ExternalMapAdapter
 import org.depromeet.clog.server.domain.crag.domain.region.RegionName
 import org.depromeet.clog.server.domain.crag.domain.region.RegionRepository
 import org.depromeet.clog.server.domain.crag.dto.KakaoSearchResponseDto
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
@@ -22,7 +23,7 @@ class CragSchedulingTask(
         const val LOCATION_BASE_QUERY = "클라이밍"
     }
 
-    // @Scheduled
+    @Scheduled(cron = "0 0 0 * * MON")
     fun saveCragSchedule() {
         RegionName.entries.forEach { regionName ->
             regionRepository.findByRegionName(regionName).forEach { region ->
