@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.crag
 
 import jakarta.persistence.*
+import org.depromeet.clog.server.infrastructure.common.BaseEntity
 
 @Table(name = "grade")
 @Entity
@@ -20,4 +21,4 @@ class GradeEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crag_id")
     val crag: CragEntity,
-)
+) : BaseEntity()

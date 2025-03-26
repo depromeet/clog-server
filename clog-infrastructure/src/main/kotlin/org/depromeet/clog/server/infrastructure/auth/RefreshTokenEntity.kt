@@ -3,6 +3,7 @@ package org.depromeet.clog.server.infrastructure.auth
 import jakarta.persistence.*
 import org.depromeet.clog.server.domain.auth.domain.RefreshToken
 import org.depromeet.clog.server.domain.user.domain.Provider
+import org.depromeet.clog.server.infrastructure.common.BaseEntity
 
 @Entity
 @Table(name = "refresh_token")
@@ -18,7 +19,7 @@ class RefreshTokenEntity(
     @Lob
     @Column(columnDefinition = "TEXT")
     var token: String
-) {
+) : BaseEntity() {
     fun toDomain(): RefreshToken = RefreshToken(
         userId = userId,
         loginId = loginId,
