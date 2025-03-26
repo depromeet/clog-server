@@ -23,3 +23,20 @@ ncp:
     end-point: ${STORAGE_END_POINT}
     bucket-name: ${STORAGE_BUCKET_NAME}
     region: ${STORAGE_REGION}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      status:
+        http-mapping:
+          DOWN: 503
+          OUT_OF_SERVICE: 503
+          UNKNOWN: 200
+          UP: 200
+        order: DOWN, OUT_OF_SERVICE, UP, UNKNOWN
