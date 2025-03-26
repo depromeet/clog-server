@@ -21,7 +21,7 @@ jobs:
           java-version: '21'
 
       - name: Build with Gradle (skip tests)
-        run: ./gradlew :clog-api:build :clog-admin:build -x test
+        run: ./gradlew :clog-api:build -x test
 
       - name: Build Docker Image
         run: |
@@ -33,13 +33,6 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${{ github.ref_name }}
 
-      - name: Build Docker Admin Image
-        run: |
-          docker build -f clog-admin/Dockerfile -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_ADMIN_IMAGE }}:${{ github.ref_name }} .
-
-      - name: Push Docker Admin Image
-        run: docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_ADMIN_IMAGE }}:${{ github.ref_name }}
-
       - name: Deploy on Remote Server via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
@@ -49,5 +42,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             docker compose -f /root/docker-compose.yml pull api
-            docker compose -f /root/docker-compose.yml pull admin
-            docker compose -f /root/docker-compose.yml up -d api admin
+            docker compose -f /root/docker-compose.yml up -d api
