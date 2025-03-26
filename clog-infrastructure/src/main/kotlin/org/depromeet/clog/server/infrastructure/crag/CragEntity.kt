@@ -20,6 +20,10 @@ class CragEntity(
     @Column(nullable = false)
     val roadAddress: String,
 
+    @Comment("지번 주소")
+    @Column(nullable = false)
+    val lotNumberAddress: String,
+
     @Comment("위도/경도를 포함한 공간 데이터")
     @Column(columnDefinition = "GEOMETRY", nullable = false)
     var location: Point,
