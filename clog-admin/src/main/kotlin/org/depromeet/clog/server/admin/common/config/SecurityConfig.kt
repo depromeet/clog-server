@@ -22,7 +22,7 @@ class SecurityConfig(
             .userDetailsService(userDetailsService)
             .authorizeHttpRequests { requests ->
                 requests
-                    .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
+                    .requestMatchers(*PERMIT_ALL_PATTERNS.toTypedArray()).permitAll()
                     .anyRequest().authenticated()
             }
             .formLogin { form ->
@@ -43,5 +43,16 @@ class SecurityConfig(
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
+    }
+
+    companion object {
+        private val PERMIT_ALL_PATTERNS = listOf(
+            "/", "/css/**", "/js/**", "/images/**",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/actuator/**",
+            "/v3/api-docs/**",
+        )
     }
 }
