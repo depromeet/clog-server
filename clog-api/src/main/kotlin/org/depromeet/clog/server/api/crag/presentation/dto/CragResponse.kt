@@ -18,7 +18,7 @@ data class CragResponse(
             return CragResponse(
                 id = crag.id!!,
                 name = crag.name,
-                roadAddress = crag.roadAddress
+                roadAddress = crag.validateRoadAddressNotBlank()
             )
         }
     }
