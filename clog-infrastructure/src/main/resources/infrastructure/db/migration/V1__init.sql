@@ -13,10 +13,10 @@ CREATE TABLE IF NOT EXISTS crag_color (
 CREATE TABLE IF NOT EXISTS region (
                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                       region_name ENUM(
-                                          'SEOUL', 'BUSAN', 'DAEGU', 'INCHEON', 'GWANGJU', 'DAEJEON', 'ULSAN', 'SEJONG',
-                                          'GYEONGGI', 'GANGWON', 'CHUNGBUK', 'CHUNGNAM', 'JEONBUK', 'JEONNAM', 'GYEONGBUK',
-                                          'GYEONGNAM', 'JEJU'
-                                          ) NOT NULL,
+                                        'SEOUL', 'BUSAN', 'DAEGU', 'INCHEON', 'GWANGJU', 'DAEJEON', 'ULSAN', 'SEJONG',
+                                        'GYEONGGI', 'GANGWON', 'CHUNGBUK', 'CHUNGNAM', 'JEONBUK', 'JEONNAM', 'GYEONGBUK',
+                                        'GYEONGNAM', 'JEJU'
+                                        ) NOT NULL,
                                       district VARCHAR(255) NOT NULL,
                                       created_at DATETIME NOT NULL,
                                       modified_at DATETIME NOT NULL
@@ -38,13 +38,17 @@ CREATE TABLE IF NOT EXISTS refresh_token (
                                              user_id BIGINT PRIMARY KEY,
                                              login_id VARCHAR(255),
                                              provider ENUM('KAKAO', 'APPLE', 'LOCAL') NOT NULL,
-                                             token TEXT NOT NULL
+                                             token TEXT NOT NULL,
+                                             created_at DATETIME NOT NULL,
+                                             modified_at DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 5. thumbnail: 썸네일 테이블
 CREATE TABLE IF NOT EXISTS thumbnail (
                                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                         file_url VARCHAR(255) NOT NULL
+                                         file_url VARCHAR(255) NOT NULL,
+                                         created_at DATETIME NOT NULL,
+                                         modified_at DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 6. crag: 암장 테이블
@@ -64,6 +68,8 @@ CREATE TABLE IF NOT EXISTS grade (
                                      color_id BIGINT NOT NULL,
                                      `order` INT,
                                      crag_id BIGINT NOT NULL,
+                                     created_at DATETIME NOT NULL,
+                                     modified_at DATETIME NOT NULL,
                                      CONSTRAINT fk_grade_color FOREIGN KEY (color_id) REFERENCES crag_color(id),
                                      CONSTRAINT fk_grade_crag FOREIGN KEY (crag_id) REFERENCES crag(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -134,6 +140,8 @@ CREATE TABLE IF NOT EXISTS daily_report_statistic (
                                                       most_attempted_problem_id BIGINT NOT NULL,
                                                       most_visited_crag_name VARCHAR(255) NOT NULL,
                                                       most_visited_crag_visit_count BIGINT NOT NULL,
+                                                      created_at DATETIME NOT NULL,
+                                                      modified_at DATETIME NOT NULL,
                                                       UNIQUE KEY uniq_user_stat_date (user_id, stat_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
