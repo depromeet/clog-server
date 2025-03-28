@@ -16,7 +16,6 @@ class SaveCrag(
     operator fun invoke(
         request: SaveCragDto.Request
     ) {
-        request.withDefaults()
         val location = Location(
             longitude = request.longitude!!.toDouble(),
             latitude = request.latitude!!.toDouble()
@@ -26,8 +25,9 @@ class SaveCrag(
             null,
             request.name!!,
             request.roadAddress!!,
+            "",
             location,
-            request.kakaoPlaceId!!.toLong()
+            request.kakaoPlaceId!!.toLong(),
         )
 
         cragAdminRepository.save(crag)
