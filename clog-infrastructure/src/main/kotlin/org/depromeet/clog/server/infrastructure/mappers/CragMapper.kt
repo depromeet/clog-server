@@ -17,6 +17,7 @@ class CragMapper(
             id = entity.id!!,
             name = entity.name,
             roadAddress = entity.roadAddress,
+            lotNumberAddress = entity.lotNumberAddress,
             location = location,
             kakaoPlaceId = entity.kakaoPlaceId,
             grades = entity.grades.map {
@@ -32,6 +33,7 @@ class CragMapper(
             id = domain.id,
             name = domain.name,
             roadAddress = domain.roadAddress,
+            lotNumberAddress = domain.lotNumberAddress,
             location = location,
             kakaoPlaceId = domain.kakaoPlaceId,
             grades = domain.grades.map {
