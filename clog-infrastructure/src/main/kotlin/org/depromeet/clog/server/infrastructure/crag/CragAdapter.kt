@@ -55,7 +55,7 @@ class CragAdapter(
                 )
                 .where(
                     cursor?.let {
-                        distanceExpression.greaterThan(cursor)
+                        distanceExpression.greaterThanOrEqualTo(cursor)
                     }
                 )
                 .orderBy(distanceExpression.asc())

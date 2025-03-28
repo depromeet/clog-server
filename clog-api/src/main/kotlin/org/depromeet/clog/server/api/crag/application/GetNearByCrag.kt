@@ -22,9 +22,8 @@ class GetNearByCrag(
         val crags = cragRepository.findNearCragsByLocation(Location(longitude!!, latitude!!), cursor, pageSize)
 
         val hasMore = crags.size > pageSize
-        val result = if (hasMore) crags.take(pageSize) else crags
         val contents = (if (hasMore) crags.take(pageSize) else crags).map { CragResponse.from(it.first) }
-        val nextCursor = if (hasMore) result.last().second else null
+        val nextCursor = if (hasMore) crags.last().second else null
 
         return CursorPagination.Response(
             contents = contents,
