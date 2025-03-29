@@ -21,24 +21,16 @@ class DailyReportStatisticCalculator(
         val attemptCount: Long
     )
 
-    fun computeForUser(userId: Long): DailyReportStatistic {
+    fun computeForUser(userId: Long): DailyReportStatistic? {
         val groupData = getGroupData(userId)
-            ?: return DailyReportStatistic(
-                userId = userId,
-                mostAttemptedProblemCrag = "없음",
-                mostAttemptedProblemGrade = "없음",
-                mostAttemptedProblemAttemptCount = 0,
-                mostAttemptedProblemId = 0,
-                mostVisitedCragName = "없음",
-                mostVisitedCragVisitCount = 0
-            )
+            ?: return null
 
         val details: ReportDTO = getDetails(userId, groupData.groupDate, groupData.problemId)
         val story = details.story
         val problem = details.problem
 
-        val mostAttemptedProblemCrag = story.crag?.name ?: "알 수 없음"
-        val mostAttemptedProblemGrade = problem.grade?.color?.name ?: "알 수 없음"
+        val mostAttemptedProblemCrag = story.crag?.name
+        val mostAttemptedProblemGrade = problem.grade?.color?.name
 
         val visitedData = getVisitedData(userId)
 

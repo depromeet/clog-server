@@ -21,10 +21,10 @@ class DailyReportStatisticEntity(
     var statDate: LocalDate,
 
     @Column(nullable = false)
-    var mostAttemptedProblemCrag: String,
+    var mostAttemptedProblemCrag: String? = null,
 
     @Column(nullable = false)
-    var mostAttemptedProblemGrade: String,
+    var mostAttemptedProblemGrade: String? = null,
 
     @Column(nullable = false)
     var mostAttemptedProblemAttemptCount: Long,

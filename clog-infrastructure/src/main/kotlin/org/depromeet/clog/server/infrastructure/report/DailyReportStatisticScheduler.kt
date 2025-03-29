@@ -20,9 +20,10 @@ class DailyReportStatisticScheduler(
         val activeUsers = userRepository.findAllActiveUsers()
         activeUsers.forEach { user ->
             try {
-                val computedStatistic = calculator.computeForUser(user.id!!)
-                dailyReportStatisticRepository.save(computedStatistic)
-                logger.info { "사용자 id ${user.id}의 통계가 저장(업데이트)되었습니다." }
+                calculator.computeForUser(user.id!!)?.let {
+                    dailyReportStatisticRepository.save(it)
+                    logger.info { "사용자 id ${user.id}의 통계가 저장(업데이트)되었습니다." }
+                }
             } catch (e: Exception) {
                 logger.error(e) { "사용자 id ${user.id}의 통계 계산 중 오류 발생: ${e.message}" }
             }
