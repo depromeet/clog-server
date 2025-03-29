@@ -50,8 +50,8 @@ class CragQueryController(
         val result = getNearByCrag(
             request.cursor,
             request.pageSize,
-            coordinateRequest.longitude ?: coordinateRequest.getLongitudeOrDefault(),
-            coordinateRequest.latitude ?: coordinateRequest.getLatitudeOrDefault()
+            coordinateRequest.longitude ?: coordinateRequest.longitudeOrDefault,
+            coordinateRequest.latitude ?: coordinateRequest.latitudeOrDefault
         )
 
         return ClogApiResponse.from(result)

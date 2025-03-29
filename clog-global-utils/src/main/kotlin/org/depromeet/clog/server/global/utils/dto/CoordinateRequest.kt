@@ -12,6 +12,9 @@ data class CoordinateRequest(
     val latitude: Double?
 ) {
 
-    fun getLongitudeOrDefault() = longitude ?: 127.058089608702
-    fun getLatitudeOrDefault() = latitude ?: 37.5423101113247
+    val longitudeOrDefault: Double
+        get() = longitude ?: 127.058089608702
+
+    val latitudeOrDefault: Double
+        get() = latitude ?: 37.5423101113247
 }
