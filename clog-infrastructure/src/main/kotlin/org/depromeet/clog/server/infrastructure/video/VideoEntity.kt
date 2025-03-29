@@ -16,7 +16,7 @@ class VideoEntity(
     val localPath: String,
 
     @Column(name = "thumbnail_url")
-    val thumbnailUrl: String,
+    val thumbnailUrl: String? = null,
 
     @Column(name = "duration_ms")
     val durationMs: Long,

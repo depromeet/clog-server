@@ -12,7 +12,7 @@ data class VideoResponse(
     val localPath: String,
 
     @Schema(description = "영상 썸네일 URL", example = "https://example.com/thumbnail.jpg")
-    val thumbnailUrl: String,
+    val thumbnailUrl: String? = null,
 
     @Schema(description = "영상 길이 (ms)", example = "120000")
     val durationMs: Long,

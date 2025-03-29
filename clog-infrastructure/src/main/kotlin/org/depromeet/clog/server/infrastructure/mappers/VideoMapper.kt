@@ -29,14 +29,4 @@ class VideoMapper(
             stamps = domain.stamps.map { videoStampMapper.toEntity(it) },
         )
     }
-
-    fun toDomainWithoutStamps(entity: VideoEntity): VideoQuery {
-        return VideoQuery(
-            id = entity.id!!,
-            localPath = entity.localPath,
-            thumbnailUrl = entity.thumbnailUrl,
-            durationMs = entity.durationMs,
-            stamps = emptyList()
-        )
-    }
 }
