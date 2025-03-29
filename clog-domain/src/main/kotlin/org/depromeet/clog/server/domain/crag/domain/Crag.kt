@@ -10,6 +10,7 @@ data class Crag(
     val location: Location,
     val kakaoPlaceId: Long,
     val grades: List<Grade> = emptyList(),
+    val status: CragStatus = CragStatus.ACTIVE,
 ) {
 
     fun validateRoadAddressNotBlank(): String {

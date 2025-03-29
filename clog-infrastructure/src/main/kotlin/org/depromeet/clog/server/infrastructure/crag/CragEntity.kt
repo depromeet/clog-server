@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.crag
 
 import jakarta.persistence.*
+import org.depromeet.clog.server.domain.crag.domain.CragStatus
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 import org.hibernate.annotations.Comment
 import org.locationtech.jts.geom.Point
@@ -15,6 +16,11 @@ class CragEntity(
     @Comment("암장 이름")
     @Column(nullable = false)
     val name: String,
+
+    @Comment("암장 상태")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar")
+    val status: CragStatus,
 
     @Comment("도로명 주소")
     @Column(nullable = false)

@@ -16,6 +16,7 @@ class CragMapper(
         return Crag(
             id = entity.id!!,
             name = entity.name,
+            status = entity.status,
             roadAddress = entity.roadAddress,
             lotNumberAddress = entity.lotNumberAddress,
             location = location,
@@ -32,6 +33,7 @@ class CragMapper(
         return CragEntity(
             id = domain.id,
             name = domain.name,
+            status = domain.status,
             roadAddress = domain.roadAddress,
             lotNumberAddress = domain.lotNumberAddress,
             location = location,

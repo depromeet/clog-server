@@ -2,6 +2,7 @@ package org.depromeet.clog.server.infrastructure.crag
 
 import org.depromeet.clog.server.domain.crag.domain.Crag
 import org.depromeet.clog.server.domain.crag.domain.CragRepository
+import org.depromeet.clog.server.domain.crag.domain.CragStatus
 import org.depromeet.clog.server.domain.crag.domain.Location
 import org.depromeet.clog.server.infrastructure.mappers.CragMapper
 import org.depromeet.clog.server.infrastructure.mappers.LocationMapper
@@ -54,9 +55,12 @@ class CragAdapter(
                     entity(CragEntity::class)
                 )
                 .where(
-                    cursor?.let {
-                        distanceExpression.greaterThanOrEqualTo(cursor)
-                    }
+                    and(
+                        cursor?.let {
+                            distanceExpression.greaterThanOrEqualTo(cursor)
+                        },
+                        path(CragEntity::status).eq(CragStatus.ACTIVE),
+                    )
                 )
                 .orderBy(distanceExpression.asc())
         }
