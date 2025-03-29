@@ -5,8 +5,11 @@ import org.depromeet.clog.server.domain.attempt.AttemptQuery
 import org.depromeet.clog.server.domain.attempt.AttemptStatus
 import java.time.LocalDateTime
 
-@Schema(description = "문제 시도 응답 DTO")
+@Schema(description = "시도 응답 DTO")
 data class AttemptDetailResponse(
+    @Schema(description = "시도 ID", example = "1")
+    val id: Long,
+
     @Schema(description = "성공/실패 여부", example = "SUCCESS")
     val status: AttemptStatus,
 
@@ -21,6 +24,7 @@ data class AttemptDetailResponse(
 
         fun from(attemptQuery: AttemptQuery): AttemptDetailResponse {
             return AttemptDetailResponse(
+                id = attemptQuery.id,
                 status = attemptQuery.status,
                 createdAt = attemptQuery.createdAt,
                 video = VideoResponse.from(attemptQuery.video),
