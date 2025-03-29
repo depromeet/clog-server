@@ -16,10 +16,10 @@ class GetNearByCrag(
     operator fun invoke(
         cursor: Double?,
         pageSize: Int,
-        longitude: Double?,
-        latitude: Double?
+        longitude: Double,
+        latitude: Double
     ): CursorPagination.Response<Double, CragResponse> {
-        val crags = cragRepository.findNearCragsByLocation(Location(longitude!!, latitude!!), cursor, pageSize)
+        val crags = cragRepository.findNearCragsByLocation(Location(longitude, latitude), cursor, pageSize)
 
         val hasMore = crags.size > pageSize
         val contents = (if (hasMore) crags.take(pageSize) else crags).map { CragResponse.from(it.first) }

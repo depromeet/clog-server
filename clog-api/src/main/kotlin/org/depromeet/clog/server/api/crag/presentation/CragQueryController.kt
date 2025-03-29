@@ -1,7 +1,6 @@
 package org.depromeet.clog.server.api.crag.presentation
 
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.crag.application.GetMyCrag
@@ -9,6 +8,7 @@ import org.depromeet.clog.server.api.crag.application.GetNearByCrag
 import org.depromeet.clog.server.api.crag.presentation.dto.CragResponse
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
+import org.depromeet.clog.server.global.utils.dto.CoordinateRequest
 import org.depromeet.clog.server.global.utils.dto.CursorPagination
 import org.springdoc.core.annotations.ParameterObject
 import org.springframework.web.bind.annotation.GetMapping
@@ -45,10 +45,15 @@ class CragQueryController(
     @GetMapping("/nearby")
     fun getNearByCrags(
         @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedRequest,
-        @Parameter(description = "사용자의 경도(x)", example = "122.4194") longitude: Double?,
-        @Parameter(description = "사용자의 위도(y)", example = "37.7749") latitude: Double?
+        @ModelAttribute @ParameterObject coordinateRequest: CoordinateRequest
     ): ClogApiResponse<CursorPagination.Response<Double, CragResponse>> {
-        val result = getNearByCrag(request.cursor, request.pageSize, longitude, latitude)
+        val result = getNearByCrag(
+            request.cursor,
+            request.pageSize,
+            coordinateRequest.longitude ?: coordinateRequest.getLongitudeOrDefault(),
+            coordinateRequest.latitude ?: coordinateRequest.getLatitudeOrDefault()
+        )
+
         return ClogApiResponse.from(result)
     }
 }
