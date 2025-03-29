@@ -10,7 +10,7 @@ fun AttemptFolderView.toGetAttemptDetailResponse(): GetAttemptDetailResponse {
         video = AttemptVideoResponse(
             id = this.videoId,
             localPath = this.videoLocalPath ?: "",
-            thumbnailUrl = this.videoThumbnailUrl ?: "",
+            thumbnailUrl = this.videoThumbnailUrl,
             durationMs = this.videoDurationMs
         ),
         date = this.date,

@@ -9,7 +9,7 @@ data class SaveVideoRequest(
     val localPath: String,
 
     @Schema(description = "영상의 썸네일 URL", example = "https://example.com/thumbnail.jpg")
-    val thumbnailUrl: String,
+    val thumbnailUrl: String? = null,
 
     @Schema(description = "영상의 길이 (ms)", example = "3600000")
     val durationMs: Long,

@@ -8,7 +8,7 @@ data class AttemptVideoResponse(
     @Schema(description = "비디오 로컬 경로", example = "/videos/record_001.mp4")
     val localPath: String,
     @Schema(description = "비디오 썸네일 URL", example = "https://example.com/thumbnail.jpg")
-    val thumbnailUrl: String,
+    val thumbnailUrl: String? = null,
     @Schema(description = "비디오 길이 (ms)", example = "12000")
     val durationMs: Long
 )
