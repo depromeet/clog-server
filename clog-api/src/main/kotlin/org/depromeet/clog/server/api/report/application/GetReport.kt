@@ -90,9 +90,10 @@ class GetReport(
         return reportRepository.getReport(userId, threeMonthsAgo)
     }
 
-    private fun getUserName(userId: Long): String {
-        return userRepository.findByIdAndIsDeletedFalse(userId)
-            ?.name
+    private fun getUserName(userId: Long): String? {
+        val user = userRepository.findByIdAndIsDeletedFalse(userId)
             ?: throw UserNotFoundException()
+
+        return user.name
     }
 }

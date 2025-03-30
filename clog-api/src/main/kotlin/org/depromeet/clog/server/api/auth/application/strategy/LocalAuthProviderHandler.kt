@@ -34,7 +34,6 @@ class LocalAuthProviderHandler(
         } else {
             val newUser = User(
                 loginId = loginId,
-                name = "로컬_$loginId",
                 provider = Provider.LOCAL
             )
             userRepository.save(newUser)

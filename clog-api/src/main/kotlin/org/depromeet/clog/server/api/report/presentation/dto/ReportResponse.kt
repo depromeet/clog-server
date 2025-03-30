@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(description = "사용자 리포트 응답 DTO")
 data class ReportResponse(
     @Schema(description = "사용자 닉네임", example = "김클로그")
-    val userName: String,
+    val userName: String? = null,
 
     @Schema(description = "최근 3개월 내 시도 횟수", example = "10")
     val recentAttemptCount: Long,
