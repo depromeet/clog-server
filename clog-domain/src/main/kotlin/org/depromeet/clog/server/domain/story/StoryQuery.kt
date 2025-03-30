@@ -18,10 +18,12 @@ data class StoryQuery(
 
     val attempts: List<AttemptQuery>
         get() = problems.flatMap { it.attempts }
+
+    val randomThumbnailUrl: String?
+        get() = attempts.map { it.video.thumbnailUrl }.randomOrNull()
 }
 
 fun List<StoryQuery>.getRandomThumbnailUrl(): String? {
-    return this.flatMap { it.attempts }
-        .map { it.video.thumbnailUrl }
+    return this.map { it.randomThumbnailUrl }
         .randomOrNull()
 }
