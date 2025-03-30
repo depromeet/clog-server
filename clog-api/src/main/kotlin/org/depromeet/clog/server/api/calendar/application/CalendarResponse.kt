@@ -113,6 +113,12 @@ data class CalendarResponse(
         val cragName: String?,
 
         @Schema(
+            description = "해당 기록의 대표 썸네일 URL",
+            example = "https://example.com/thumbnail.jpg",
+        )
+        val thumbnailUrl: String?,
+
+        @Schema(
             description = "해당 스토리의 문제 리스트",
         )
         val problems: List<ProblemGradeSummary>,
@@ -122,6 +128,7 @@ data class CalendarResponse(
                 id = story.id,
                 totalDurationMs = story.totalDurationMs,
                 cragName = story.crag?.name,
+                thumbnailUrl = story.randomThumbnailUrl,
                 problems = story.problems.map { ProblemGradeSummary.from(it) }
             )
         }
