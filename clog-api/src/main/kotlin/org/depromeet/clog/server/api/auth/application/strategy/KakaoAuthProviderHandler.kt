@@ -80,7 +80,6 @@ class KakaoAuthProviderHandler(
         } else {
             val newUser = User(
                 loginId = kakaoUserInfo.id,
-                name = kakaoUserInfo.nickname,
                 provider = Provider.KAKAO
             )
             userRepository.save(newUser)

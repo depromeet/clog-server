@@ -115,7 +115,6 @@ class AppleAuthProviderHandler(
         } else {
             val newUser = User(
                 loginId = appleUser.id,
-                name = appleUser.name,
                 provider = Provider.APPLE
             )
             userRepository.save(newUser)
