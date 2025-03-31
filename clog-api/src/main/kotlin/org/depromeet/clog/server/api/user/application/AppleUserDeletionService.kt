@@ -2,6 +2,7 @@ package org.depromeet.clog.server.api.user.application
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.depromeet.clog.server.api.auth.application.strategy.AppleAuthProviderHandler
 import org.depromeet.clog.server.domain.user.presentation.exception.AppleRevokeException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -20,7 +21,8 @@ class AppleUserDeletionService(
     @Value("\${apple.team-id}") private val appleTeamId: String,
     @Value("\${apple.key-id}") private val appleKeyId: String,
     @Value("\${apple.private-key}") private val applePrivateKey: String,
-    private val restTemplate: RestTemplate
+    private val restTemplate: RestTemplate,
+    private val handler: AppleAuthProviderHandler,
 ) {
 
     /**
@@ -31,13 +33,18 @@ class AppleUserDeletionService(
         val url = "https://appleid.apple.com/auth/revoke"
         val clientSecret = generateAppleClientSecret()
 
+        val refreshToken = handler.requestAppleAccessToken(
+            authorizationCode,
+            UUID.randomUUID().toString()
+        )["refresh_token"] as String
+
         val headers = HttpHeaders().apply {
             contentType = MediaType.APPLICATION_FORM_URLENCODED
         }
         val body = LinkedMultiValueMap<String, String>().apply {
             add("client_id", appleClientId)
             add("client_secret", clientSecret)
-            add("token", authorizationCode)
+            add("token", refreshToken)
             add("token_type_hint", "refresh_token")
         }
         val requestEntity = HttpEntity(body, headers)

@@ -55,7 +55,7 @@ class AppleAuthProviderHandler(
         return tokenService.generateTokens(user)
     }
 
-    private fun requestAppleAccessToken(
+    fun requestAppleAccessToken(
         authorizationCode: String,
         codeVerifier: String
     ): Map<String, Any> {
