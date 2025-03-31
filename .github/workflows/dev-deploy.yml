@@ -48,5 +48,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker compose -f /root/docker-compose.yml pull api
-            docker compose -f /root/docker-compose.yml up -d api
+            docker compose -f /home/ubuntu/docker-compose.yml pull api
+            docker compose -f /home/ubuntu/docker-compose.yml up -d api
