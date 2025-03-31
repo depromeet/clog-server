@@ -11,7 +11,7 @@ data class StoryQuery(
     val crag: Crag? = null,
     val memo: String? = null,
     val date: LocalDate,
-    val problems: List<ProblemQuery>,
+    val problems: MutableList<ProblemQuery> = mutableListOf(),
 ) {
     val totalDurationMs: Long
         get() = problems.sumOf { it.attempts.sumOf { at -> at.video.durationMs } }
