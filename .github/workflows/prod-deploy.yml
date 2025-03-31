@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     name: Build and Push Docker Images
+    environment: prod
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.set_image_tag.outputs.image_tag }}
@@ -47,6 +48,7 @@ jobs:
   update-manifests:
     name: Update k8s Manifests with New Image Tag
     runs-on: ubuntu-latest
+    environment: prod
     needs: build
     steps:
       - name: Checkout Manifests Repository
