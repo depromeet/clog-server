@@ -22,7 +22,7 @@ class StoryMapper(
             userId = entity.userId,
             memo = entity.memo,
             date = entity.date,
-            problems = entity.problems.map { problemMapper.toDomain(it) },
+            problems = entity.problems.map { problemMapper.toDomain(it) }.toMutableList(),
             crag = entity.crag?.let { cragMapper.toDomain(it) },
         )
     }

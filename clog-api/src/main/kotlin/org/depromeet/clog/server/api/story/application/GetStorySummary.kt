@@ -40,6 +40,8 @@ class GetStorySummary(
             totalFailCount = totalFailCount,
             memo = story.memo,
             problems = problems,
+            date = story.date,
+            thumbnailUrl = story.randomThumbnailUrl
         )
     }
 

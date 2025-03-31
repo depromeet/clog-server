@@ -22,7 +22,7 @@ class ProblemMapper(
         return ProblemQuery(
             id = entity.id!!,
             grade = entity.grade?.let { gradeMapper.toDomain(it) },
-            attempts = entity.attempts.map { attemptMapper.toDomain(it) },
+            attempts = entity.attempts.map { attemptMapper.toDomain(it) }.toMutableList(),
         )
     }
 

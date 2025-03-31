@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.api.story.presentation
 
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.LocalDate
 
 @Schema(description = "스토리 요약 응답 DTO")
 data class StorySummaryResponse(
@@ -27,6 +28,12 @@ data class StorySummaryResponse(
 
     @Schema(description = "문제 목록")
     val problems: List<Problem>,
+
+    @Schema(description = "날짜")
+    val date: LocalDate,
+
+    @Schema(description = "썸네일 url")
+    val thumbnailUrl: String? = null
 ) {
 
     @Schema(name = "StorySummaryResponse.Problem", description = "문제 정보")
