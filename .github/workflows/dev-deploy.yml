@@ -7,10 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-deploy:
-    environment: dev
+  build:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -34,12 +33,17 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${{ github.ref_name }}
 
+  deploy:
+    name: Deploy to Remote Server
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy on Remote Server via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             docker compose -f /root/docker-compose.yml pull api
