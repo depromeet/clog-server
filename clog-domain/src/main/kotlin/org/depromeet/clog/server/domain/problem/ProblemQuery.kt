@@ -7,7 +7,7 @@ import org.depromeet.clog.server.global.utils.Constants.DEFAULT_GRADE_COLOR
 data class ProblemQuery(
     val id: Long,
     val grade: Grade? = null,
-    val attempts: List<AttemptQuery> = emptyList(),
+    val attempts: MutableList<AttemptQuery> = mutableListOf(),
 ) {
 
     val colorHexWithDefault: String

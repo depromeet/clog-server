@@ -25,9 +25,18 @@ class DeleteAttemptAndParents(
         val problem = fetchProblem(story, attemptId)
         val attempt = fetchAttempt(problem, attemptId)
 
-        deleteAttempt(attempt)
-        deleteProblemIfEmpty(problem)
-        deleteStoryIfEmpty(story)
+        problem.attempts.removeIf { it.id == attempt.id }
+
+        attemptRepository.deleteById(attempt.id)
+
+        if (problem.attempts.isEmpty()) {
+            story.problems.removeIf { it.id == problem.id }
+            problemRepository.deleteById(problem.id)
+        }
+
+        if (story.problems.isEmpty()) {
+            storyRepository.deleteById(story.id)
+        }
     }
 
     private fun fetchAttempt(
@@ -52,21 +61,5 @@ class DeleteAttemptAndParents(
         val story = storyRepository.findByAttemptId(attemptId)
             ?: throw StoryNotFoundException("Story not found for attemptId: $attemptId")
         return story
-    }
-
-    private fun deleteAttempt(attempt: AttemptQuery) {
-        attemptRepository.deleteById(attempt.id)
-    }
-
-    private fun deleteProblemIfEmpty(problem: ProblemQuery) {
-        if (problem.attempts.isEmpty()) {
-            problemRepository.deleteById(problem.id)
-        }
-    }
-
-    private fun deleteStoryIfEmpty(story: StoryQuery) {
-        if (story.problems.isEmpty()) {
-            storyRepository.deleteById(story.id)
-        }
     }
 }
