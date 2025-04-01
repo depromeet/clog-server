@@ -1,8 +1,10 @@
-package org.depromeet.clog.server.infrastructure.report
+package org.depromeet.clog.server.infrastructure.report.scheduler
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock
 import org.depromeet.clog.server.domain.report.DailyReportStatisticRepository
 import org.depromeet.clog.server.domain.user.domain.UserRepository
+import org.depromeet.clog.server.infrastructure.report.DailyReportStatisticCalculator
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -16,6 +18,11 @@ class DailyReportStatisticScheduler(
     private val logger = KotlinLogging.logger {}
 
     @Scheduled(cron = "0 0 3 * * ?")
+    @SchedulerLock(
+        name = "dailyReportStatisticSchedulerLock",
+        lockAtMostFor = "10m",
+        lockAtLeastFor = "5m"
+    )
     fun calculateDailyStatistics() {
         val activeUsers = userRepository.findAllActiveUsers()
         activeUsers.forEach { user ->

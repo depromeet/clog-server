@@ -19,6 +19,8 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.flywaydb:flyway-mysql:9.1.6")
+    implementation("net.javacrumbs.shedlock:shedlock-spring:5.9.0")
+    implementation("net.javacrumbs.shedlock:shedlock-provider-jdbc-template:5.9.0")
 }
 
 tasks {
