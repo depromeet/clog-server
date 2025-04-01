@@ -11,6 +11,7 @@ import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptRespons
 import org.depromeet.clog.server.api.attempt.presentation.dto.UpdateAttemptRequest
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
+import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.depromeet.clog.server.domain.common.ErrorCode
 import org.springframework.web.bind.annotation.*
@@ -24,12 +25,13 @@ class AttemptCommandController(
     private val deleteAttemptAndParents: DeleteAttemptAndParents,
 ) {
 
-    @Operation(summary = "시도 등록 API", description = "한 영상 촬영이 마무리된 후, 영산 편집까지 마치면 호출하는 API입니다.")
+    @Operation(summary = "시도 등록 API", description = "한 영상 촬영이 마무리된 후, 영상 편집까지 마치면 호출하는 API입니다.")
     @PostMapping
     fun registerAttempt(
         @RequestBody @Valid request: SaveAttemptRequest,
+        userContext: UserContext
     ): ClogApiResponse<SaveAttemptResponse> {
-        val result = saveAttempt(request)
+        val result = saveAttempt(request, userContext.userId)
         return ClogApiResponse.from(result)
     }
 
