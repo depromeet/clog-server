@@ -3,7 +3,7 @@ package org.depromeet.clog.server.api.attempt.application
 import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptRequest
 import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptResponse
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
-import org.depromeet.clog.server.domain.report.event.AttemptCreatedEvent
+import org.depromeet.clog.server.domain.report.event.AttemptUpdatedEvent
 import org.depromeet.clog.server.domain.video.VideoRepository
 import org.depromeet.clog.server.domain.video.VideoStampRepository
 import org.springframework.context.ApplicationEventPublisher
@@ -25,7 +25,7 @@ class SaveAttempt(
             request.video.stamps.map { it.toDomain(video.id) }
         )
         val attempt = attemptRepository.save(request.toDomain(video.id))
-        eventPublisher.publishEvent(AttemptCreatedEvent(userId = userId, attemptId = attempt.id!!))
+        eventPublisher.publishEvent(AttemptUpdatedEvent(userId = userId, attemptId = attempt.id!!))
         return SaveAttemptResponse(attempt.id)
     }
 }

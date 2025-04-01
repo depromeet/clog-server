@@ -6,7 +6,7 @@ import org.depromeet.clog.server.domain.attempt.AttemptRepository
 import org.depromeet.clog.server.domain.problem.ProblemNotFoundException
 import org.depromeet.clog.server.domain.problem.ProblemQuery
 import org.depromeet.clog.server.domain.problem.ProblemRepository
-import org.depromeet.clog.server.domain.report.event.AttemptDeletedEvent
+import org.depromeet.clog.server.domain.report.event.AttemptUpdatedEvent
 import org.depromeet.clog.server.domain.story.StoryNotFoundException
 import org.depromeet.clog.server.domain.story.StoryQuery
 import org.depromeet.clog.server.domain.story.StoryRepository
@@ -43,7 +43,7 @@ class DeleteAttemptAndParents(
         }
 
         eventPublisher.publishEvent(
-            AttemptDeletedEvent(
+            AttemptUpdatedEvent(
                 userId = story.userId ?: throw UserNotFoundException(),
                 attemptId = attempt.id
             )
