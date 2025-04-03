@@ -9,6 +9,7 @@ data class StoryQuery(
     val id: Long,
     val userId: Long? = null,
     val crag: Crag? = null,
+    val status: StoryStatus,
     val memo: String? = null,
     val date: LocalDate,
     val problems: MutableList<ProblemQuery> = mutableListOf(),

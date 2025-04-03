@@ -3,6 +3,7 @@ package org.depromeet.clog.server.infrastructure.story
 import org.depromeet.clog.server.domain.story.StoryCommand
 import org.depromeet.clog.server.domain.story.StoryQuery
 import org.depromeet.clog.server.domain.story.StoryRepository
+import org.depromeet.clog.server.domain.story.StoryStatus
 import org.depromeet.clog.server.infrastructure.attempt.AttemptEntity
 import org.depromeet.clog.server.infrastructure.mappers.StoryMapper
 import org.depromeet.clog.server.infrastructure.problem.ProblemEntity
@@ -32,10 +33,11 @@ class StoryAdapter(
         startDate: LocalDate,
         endDate: LocalDate,
     ): List<StoryQuery> {
-        return storyJpaRepository.findAllByUserIdAndDateBetween(
+        return storyJpaRepository.findAllByUserIdAndDateBetweenAndStatus(
             userId = userId,
             startDate = startDate.minusDays(1),
             endDate = endDate.plusDays(1),
+            status = StoryStatus.DONE,
         ).map { storyMapper.toDomain(it) }
     }
 

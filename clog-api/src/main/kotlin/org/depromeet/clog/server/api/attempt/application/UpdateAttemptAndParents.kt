@@ -60,6 +60,7 @@ class UpdateAttemptAndParents(
                     cragId = request.cragId,
                     date = story.date,
                     memo = story.memo,
+                    status = story.status,
                 )
             )
         }
