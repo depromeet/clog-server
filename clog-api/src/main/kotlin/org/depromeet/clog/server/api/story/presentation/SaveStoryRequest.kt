@@ -22,13 +22,19 @@ data class SaveStoryRequest(
     val memo: String? = null,
 ) {
 
-    fun toDomain(userId: Long): StoryCommand {
+    fun toDomain(userId: Long, appVersion: String?): StoryCommand {
+        val status = if (appVersion != null && appVersion in setOf("1.0.0", "1.0.1", "1.0.2")) {
+            StoryStatus.DONE
+        } else {
+            StoryStatus.IN_PROGRESS
+        }
+
         return StoryCommand(
             userId = userId,
             cragId = cragId,
             date = LocalDate.now(),
             memo = memo,
-            status = StoryStatus.IN_PROGRESS,
+            status = status,
         )
     }
 }
