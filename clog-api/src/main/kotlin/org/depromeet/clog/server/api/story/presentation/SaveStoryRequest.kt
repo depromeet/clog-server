@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptRequest
 import org.depromeet.clog.server.api.problem.presentation.SaveProblemRequest
 import org.depromeet.clog.server.domain.story.StoryCommand
+import org.depromeet.clog.server.domain.story.StoryStatus
 import java.time.LocalDate
 
 @Schema(description = "새로운 기록 저장 요청")
@@ -27,6 +28,7 @@ data class SaveStoryRequest(
             cragId = cragId,
             date = LocalDate.now(),
             memo = memo,
+            status = StoryStatus.IN_PROGRESS,
         )
     }
 }

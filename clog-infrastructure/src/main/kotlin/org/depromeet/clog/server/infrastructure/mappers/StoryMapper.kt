@@ -20,6 +20,7 @@ class StoryMapper(
         return StoryQuery(
             id = entity.id!!,
             userId = entity.userId,
+            status = entity.status,
             memo = entity.memo,
             date = entity.date,
             problems = entity.problems.map { problemMapper.toDomain(it) }.toMutableList(),
@@ -40,6 +41,7 @@ class StoryMapper(
             userId = domain.userId,
             memo = domain.memo,
             date = domain.date,
+            status = domain.status,
         )
     }
 }

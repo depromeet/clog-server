@@ -33,6 +33,7 @@ class UpdateStoryMemo(
                 cragId = story.crag?.id,
                 date = story.date,
                 memo = request.memo,
+                status = story.status,
             )
         )
     }

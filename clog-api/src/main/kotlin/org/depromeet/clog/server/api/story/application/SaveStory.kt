@@ -40,13 +40,14 @@ class SaveStory(
             request.attempt.video.stamps.map { it.toDomain(video.id) }
         )
 
-        attemptRepository.save(
+        val attempt = attemptRepository.save(
             request.attempt.toDomain(video.id, problem.id)
         )
 
         return SaveStoryResponse(
             storyId = story.id,
             problemId = problem.id,
+            attemptId = attempt.id,
         )
     }
 }

@@ -36,6 +36,7 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
           AND (:attemptStatus IS NULL OR a.status = :attemptStatus)
           AND (:cragId IS NULL OR c.id = :cragId)
           AND (:gradeId IS NULL OR g.id = :gradeId)
+          AND (s.status = 'DONE')
         ORDER BY a.id DESC
     """
     )

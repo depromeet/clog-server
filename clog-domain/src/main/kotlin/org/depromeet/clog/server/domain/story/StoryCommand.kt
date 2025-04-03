@@ -7,5 +7,6 @@ data class StoryCommand(
     val userId: Long? = null,
     val cragId: Long? = null,
     val memo: String? = null,
+    val status: StoryStatus,
     val date: LocalDate,
 )

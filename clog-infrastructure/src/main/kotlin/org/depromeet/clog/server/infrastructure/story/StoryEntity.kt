@@ -1,6 +1,7 @@
 package org.depromeet.clog.server.infrastructure.story
 
 import jakarta.persistence.*
+import org.depromeet.clog.server.domain.story.StoryStatus
 import org.depromeet.clog.server.infrastructure.common.BaseEntity
 import org.depromeet.clog.server.infrastructure.crag.CragEntity
 import org.depromeet.clog.server.infrastructure.problem.ProblemEntity
@@ -20,6 +21,10 @@ class StoryEntity(
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "crag_id")
     val crag: CragEntity? = null,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "varchar")
+    val status: StoryStatus,
 
     @Column(name = "memo")
     val memo: String? = null,
