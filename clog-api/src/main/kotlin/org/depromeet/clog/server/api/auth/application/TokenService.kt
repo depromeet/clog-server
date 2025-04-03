@@ -54,14 +54,16 @@ class TokenService(
 
     @Suppress("ThrowsCount")
     fun refreshAccessToken(refreshToken: String): AuthResponseDto {
+        val prefixRemoved = refreshToken.removePrefix("Bearer ")
+
         val userId = try {
-            extractUserIdFromToken(refreshToken)
+            extractUserIdFromToken(prefixRemoved)
         } catch (e: AuthException) {
             log.error(e) { "리프레시 토큰 검증 실패" }
             throw e
         }
 
-        refreshTokenRepository.findByUserId(userId)?.takeIf { it.token == refreshToken }
+        refreshTokenRepository.findByUserId(userId)?.takeIf { it.token == prefixRemoved }
             ?: throw AuthException(ErrorCode.TOKEN_INVALID)
 
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
