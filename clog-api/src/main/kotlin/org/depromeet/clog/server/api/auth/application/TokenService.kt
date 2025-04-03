@@ -54,14 +54,16 @@ class TokenService(
 
     @Suppress("ThrowsCount")
     fun refreshAccessToken(refreshToken: String): AuthResponseDto {
+        val prefixRemoved = refreshToken.removePrefix("Bearer ")
+
         val userId = try {
-            extractUserIdFromToken(refreshToken)
+            extractUserIdFromToken(prefixRemoved)
         } catch (e: AuthException) {
             log.error(e) { "리프레시 토큰 검증 실패" }
             throw e
         }
 
-        refreshTokenRepository.findByUserId(userId)?.takeIf { it.token == refreshToken }
+        refreshTokenRepository.findByUserId(userId)?.takeIf { it.token == prefixRemoved }
             ?: throw AuthException(ErrorCode.TOKEN_INVALID)
 
         val user = userRepository.findByIdAndIsDeletedFalse(userId)
@@ -134,8 +136,7 @@ class TokenService(
 
     private fun extractUserIdFromToken(token: String): Long {
         return try {
-            val prefixRemoved = token.removePrefix("Bearer ")
-            JWT.decode(prefixRemoved).getClaim("userId").asLong()
+            JWT.decode(token).getClaim("userId").asLong()
                 ?: throw AuthException(ErrorCode.TOKEN_INVALID)
         } catch (e: Exception) {
             log.error(e) { "토큰에서 userId 추출 실패" }
