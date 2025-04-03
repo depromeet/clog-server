@@ -3,6 +3,7 @@ package org.depromeet.clog.server.api.story.presentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
+import org.depromeet.clog.server.api.configuration.ApiConstants.APP_VERSION_HEADER
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.api.story.application.DeleteStory
 import org.depromeet.clog.server.api.story.application.SaveStory
@@ -31,9 +32,10 @@ class StoryCommandController(
     @PostMapping
     fun save(
         userContext: UserContext,
+        @RequestHeader(APP_VERSION_HEADER, required = false) appVersion: String? = null,
         @RequestBody request: SaveStoryRequest,
     ): ClogApiResponse<SaveStoryResponse> {
-        val result = saveStory(userContext.userId, request)
+        val result = saveStory(userContext.userId, request, appVersion)
         return ClogApiResponse.from(result)
     }
 

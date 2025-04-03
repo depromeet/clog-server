@@ -23,9 +23,10 @@ class SaveStory(
     operator fun invoke(
         userId: Long,
         request: SaveStoryRequest,
+        appVersion: String?,
     ): SaveStoryResponse {
         val story = storyRepository.save(
-            request.toDomain(userId)
+            request.toDomain(userId, appVersion)
         )
 
         val problem = problemRepository.save(
