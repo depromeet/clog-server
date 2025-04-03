@@ -136,8 +136,7 @@ class TokenService(
 
     private fun extractUserIdFromToken(token: String): Long {
         return try {
-            val prefixRemoved = token.removePrefix("Bearer ")
-            JWT.decode(prefixRemoved).getClaim("userId").asLong()
+            JWT.decode(token).getClaim("userId").asLong()
                 ?: throw AuthException(ErrorCode.TOKEN_INVALID)
         } catch (e: Exception) {
             log.error(e) { "토큰에서 userId 추출 실패" }
