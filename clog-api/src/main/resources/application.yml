@@ -41,8 +41,8 @@ decorator:
 
 jwt:
   secret: ${JWT_SECRET}
-  access-token-expiration-millis: 86400000
-  refresh-token-expiration-millis: 604800000
+  access-token-expiration-millis: 30000
+  refresh-token-expiration-millis: 180000
 
 apple:
   team-id: ${APPLE_TEAM_ID}
