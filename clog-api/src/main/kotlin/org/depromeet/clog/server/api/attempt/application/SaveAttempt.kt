@@ -25,7 +25,7 @@ class SaveAttempt(
             request.video.stamps.map { it.toDomain(video.id) }
         )
         val attempt = attemptRepository.save(request.toDomain(video.id))
-        eventPublisher.publishEvent(AttemptUpdatedEvent(userId = userId, attemptId = attempt.id!!))
+        eventPublisher.publishEvent(AttemptUpdatedEvent(userId = userId, attemptId = attempt.id))
         return SaveAttemptResponse(attempt.id)
     }
 }
