@@ -13,10 +13,10 @@ CREATE TABLE IF NOT EXISTS crag_color (
 CREATE TABLE IF NOT EXISTS region (
                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                       region_name ENUM(
-                                        'SEOUL', 'BUSAN', 'DAEGU', 'INCHEON', 'GWANGJU', 'DAEJEON', 'ULSAN', 'SEJONG',
-                                        'GYEONGGI', 'GANGWON', 'CHUNGBUK', 'CHUNGNAM', 'JEONBUK', 'JEONNAM', 'GYEONGBUK',
-                                        'GYEONGNAM', 'JEJU'
-                                        ) NOT NULL,
+                                          'SEOUL', 'BUSAN', 'DAEGU', 'INCHEON', 'GWANGJU', 'DAEJEON', 'ULSAN', 'SEJONG',
+                                          'GYEONGGI', 'GANGWON', 'CHUNGBUK', 'CHUNGNAM', 'JEONBUK', 'JEONNAM', 'GYEONGBUK',
+                                          'GYEONGNAM', 'JEJU'
+                                          ) NOT NULL,
                                       district VARCHAR(255) NOT NULL,
                                       created_at DATETIME NOT NULL,
                                       modified_at DATETIME NOT NULL

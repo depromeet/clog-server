@@ -9,10 +9,13 @@ import org.depromeet.clog.server.domain.problem.ProblemCommand
 import org.depromeet.clog.server.domain.problem.ProblemNotFoundException
 import org.depromeet.clog.server.domain.problem.ProblemQuery
 import org.depromeet.clog.server.domain.problem.ProblemRepository
+import org.depromeet.clog.server.domain.report.event.AttemptUpdatedEvent
 import org.depromeet.clog.server.domain.story.StoryCommand
 import org.depromeet.clog.server.domain.story.StoryNotFoundException
 import org.depromeet.clog.server.domain.story.StoryQuery
 import org.depromeet.clog.server.domain.story.StoryRepository
+import org.depromeet.clog.server.domain.user.presentation.exception.UserNotFoundException
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,6 +24,7 @@ class UpdateAttemptAndParents(
     private val attemptRepository: AttemptRepository,
     private val problemRepository: ProblemRepository,
     private val storyRepository: StoryRepository,
+    private val eventPublisher: ApplicationEventPublisher
 ) {
 
     @Transactional
@@ -32,6 +36,13 @@ class UpdateAttemptAndParents(
         updateStory(story, request)
         updateProblem(problem, story.id, request)
         updateAttempt(attempt, problem.id, request)
+
+        eventPublisher.publishEvent(
+            AttemptUpdatedEvent(
+                userId = story.userId ?: throw UserNotFoundException(),
+                attemptId = attempt.id
+            )
+        )
     }
 
     private fun fetchStory(attemptId: Long): StoryQuery {
@@ -85,7 +96,11 @@ class UpdateAttemptAndParents(
         )
     }
 
-    private fun updateAttempt(attempt: AttemptQuery, problemId: Long, request: UpdateAttemptRequest) {
+    private fun updateAttempt(
+        attempt: AttemptQuery,
+        problemId: Long,
+        request: UpdateAttemptRequest
+    ) {
         request.status?.let {
             attemptRepository.save(
                 AttemptCommand(

@@ -6,9 +6,12 @@ import org.depromeet.clog.server.domain.attempt.AttemptRepository
 import org.depromeet.clog.server.domain.problem.ProblemNotFoundException
 import org.depromeet.clog.server.domain.problem.ProblemQuery
 import org.depromeet.clog.server.domain.problem.ProblemRepository
+import org.depromeet.clog.server.domain.report.event.AttemptUpdatedEvent
 import org.depromeet.clog.server.domain.story.StoryNotFoundException
 import org.depromeet.clog.server.domain.story.StoryQuery
 import org.depromeet.clog.server.domain.story.StoryRepository
+import org.depromeet.clog.server.domain.user.presentation.exception.UserNotFoundException
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,6 +20,7 @@ class DeleteAttemptAndParents(
     private val attemptRepository: AttemptRepository,
     private val problemRepository: ProblemRepository,
     private val storyRepository: StoryRepository,
+    private val eventPublisher: ApplicationEventPublisher
 ) {
 
     @Transactional
@@ -37,6 +41,13 @@ class DeleteAttemptAndParents(
         if (story.problems.isEmpty()) {
             storyRepository.deleteById(story.id)
         }
+
+        eventPublisher.publishEvent(
+            AttemptUpdatedEvent(
+                userId = story.userId ?: throw UserNotFoundException(),
+                attemptId = attempt.id
+            )
+        )
     }
 
     private fun fetchAttempt(
@@ -52,8 +63,9 @@ class DeleteAttemptAndParents(
         story: StoryQuery,
         attemptId: Long
     ): ProblemQuery {
-        val problem = story.problems.firstOrNull { it.attempts.any { attempt -> attempt.id == attemptId } }
-            ?: throw ProblemNotFoundException("Problem not found for attemptId: $attemptId")
+        val problem =
+            story.problems.firstOrNull { it.attempts.any { attempt -> attempt.id == attemptId } }
+                ?: throw ProblemNotFoundException("Problem not found for attemptId: $attemptId")
         return problem
     }
 
