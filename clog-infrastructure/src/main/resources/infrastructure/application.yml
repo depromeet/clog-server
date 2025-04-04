@@ -28,3 +28,7 @@ kakao:
   map:
     rest-api-key: ${KAKAO_MAP_REST_API_KEY}
     local-search-base-url: ${KAKAO_MAP_LOCAL_SEARCH_BASE_URL}
+
+thumbnail:
+  crop:
+    enabled: true
