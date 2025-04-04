@@ -16,7 +16,8 @@ class VideoMapper(
             localPath = entity.localPath,
             thumbnailUrl = entity.thumbnailUrl,
             durationMs = entity.durationMs,
-            stamps = entity.stamps.map { videoStampMapper.toDomain(it) },
+            stamps = entity.stamps.map { videoStampMapper.toDomain(it) }
+                .sortedBy { it.timeMs },
         )
     }
 
