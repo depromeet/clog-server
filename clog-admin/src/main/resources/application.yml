@@ -40,3 +40,7 @@ management:
           UNKNOWN: 200
           UP: 200
         order: DOWN, OUT_OF_SERVICE, UP, UNKNOWN
+
+thumbnail:
+  crop:
+    enabled: true
