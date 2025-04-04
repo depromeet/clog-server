@@ -20,7 +20,7 @@ class NcpObjectStorageClient(
     @Value("\${ncp.storage.access-key}") private val accessKey: String,
     @Value("\${ncp.storage.secret-key}") private val secretKey: String,
     @Value("\${ncp.storage.end-point}") private val endpoint: String,
-    @Value("\${thumbnail.image.crop.enable}") private val isCropEnable: Boolean,
+    @Value("\${thumbnail.crop.enabled}") private val isCropEnabled: Boolean,
 ) {
 
     private val s3Client: AmazonS3 = run {
@@ -35,7 +35,7 @@ class NcpObjectStorageClient(
     fun uploadFile(file: MultipartFile): String {
         val fileName = generateUniqueFileName(file.originalFilename)
 
-        if (isCropEnable && file.contentType?.equals("image/png", ignoreCase = true) == true) {
+        if (isCropEnabled && file.contentType?.equals("image/png", ignoreCase = true) == true) {
             val croppedBytes = ImageCropper.cropPngImage(file)
             val croppedInputStream = ByteArrayInputStream(croppedBytes)
             val metadata = ObjectMetadata().apply {

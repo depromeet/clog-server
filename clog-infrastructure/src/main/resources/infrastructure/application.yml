@@ -30,6 +30,5 @@ kakao:
     local-search-base-url: ${KAKAO_MAP_LOCAL_SEARCH_BASE_URL}
 
 thumbnail:
-  image:
-    crop:
-      enable: true
+  crop:
+    enabled: true
