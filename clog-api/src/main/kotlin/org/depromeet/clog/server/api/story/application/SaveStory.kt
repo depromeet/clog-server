@@ -2,6 +2,7 @@ package org.depromeet.clog.server.api.story.application
 
 import org.depromeet.clog.server.api.story.presentation.SaveStoryRequest
 import org.depromeet.clog.server.api.story.presentation.SaveStoryResponse
+import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
 import org.depromeet.clog.server.domain.problem.ProblemRepository
 import org.depromeet.clog.server.domain.story.StoryRepository
@@ -21,12 +22,11 @@ class SaveStory(
 
     @Transactional
     operator fun invoke(
-        userId: Long,
+        userContext: UserContext,
         request: SaveStoryRequest,
-        appVersion: String?,
     ): SaveStoryResponse {
         val story = storyRepository.save(
-            request.toDomain(userId, appVersion)
+            request.toDomain(userContext.userId, userContext.appVersion)
         )
 
         val problem = problemRepository.save(
