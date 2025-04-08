@@ -32,3 +32,12 @@ kakao:
 thumbnail:
   crop:
     enabled: true
+
+aws:
+  s3:
+    access-key: ${AWS_S3_ACCESS_KEY}
+    secret-key: ${AWS_S3_SECRET_KEY}
+    region: ap-northeast-2
+    bucket-name: ${AWS_S3_BUCKET_NAME}
+  cloudfront:
+    domain: ${AWS_CLOUDFRONT_DOMAIN}
