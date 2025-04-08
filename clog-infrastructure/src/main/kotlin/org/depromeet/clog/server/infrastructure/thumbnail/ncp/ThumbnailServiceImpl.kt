@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.infrastructure.thumbnail
+package org.depromeet.clog.server.infrastructure.thumbnail.ncp
 
 import org.depromeet.clog.server.domain.thumbnail.Thumbnail
 import org.depromeet.clog.server.domain.thumbnail.ThumbnailRepository

@@ -1,4 +1,4 @@
-package org.depromeet.clog.server.infrastructure.thumbnail
+package org.depromeet.clog.server.infrastructure.thumbnail.ncp
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials
@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
+import org.depromeet.clog.server.infrastructure.thumbnail.ImageCropper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
