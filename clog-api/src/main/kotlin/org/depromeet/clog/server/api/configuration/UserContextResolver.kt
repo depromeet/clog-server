@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest
 import org.depromeet.clog.server.api.auth.application.TokenService
 import org.depromeet.clog.server.api.security.jwt.JwtUtils
 import org.depromeet.clog.server.api.user.UserContext
+import org.depromeet.clog.server.domain.common.AppVersion
+import org.depromeet.clog.server.domain.common.AppVersion.Companion.APP_VERSION_HEADER
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -31,8 +33,12 @@ class UserContextResolver(
             ?: throw IllegalArgumentException("Token is missing")
         val loginDetails = tokenService.extractLoginDetails(token)
 
+        val appVersion = request.getHeader(APP_VERSION_HEADER)
+            ?.let { AppVersion(it) }
+
         return UserContext(
             userId = loginDetails.userId,
+            appVersion = appVersion,
         )
     }
 }

@@ -3,6 +3,7 @@ package org.depromeet.clog.server.api.story.presentation
 import io.swagger.v3.oas.annotations.media.Schema
 import org.depromeet.clog.server.api.attempt.presentation.dto.SaveAttemptRequest
 import org.depromeet.clog.server.api.problem.presentation.SaveProblemRequest
+import org.depromeet.clog.server.domain.common.AppVersion
 import org.depromeet.clog.server.domain.story.StoryCommand
 import org.depromeet.clog.server.domain.story.StoryStatus
 import java.time.LocalDate
@@ -22,8 +23,8 @@ data class SaveStoryRequest(
     val memo: String? = null,
 ) {
 
-    fun toDomain(userId: Long, appVersion: String?): StoryCommand {
-        val status = if (appVersion != null && appVersion in setOf("1.0.0", "1.0.1", "1.0.2")) {
+    fun toDomain(userId: Long, appVersion: AppVersion?): StoryCommand {
+        val status = if (appVersion != null && appVersion <= AppVersion("1.0.2")) {
             StoryStatus.DONE
         } else {
             StoryStatus.IN_PROGRESS
