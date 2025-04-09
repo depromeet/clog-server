@@ -2,11 +2,10 @@ package org.depromeet.clog.server.infrastructure.thumbnail.s3
 
 import org.depromeet.clog.server.domain.thumbnail.Thumbnail
 import org.depromeet.clog.server.domain.thumbnail.ThumbnailRepository
-import org.depromeet.clog.server.domain.thumbnail.application.*
+import org.depromeet.clog.server.domain.thumbnail.application.ThumbnailPresignedService
 import org.depromeet.clog.server.domain.thumbnail.dto.ThumbnailPresignedUploadRequest
 import org.depromeet.clog.server.domain.thumbnail.dto.ThumbnailPresignedUploadResponse
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class ThumbnailPresignedServiceImpl(
@@ -15,7 +14,7 @@ class ThumbnailPresignedServiceImpl(
 ) : ThumbnailPresignedService {
 
     override fun generatePresignedUrl(request: ThumbnailPresignedUploadRequest): ThumbnailPresignedUploadResponse {
-        val key = "${UUID.randomUUID()}-${request.originalFilename}"
+        val key = request.originalFilename
         val presignedUrl = awsS3PresignedClient.generatePresignedPutUrl(key, request.contentType)
         val fileUrl = awsS3PresignedClient.getCloudFrontUrl(key)
 
