@@ -45,11 +45,10 @@ class CragQueryController(
     @GetMapping("/nearby")
     fun getNearByCrags(
         @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedRequest,
-        @ModelAttribute @ParameterObject coordinateRequest: CoordinateRequest
+        @ModelAttribute @ParameterObject coordinateRequest: CoordinateRequest,
     ): ClogApiResponse<CursorPagination.Response<Double, CragResponse>> {
         val result = getNearByCrag(
-            request.cursor,
-            request.pageSize,
+            request,
             coordinateRequest.longitudeOrDefault,
             coordinateRequest.latitudeOrDefault,
         )

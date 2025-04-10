@@ -19,6 +19,9 @@ object CursorPagination {
         @Parameter(example = "1", description = "커서 값 (예: 소수")
         val cursor: Double? = null,
 
+        @Parameter(example = "더클", description = "암장 키워드")
+        val keyword: String? = null,
+
         @Parameter(example = "10")
         val pageSize: Int = 10,
     )

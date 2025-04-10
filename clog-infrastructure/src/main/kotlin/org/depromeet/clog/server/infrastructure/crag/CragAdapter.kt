@@ -35,7 +35,12 @@ class CragAdapter(
             .map { cragMapper.toDomain(it) }
     }
 
-    override fun findNearCragsByLocation(location: Location, cursor: Double?, pageSize: Int): List<Pair<Crag, Double>> {
+    override fun findNearCragsByLocation(
+        location: Location,
+        cursor: Double?,
+        pageSize: Int,
+        keyword: String?
+    ): List<Pair<Crag, Double>> {
         val userPoint = locationMapper.toPoint(location)
 
         val crags = cragJpaRepository.findAll(limit = pageSize + 1) {
@@ -60,6 +65,9 @@ class CragAdapter(
                             distanceExpression.greaterThanOrEqualTo(cursor)
                         },
                         path(CragEntity::status).eq(CragStatus.ACTIVE),
+                        keyword?.let {
+                            path(CragEntity::name).like("%$it%")
+                        }
                     )
                 )
                 .orderBy(distanceExpression.asc())
