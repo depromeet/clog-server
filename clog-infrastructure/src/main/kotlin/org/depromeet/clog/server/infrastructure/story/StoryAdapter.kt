@@ -43,18 +43,26 @@ class StoryAdapter(
 
     override fun findByAttemptId(attemptId: Long): StoryQuery? {
         val entity = storyJpaRepository.findAll {
+            val subquery = select<Long>(
+                path(StoryEntity::id)
+            ).from(
+                entity(StoryEntity::class),
+                join(StoryEntity::problems),
+                join(ProblemEntity::attempts)
+            ).where(
+                path(AttemptEntity::id).eq(attemptId)
+            ).asSubquery()
+
             select(
                 entity(StoryEntity::class)
             ).from(
                 entity(StoryEntity::class),
                 fetchJoin(StoryEntity::problems),
-                join(ProblemEntity::attempts),
+                join(ProblemEntity::attempts)
             ).where(
-                path(AttemptEntity::id).eq(attemptId),
+                subquery.eq(path(StoryEntity::id)),
             )
-        }
-            .filterNotNull()
-            .firstOrNull()
+        }.filterNotNull().firstOrNull()
 
         return entity?.let { storyMapper.toDomain(it) }
     }
