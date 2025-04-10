@@ -14,7 +14,6 @@ import org.springdoc.core.annotations.ParameterObject
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "암장 조회 API", description = "암장 정보를 조회할때 사용하는 API 입니다.")
@@ -45,7 +44,7 @@ class CragQueryController(
     )
     @GetMapping("/nearby")
     fun getNearByCrags(
-        @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedAndKeywordRequest,
+        @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedRequest,
         @ModelAttribute @ParameterObject coordinateRequest: CoordinateRequest,
     ): ClogApiResponse<CursorPagination.Response<Double, CragResponse>> {
         val result = getNearByCrag(

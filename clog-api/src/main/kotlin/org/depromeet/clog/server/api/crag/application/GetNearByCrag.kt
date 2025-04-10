@@ -14,7 +14,7 @@ class GetNearByCrag(
 
     @Transactional(readOnly = true)
     operator fun invoke(
-        request: CursorPagination.LocationBasedAndKeywordRequest,
+        request: CursorPagination.LocationBasedRequest,
         longitude: Double,
         latitude: Double
     ): CursorPagination.Response<Double, CragResponse> {
