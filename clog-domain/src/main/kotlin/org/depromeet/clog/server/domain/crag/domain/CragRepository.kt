@@ -18,13 +18,7 @@ interface CragRepository {
     fun findNearCragsByLocation(
         location: Location,
         cursor: Double?,
-        pageSize: Int
-    ): List<Pair<Crag, Double>>
-
-    fun findNearCragsByLocationAndKeyword(
-        location: Location,
-        keyword: String?,
-        cursor: Double?,
-        pageSize: Int
+        pageSize: Int,
+        keyword: String?
     ): List<Pair<Crag, Double>>
 }
