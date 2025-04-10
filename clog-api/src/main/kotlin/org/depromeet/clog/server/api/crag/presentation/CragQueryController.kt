@@ -56,4 +56,22 @@ class CragQueryController(
 
         return ClogApiResponse.from(result)
     }
+
+    @Operation(
+        summary = "키워드로 가까운 암장 정보 조회",
+        description = "첫 촬영을 끝내고 키워드로 가까운 암장 정보를 조회합니다."
+    )
+    @GetMapping("/nearby/search")
+    fun searchNearbyCrags(
+        @ModelAttribute @ParameterObject request: CursorPagination.LocationBasedAndKeywordRequest,
+        @ModelAttribute @ParameterObject coordinateRequest: CoordinateRequest
+    ): ClogApiResponse<CursorPagination.Response<Double, CragResponse>> {
+        val result = getNearByCrag.searchCragsByLocationAndKeyword(
+            request,
+            coordinateRequest.longitudeOrDefault,
+            coordinateRequest.latitudeOrDefault,
+        )
+
+        return ClogApiResponse.from(result)
+    }
 }

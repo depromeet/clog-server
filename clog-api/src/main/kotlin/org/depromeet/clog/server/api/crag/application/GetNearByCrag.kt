@@ -30,4 +30,27 @@ class GetNearByCrag(
             meta = CursorPagination.Response.Meta(nextCursor = nextCursor, hasMore = hasMore)
         )
     }
+
+    @Transactional(readOnly = true)
+    fun searchCragsByLocationAndKeyword(
+        request: CursorPagination.LocationBasedAndKeywordRequest,
+        longitude: Double,
+        latitude: Double
+    ): CursorPagination.Response<Double, CragResponse> {
+        val crags = cragRepository.findNearCragsByLocationAndKeyword(
+            Location(longitude, latitude),
+            request.keyword,
+            request.cursor,
+            request.pageSize
+        )
+
+        val hasMore = crags.size > request.pageSize
+        val contents = (if (hasMore) crags.take(request.pageSize) else crags).map { CragResponse.from(it.first) }
+        val nextCursor = if (hasMore) crags.last().second else null
+
+        return CursorPagination.Response(
+            contents = contents,
+            meta = CursorPagination.Response.Meta(nextCursor = nextCursor, hasMore = hasMore)
+        )
+    }
 }

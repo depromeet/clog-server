@@ -35,7 +35,11 @@ class CragAdapter(
             .map { cragMapper.toDomain(it) }
     }
 
-    override fun findNearCragsByLocation(location: Location, cursor: Double?, pageSize: Int): List<Pair<Crag, Double>> {
+    override fun findNearCragsByLocation(
+        location: Location,
+        cursor: Double?,
+        pageSize: Int
+    ): List<Pair<Crag, Double>> {
         val userPoint = locationMapper.toPoint(location)
 
         val crags = cragJpaRepository.findAll(limit = pageSize + 1) {
@@ -60,6 +64,50 @@ class CragAdapter(
                             distanceExpression.greaterThanOrEqualTo(cursor)
                         },
                         path(CragEntity::status).eq(CragStatus.ACTIVE),
+                    )
+                )
+                .orderBy(distanceExpression.asc())
+        }
+
+        return crags.filterNotNull().map { cragEntity ->
+            val distance = userPoint.distance(cragEntity.location)
+            cragMapper.toDomain(cragEntity) to distance
+        }
+    }
+
+    override fun findNearCragsByLocationAndKeyword(
+        location: Location,
+        keyword: String?,
+        cursor: Double?,
+        pageSize: Int
+    ): List<Pair<Crag, Double>> {
+        val userPoint = locationMapper.toPoint(location)
+
+        val crags = cragJpaRepository.findAll(limit = pageSize + 1) {
+            val distanceExpression = expression<Double>(
+                "ST_Distance" +
+                    "(" +
+                    "location, " +
+                    "ST_GeomFromText('POINT(${userPoint.coordinate.x} ${userPoint.coordinate.y})'" +
+                    ", 5181)" +
+                    ")"
+            )
+
+            select(
+                entity(CragEntity::class),
+            )
+                .from(
+                    entity(CragEntity::class)
+                )
+                .where(
+                    and(
+                        cursor?.let {
+                            distanceExpression.greaterThanOrEqualTo(cursor)
+                        },
+                        path(CragEntity::status).eq(CragStatus.ACTIVE),
+                        keyword?.let {
+                            path(CragEntity::name).like("%$it%")
+                        }
                     )
                 )
                 .orderBy(distanceExpression.asc())
