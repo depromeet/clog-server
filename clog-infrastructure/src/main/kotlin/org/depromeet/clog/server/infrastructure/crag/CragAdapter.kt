@@ -55,22 +55,22 @@ class CragAdapter(
 
             select(
                 entity(CragEntity::class),
+            ).from(
+                entity(CragEntity::class),
+                fetchJoin(CragEntity::grades)
+            ).where(
+                and(
+                    cursor?.let {
+                        distanceExpression.greaterThanOrEqualTo(cursor)
+                    },
+                    path(CragEntity::status).eq(CragStatus.ACTIVE),
+                    keyword?.let {
+                        path(CragEntity::name).like("%$it%")
+                    }
+                )
+            ).orderBy(
+                distanceExpression.asc()
             )
-                .from(
-                    entity(CragEntity::class)
-                )
-                .where(
-                    and(
-                        cursor?.let {
-                            distanceExpression.greaterThanOrEqualTo(cursor)
-                        },
-                        path(CragEntity::status).eq(CragStatus.ACTIVE),
-                        keyword?.let {
-                            path(CragEntity::name).like("%$it%")
-                        }
-                    )
-                )
-                .orderBy(distanceExpression.asc())
         }
 
         return crags.filterNotNull().map { cragEntity ->
