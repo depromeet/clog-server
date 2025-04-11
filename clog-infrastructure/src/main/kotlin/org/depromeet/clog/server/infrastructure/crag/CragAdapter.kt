@@ -57,7 +57,6 @@ class CragAdapter(
                 entity(CragEntity::class),
             ).from(
                 entity(CragEntity::class),
-                leftFetchJoin(CragEntity::grades)
             ).where(
                 and(
                     cursor?.let {
