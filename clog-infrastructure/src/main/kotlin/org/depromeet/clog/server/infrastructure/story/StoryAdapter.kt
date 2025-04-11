@@ -33,12 +33,21 @@ class StoryAdapter(
         startDate: LocalDate,
         endDate: LocalDate,
     ): List<StoryQuery> {
-        return storyJpaRepository.findAllByUserIdAndDateBetweenAndStatus(
-            userId = userId,
-            startDate = startDate.minusDays(1),
-            endDate = endDate.plusDays(1),
-            status = StoryStatus.DONE,
-        ).map { storyMapper.toDomain(it) }
+        return storyJpaRepository.findAll {
+            select(
+                entity(StoryEntity::class)
+            ).from(
+                entity(StoryEntity::class),
+                fetchJoin(StoryEntity::problems)
+            ).where(
+                and(
+                    path(StoryEntity::userId).eq(userId),
+                    path(StoryEntity::date).between(startDate.minusDays(1), endDate.plusDays(1)),
+                    path(StoryEntity::status).eq(StoryStatus.DONE),
+                )
+            )
+        }.filterNotNull()
+            .map { storyMapper.toDomain(it) }
     }
 
     override fun findByAttemptId(attemptId: Long): StoryQuery? {
