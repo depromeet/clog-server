@@ -1,5 +1,6 @@
 spring:
   application:
     name: clog-api
+
   config:
-    import: configserver:http://cloud-config:8888
+    import: configserver:https://${CLOUD_CONFIG_USERNAME}:${CLOUD_CONFIG_PASSWORD}@cloud-config.climb-log.my
