@@ -35,7 +35,7 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
         WHERE s.userId = :userId
           AND (:attemptStatus IS NULL OR a.status = :attemptStatus)
           AND (:cragId IS NULL OR c.id = :cragId)
-          AND (:gradeId IS NULL OR g.id = :gradeId)
+          AND (:colorId IS NULL OR col.id = :colorId)
           AND (s.status = 'DONE')
         ORDER BY a.id DESC
     """
@@ -44,7 +44,7 @@ interface AttemptJpaRepository : JpaRepository<AttemptEntity, Long> {
         @Param("userId") userId: Long,
         @Param("attemptStatus") attemptStatus: AttemptStatus?,
         @Param("cragId") cragId: Long?,
-        @Param("gradeId") gradeId: Long?
+        @Param("colorId") colorId: Long?
     ): List<AttemptFolderView>
 
     fun findAllByProblemId(problemId: Long): List<AttemptEntity>

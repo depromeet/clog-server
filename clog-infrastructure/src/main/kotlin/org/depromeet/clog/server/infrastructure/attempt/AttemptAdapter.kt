@@ -25,13 +25,13 @@ class AttemptAdapter(
 
     override fun findAttemptsByUserAndFilter(
         userId: Long,
-        filter: AttemptFilter
+        filter: AttemptFilter,
     ): List<AttemptFolderView> {
         return attemptJpaRepository.findAttemptsByUserAndFilter(
             userId,
             filter.attemptStatus,
             filter.cragId,
-            filter.gradeId
+            filter.colorId,
         )
     }
 }

@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.domain.crag.domain.color
 
 interface ColorRepository {
-    fun save(color: Color): Color
+
+    fun findDistinctColorsByUserId(userId: Long, cursor: Long?, pageSize: Int): List<Color>
 }

@@ -4,6 +4,7 @@ import org.depromeet.clog.server.api.attempt.presentation.dto.AttemptFilterReque
 import org.depromeet.clog.server.api.attempt.presentation.dto.GetMyAttemptsResponse
 import org.depromeet.clog.server.api.attempt.presentation.dto.toGetAttemptDetailResponse
 import org.depromeet.clog.server.domain.attempt.AttemptRepository
+import org.depromeet.clog.server.domain.attempt.dto.AttemptFilter
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,12 +16,12 @@ class GetAllAttempts(
     @Transactional(readOnly = true)
     fun getAttemptDetail(
         userId: Long,
-        attemptFilterRequest: AttemptFilterRequest
+        request: AttemptFilterRequest,
     ): GetMyAttemptsResponse {
-        val attemptFilter = org.depromeet.clog.server.domain.attempt.dto.AttemptFilter(
-            attemptStatus = attemptFilterRequest.attemptStatus,
-            cragId = attemptFilterRequest.cragId,
-            gradeId = attemptFilterRequest.gradeId
+        val attemptFilter = AttemptFilter(
+            attemptStatus = request.attemptStatus,
+            cragId = request.cragId,
+            colorId = request.colorId ?: request.gradeId,
         )
         val domainAttempts = attemptRepository.findAttemptsByUserAndFilter(userId, attemptFilter)
         val apiAttempts = domainAttempts.map { it.toGetAttemptDetailResponse() }
