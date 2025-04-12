@@ -38,6 +38,10 @@
                     <stackTrace>
                         <fieldName>stack_trace</fieldName>
                     </stackTrace>
+                    <context>
+                        <name>app_name</name>
+                        <value>${springAppName}</value>
+                    </context>
                 </providers>
             </encoder>
         </appender>
