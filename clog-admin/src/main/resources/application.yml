@@ -1,46 +1,5 @@
-server:
-  port: 8081
-
-  servlet:
-    session:
-      timeout: 60m
-
 spring:
-  mvc:
-    hidden method:
-      filter:
-        enabled: true
-
-  thymeleaf:
-    prefix: classpath:templates/
-    suffix: .html
-    cache: false
-
-ncp:
-  storage:
-    access-key: ${STORAGE_ACCESS_KEY}
-    secret-key: ${STORAGE_SECRET_KEY}
-    end-point: ${STORAGE_END_POINT}
-    bucket-name: ${STORAGE_BUCKET_NAME}
-    region: ${STORAGE_REGION}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "health"
-  endpoint:
-    health:
-      probes:
-        enabled: true
-      status:
-        http-mapping:
-          DOWN: 503
-          OUT_OF_SERVICE: 503
-          UNKNOWN: 200
-          UP: 200
-        order: DOWN, OUT_OF_SERVICE, UP, UNKNOWN
-
-thumbnail:
-  crop:
-    enabled: true
+  application:
+    name: clog-admin
+  config:
+    import: configserver:http://cloud-config:8888

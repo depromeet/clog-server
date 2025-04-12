@@ -113,6 +113,12 @@ subprojects {
     reportMerge {
         input.from(tasks.detekt.map { it.xmlReportFile })
     }
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.1")
+        }
+    }
 }
 
 tasks.configureEach {
