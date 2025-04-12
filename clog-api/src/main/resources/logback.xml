@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <property name="CONSOLE_LOG" value="%d{yyyy-MM-dd HH:mm:ss}:%-4relative [%thread] %highlight(%5level) %magenta(%logger) - %msg%n" />
+    <property name="CONSOLE_LOG" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n" />
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -35,7 +35,7 @@
                 </providers>
             </encoder>
         </appender>
-        <root level="ERROR">
+        <root level="INFO">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="LOGSTASH" />
         </root>
