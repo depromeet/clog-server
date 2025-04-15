@@ -12,7 +12,8 @@ chmod +x .githooks/pre-commit
 - TODO
 
 ## 🏗️ Application Architecture
-- TODO
+<img width="927" alt="스크린샷 2025-04-05 02 06 35" src="https://github.com/user-attachments/assets/541ef47f-821e-4e70-bc1f-7be29b983c92" />
+
 
 ## 🚨 Monitoring / Alert
 - 다양한 지표와 로그를 효과적으로 수집하고 시각화하여 **서비스 가용성**과 **성능 최적화**에 기여합니다.
