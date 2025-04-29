@@ -13,13 +13,12 @@ interface ColorJpaRepository : JpaRepository<ColorEntity, Long> {
 
     @Query(
         """
-        SELECT DISTINCT c
+        SELECT DISTINCT g
         FROM StoryEntity s
         JOIN s.problems p
         JOIN p.grade g
-        JOIN g.color c
         WHERE s.userId = :userId
-          AND (:cursor IS NULL OR c.id < :cursor)
+          AND (:cursor IS NULL OR g.id < :cursor)
         ORDER BY g.id DESC
         """
     )
