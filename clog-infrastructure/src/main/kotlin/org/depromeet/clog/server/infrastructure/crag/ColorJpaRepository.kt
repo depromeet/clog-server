@@ -20,7 +20,8 @@ interface ColorJpaRepository : JpaRepository<ColorEntity, Long> {
         JOIN g.color c
         WHERE s.userId = :userId
           AND (:cursor IS NULL OR c.id < :cursor)
-        ORDER BY g.id DESC
+        GROUP BY c.id
+        ORDER BY MAX(g.id) DESC
         """
     )
     fun findDistinctColorsByUserIdWithCursor(
