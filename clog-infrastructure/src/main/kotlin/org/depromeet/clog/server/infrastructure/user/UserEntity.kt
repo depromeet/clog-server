@@ -21,5 +21,14 @@ class UserEntity(
     val provider: Provider,
 
     @Column(nullable = false)
-    var isDeleted: Boolean = false
+    var isDeleted: Boolean = false,
+
+    @Column
+    val height: Int? = null,
+
+    @Column
+    val armSpan: Int? = null,
+
+    @Column
+    val instagramUrl: String? = null,
 ) : BaseEntity()
