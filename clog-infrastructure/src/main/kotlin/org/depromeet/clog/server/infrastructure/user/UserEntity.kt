@@ -24,10 +24,10 @@ class UserEntity(
     var isDeleted: Boolean = false,
 
     @Column
-    val height: Int? = null,
+    val height: Double? = null,
 
     @Column
-    val armSpan: Int? = null,
+    val armSpan: Double? = null,
 
     @Column
     val instagramUrl: String? = null,
