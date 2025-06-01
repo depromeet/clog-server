@@ -2,6 +2,7 @@ package org.depromeet.clog.server.api.user.presentation
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.depromeet.clog.server.api.auth.application.LogoutService
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
@@ -58,7 +59,7 @@ class UserController(
     @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
     fun update(
         userContext: UserContext,
-        @RequestBody request: UpdateUser.Command
+        @RequestBody @Valid request: UpdateUser.Command
     ): ClogApiResponse<UpdateUser.Result> {
         val result = updateUser(userContext.userId, request)
         return ClogApiResponse.from(result)
