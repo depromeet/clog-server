@@ -43,13 +43,13 @@ class UpdateUser(
 
         @field:Min(1)
         @field:Max(999)
-        @Schema(title = "키", description = "1 ~ 999 사이의 값", example = "180")
-        val height: Int? = null,
+        @Schema(title = "키", description = "1 ~ 999 사이의 값", example = "180.0")
+        val height: Double? = null,
 
         @field:Min(1)
         @field:Max(999)
-        @Schema(title = "팔 길이", description = "1 ~ 999 사이의 값", example = "190")
-        val armSpan: Int? = null,
+        @Schema(title = "팔 길이", description = "1 ~ 999 사이의 값", example = "190.0")
+        val armSpan: Double? = null,
 
         @field:Pattern(
             regexp = "^https://(www\\.)?instagram\\.com/[A-Za-z0-9._]{1,30}/?$",
