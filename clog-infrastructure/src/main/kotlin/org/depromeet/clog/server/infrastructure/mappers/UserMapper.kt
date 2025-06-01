@@ -14,6 +14,9 @@ class UserMapper : DomainEntityMapper<User, User, UserEntity> {
             name = entity.name,
             provider = entity.provider,
             isDeleted = entity.isDeleted,
+            height = entity.height,
+            armSpan = entity.armSpan,
+            instagramUrl = entity.instagramUrl,
         )
     }
 
@@ -24,6 +27,9 @@ class UserMapper : DomainEntityMapper<User, User, UserEntity> {
             name = domain.name,
             provider = domain.provider,
             isDeleted = domain.isDeleted,
+            height = domain.height,
+            armSpan = domain.armSpan,
+            instagramUrl = domain.instagramUrl,
         )
     }
 }

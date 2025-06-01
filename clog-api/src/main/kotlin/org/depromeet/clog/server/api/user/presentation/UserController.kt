@@ -6,6 +6,7 @@ import org.depromeet.clog.server.api.auth.application.LogoutService
 import org.depromeet.clog.server.api.configuration.ApiConstants.API_BASE_PATH_V1
 import org.depromeet.clog.server.api.configuration.annotation.ApiErrorCodes
 import org.depromeet.clog.server.api.user.UserContext
+import org.depromeet.clog.server.api.user.application.UpdateUser
 import org.depromeet.clog.server.api.user.application.UserService
 import org.depromeet.clog.server.api.user.presentation.dto.WithdrawalRequest
 import org.depromeet.clog.server.domain.common.ClogApiResponse
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("$API_BASE_PATH_V1/users")
 class UserController(
     private val userService: UserService,
-    private val logoutService: LogoutService
+    private val logoutService: LogoutService,
+    private val updateUser: UpdateUser,
 ) {
 
     @Operation(summary = "로그아웃")
@@ -49,5 +51,16 @@ class UserController(
     ): ClogApiResponse<Nothing?> {
         userService.updateName(userContext.userId, request)
         return ClogApiResponse.from(null)
+    }
+
+    @Operation(summary = "유저 정보 변경")
+    @PatchMapping
+    @ApiErrorCodes([ErrorCode.USER_NOT_FOUND])
+    fun update(
+        userContext: UserContext,
+        @RequestBody request: UpdateUser.Command
+    ): ClogApiResponse<UpdateUser.Result> {
+        val result = updateUser(userContext.userId, request)
+        return ClogApiResponse.from(result)
     }
 }

@@ -18,6 +18,9 @@ class GetMe(
         return UserResponse(
             id = user.id!!,
             name = user.name,
+            height = user.height,
+            armSpan = user.armSpan,
+            instagramUrl = user.instagramUrl,
         )
     }
 }
