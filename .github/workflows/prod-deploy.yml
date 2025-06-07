@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Build and Push Docker Images
+    name: Build and Push Docker Image
     environment: prod
     runs-on: ubuntu-latest
     outputs:
@@ -30,44 +31,32 @@ jobs:
           java-version: '21'
 
       - name: Build with Gradle (skip tests)
-        run: ./gradlew :clog-api:build :clog-admin:build -x test
+        run: ./gradlew :clog-api:build -x test
 
-      - name: Build Docker Images
+      - name: Build Docker Image
         run: |
           docker build -f clog-api/Dockerfile -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${IMAGE_TAG} .
-          docker build -f clog-admin/Dockerfile -t ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_ADMIN_IMAGE }}:${IMAGE_TAG} .
 
       - name: Login to Docker Registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.DOCKER_REGISTRY }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Push Docker Images
-        run: |
-          docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${IMAGE_TAG}
-          docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_ADMIN_IMAGE }}:${IMAGE_TAG}
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${IMAGE_TAG}
 
-  update-manifests:
-    name: Update k8s Manifests with New Image Tag
-    runs-on: ubuntu-latest
+  deploy:
+    name: Deploy to Remote Server
     environment: prod
+    runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Checkout Manifests Repository
-        uses: actions/checkout@v3
+      - name: Deploy on Remote Server via SSH
+        uses: appleboy/ssh-action@v0.1.8
         with:
-          repository: clog-depromeet/clog-server-argocd-manifests
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          ref: main
-
-      - name: Update Image Tag in Manifests
-        run: |
-          sed -i "s|image: .*$|image: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${{ needs.build.outputs.image_tag }}|" manifests/api-deployment.yaml
-          sed -i "s|image: .*$|image: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_ADMIN_IMAGE }}:${{ needs.build.outputs.image_tag }}|" manifests/admin-deployment.yaml
-
-      - name: Commit and Push Changes
-        run: |
-          git config --global user.name "supershy-bot"
-          git config --global user.email "supershy-bot@depromeet.org"
-          git add manifests/api-deployment.yaml
-          git add manifests/admin-deployment.yaml
-          git commit -m "Update image tag to ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${{ needs.build.outputs.image_tag }}"
-          git push
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            sed -i "s/^TAG=.*/TAG=${{ needs.build.outputs.image_tag }}/" /home/ubuntu/.env
+            docker compose -f /home/ubuntu/docker-compose.yml pull api
+            docker compose -f /home/ubuntu/docker-compose.yml up -d api

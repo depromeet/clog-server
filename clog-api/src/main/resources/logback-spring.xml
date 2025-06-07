@@ -15,7 +15,7 @@
         </encoder>
     </appender>
 
-    <springProfile name="prod">
+    <springProfile name="logstash">
         <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
             <destination>logstash:5000</destination>
             <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
@@ -50,7 +50,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="!prod">
+    <springProfile name="!logstash">
         <root level="INFO">
             <appender-ref ref="CONSOLE" />
         </root>
