@@ -31,4 +31,15 @@ class UserEntity(
 
     @Column
     val instagramUrl: String? = null,
+
+    @ManyToMany
+    @JoinTable(
+        name = "follow_relation",
+        joinColumns = [JoinColumn(name = "follower_id")],
+        inverseJoinColumns = [JoinColumn(name = "following_id")],
+    )
+    val followings: MutableSet<UserEntity> = mutableSetOf(),
+
+    @ManyToMany(mappedBy = "followings")
+    val followers: MutableSet<UserEntity> = mutableSetOf()
 ) : BaseEntity()

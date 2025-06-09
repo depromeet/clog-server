@@ -37,5 +37,24 @@ object CursorPagination {
             val nextCursor: T?,
             val hasMore: Boolean
         )
+
+        companion object {
+            fun <T, E> of(
+                results: List<E>,
+                pageSize: Int,
+                cursorExtractor: (E) -> T?
+            ): Response<T, E> {
+                val page = results.take(pageSize)
+                val nextCursor = page.lastOrNull()?.let(cursorExtractor)
+                val hasMore = results.size > pageSize
+                return Response(
+                    contents = page,
+                    meta = Meta(
+                        nextCursor = nextCursor,
+                        hasMore = hasMore
+                    )
+                )
+            }
+        }
     }
 }
