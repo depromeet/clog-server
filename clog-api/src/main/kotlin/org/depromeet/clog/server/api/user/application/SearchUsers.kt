@@ -17,10 +17,14 @@ class SearchUsers(
         userId: Long,
         query: UserQuery,
     ): CursorPagination.Response<Long, UserResponse> {
-        val users = userRepository.findAllActiveUsersByQuery(
-            requestedUserId = userId,
-            query = query,
-        )
+        val users = if (query.keyword == null) {
+            emptyList()
+        } else {
+            userRepository.findAllActiveUsersByQuery(
+                requestedUserId = userId,
+                query = query,
+            )
+        }
 
         return CursorPagination.Response.of(
             results = users.map { UserResponse.from(it) },

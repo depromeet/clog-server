@@ -4,12 +4,14 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
 import org.depromeet.clog.server.api.user.UserContext
-import org.depromeet.clog.server.api.user.application.CancelFollow
+import org.depromeet.clog.server.api.user.application.AddFollowing
+import org.depromeet.clog.server.api.user.application.CancelFollowing
 import org.depromeet.clog.server.api.user.application.FollowService
 import org.depromeet.clog.server.domain.common.ClogApiResponse
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("${ApiConstants.API_BASE_PATH_V1}/users")
 class FollowController(
     private val followService: FollowService,
-    private val cancelFollow: CancelFollow,
+    private val cancelFollowing: CancelFollowing,
+    private val addFollowing: AddFollowing,
 ) {
 
     @Operation(summary = "팔로워 목록 조회")
@@ -37,13 +40,23 @@ class FollowController(
         return ClogApiResponse.from(results)
     }
 
+    @Operation(summary = "팔로잉")
+    @PostMapping("/me/followings/{targetUserId}")
+    fun follow(
+        userContext: UserContext,
+        @PathVariable targetUserId: Long
+    ): ClogApiResponse<Boolean> {
+        addFollowing(userContext.userId, targetUserId)
+        return ClogApiResponse.from(true)
+    }
+
     @Operation(summary = "팔로잉 취소")
     @DeleteMapping("/me/followings/{targetUserId}")
     fun unfollow(
         userContext: UserContext,
         @PathVariable targetUserId: Long
     ): ClogApiResponse<Boolean> {
-        cancelFollow(userContext.userId, targetUserId)
+        cancelFollowing(userContext.userId, targetUserId)
         return ClogApiResponse.from(true)
     }
 }

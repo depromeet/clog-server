@@ -14,6 +14,11 @@ interface UserRepository {
         query: UserQuery,
     ): List<OtherUser>
 
+    fun addFollowing(
+        requestedUserId: Long,
+        targetUserId: Long,
+    )
+
     fun deleteFollowing(
         requestedUserId: Long,
         targetUserId: Long,

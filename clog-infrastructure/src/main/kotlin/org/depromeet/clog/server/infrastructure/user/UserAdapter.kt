@@ -69,6 +69,16 @@ class UserAdapter(
             .map { otherUserMapper.toDomain(it, requestedUser.followings) }
     }
 
+    override fun addFollowing(requestedUserId: Long, targetUserId: Long) {
+        val requestedUser = userJpaRepository.findByIdOrNull(requestedUserId)
+            ?: throw IllegalArgumentException("User with id $requestedUserId not found")
+        val targetUser = userJpaRepository.findByIdOrNull(targetUserId)
+            ?: throw IllegalArgumentException("Target user with id $targetUserId not found")
+
+        requestedUser.followings.add(targetUser)
+        userJpaRepository.save(requestedUser)
+    }
+
     override fun deleteFollowing(requestedUserId: Long, targetUserId: Long) {
         val requestedUser = userJpaRepository.findByIdOrNull(requestedUserId)
             ?: throw IllegalArgumentException("User with id $requestedUserId not found")

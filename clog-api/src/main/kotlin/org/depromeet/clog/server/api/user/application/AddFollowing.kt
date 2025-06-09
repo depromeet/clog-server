@@ -1,12 +1,11 @@
 package org.depromeet.clog.server.api.user.application
 
 import org.depromeet.clog.server.domain.user.domain.UserRepository
-import org.depromeet.clog.server.domain.user.domain.exception.UserNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CancelFollow(
+class AddFollowing(
     private val userRepository: UserRepository,
 ) {
 
@@ -15,11 +14,8 @@ class CancelFollow(
         requestedUserId: Long,
         targetUserId: Long
     ) {
-        val requestedUser = userRepository.findByIdAndIsDeletedFalse(requestedUserId)
-            ?: throw UserNotFoundException()
-
-        userRepository.deleteFollowing(
-            requestedUserId = requestedUser.id!!,
+        userRepository.addFollowing(
+            requestedUserId = requestedUserId,
             targetUserId = targetUserId
         )
     }
