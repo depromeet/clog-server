@@ -21,6 +21,7 @@ class GetMe(
             height = user.height,
             armSpan = user.armSpan,
             instagramUrl = user.instagramUrl,
+            isFollowing = true,
         )
     }
 }
