@@ -9,8 +9,12 @@ data class SaveGalleryStoryRequest(
     @Schema(description = "기록 날짜", example = "2024-05-25")
     val date: LocalDate,
 
-    @Schema(description = "암장 ID", example = "1")
-    val cragId: Long,
+    @Schema(
+        description = "암장 ID(선택). 등록하지 않을 경우 null",
+        example = "1",
+        nullable = true
+    )
+    val cragId: Long? = null,
 
     @Schema(description = "기록 메모", example = "오늘 죽을 뻔함")
     val memo: String? = null,
