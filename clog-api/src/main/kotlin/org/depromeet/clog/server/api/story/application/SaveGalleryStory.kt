@@ -32,7 +32,7 @@ class SaveGalleryStory(
                 cragId = request.cragId,
                 date = request.date,
                 memo = request.memo,
-                status = StoryStatus.IN_PROGRESS
+                status = StoryStatus.DONE
             )
         )
 
