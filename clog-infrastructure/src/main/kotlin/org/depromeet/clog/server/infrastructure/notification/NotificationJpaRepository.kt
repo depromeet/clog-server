@@ -31,4 +31,8 @@ interface NotificationJpaRepository : JpaRepository<NotificationEntity, Long> {
         """
     )
     fun clearNewFlags(userId: Long)
+
+    @Modifying
+    @Query("DELETE FROM NotificationEntity n WHERE n.id = :notificationId AND n.receiver.id = :userId")
+    fun deleteByIdAndReceiverId(notificationId: Long, userId: Long): Int
 }

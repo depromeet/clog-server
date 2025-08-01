@@ -53,4 +53,8 @@ class NotificationAdapter(
     override fun clearNewFlags(userId: Long) {
         notificationJpaRepository.clearNewFlags(userId)
     }
+
+    override fun deleteByIdAndUserId(notificationId: Long, userId: Long): Int {
+        return notificationJpaRepository.deleteByIdAndReceiverId(notificationId, userId)
+    }
 }

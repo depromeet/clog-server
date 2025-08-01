@@ -25,6 +25,7 @@ enum class ErrorCode(
     CRAG_NOT_FOUND("C4044", "존재하지 않는 암장입니다.", 404),
     PROBLEM_NOT_FOUND("C4045", "존재하지 않는 문제입니다.", 404),
     GRADE_NOT_FOUND("C4046", "존재하지 않는 난이도입니다.", 404),
+    NOTIFICATION_NOT_FOUND("C4047", "존재하지 않는 알림입니다.", 404),
 
     INTERNAL_SERVER_ERROR("C5000", "서버 내부 오류입니다.", 500),
 }

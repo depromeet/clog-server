@@ -20,4 +20,6 @@ interface NotificationRepository {
     ): List<NotificationQuery>
 
     fun clearNewFlags(userId: Long)
+
+    fun deleteByIdAndUserId(notificationId: Long, userId: Long): Int
 }
