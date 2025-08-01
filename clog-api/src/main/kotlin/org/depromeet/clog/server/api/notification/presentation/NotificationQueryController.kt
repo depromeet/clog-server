@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.depromeet.clog.server.api.configuration.ApiConstants
+import org.depromeet.clog.server.api.notification.application.CheckUnreadNotificationExist
 import org.depromeet.clog.server.api.notification.application.GetNotifications
 import org.depromeet.clog.server.api.user.UserContext
 import org.depromeet.clog.server.domain.common.ClogApiResponse
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class NotificationQueryController(
     private val getNotifications: GetNotifications,
+    private val checkUnreadNotificationExist: CheckUnreadNotificationExist
 ) {
 
     @Operation(summary = "알림 전체 조회", description = "최근 30일 이내의 알림을 최신순으로 조회.")
@@ -35,5 +37,17 @@ class NotificationQueryController(
     ): ClogApiResponse<List<NotificationResponse>> {
         val notifications = getNotifications(userContext.userId, page, size, type)
         return ClogApiResponse.from(notifications)
+    }
+
+    @Operation(
+        summary = "새 알림 존재 여부 조회(알림 아이콘 레드닷에 표시에 사용)",
+        description = "새 알림이 하나라도 있으면 true, 아니면 false 반환"
+    )
+    @GetMapping("/has-unread")
+    fun unreadExist(
+        userContext: UserContext
+    ): ClogApiResponse<UnreadExistResponse> {
+        val exists = checkUnreadNotificationExist(userContext.userId)
+        return ClogApiResponse.from(UnreadExistResponse(exists))
     }
 }

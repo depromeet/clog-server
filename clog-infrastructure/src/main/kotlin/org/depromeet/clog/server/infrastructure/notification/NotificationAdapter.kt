@@ -57,4 +57,8 @@ class NotificationAdapter(
     override fun deleteByIdAndUserId(notificationId: Long, userId: Long): Int {
         return notificationJpaRepository.deleteByIdAndReceiverId(notificationId, userId)
     }
+
+    override fun existsUnreadByUserId(userId: Long): Boolean {
+        return notificationJpaRepository.existsByReceiverIdAndIsNewFlagClearedFalse(userId)
+    }
 }

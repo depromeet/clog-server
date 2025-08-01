@@ -22,4 +22,6 @@ interface NotificationRepository {
     fun clearNewFlags(userId: Long)
 
     fun deleteByIdAndUserId(notificationId: Long, userId: Long): Int
+
+    fun existsUnreadByUserId(userId: Long): Boolean
 }
