@@ -1,5 +1,6 @@
 package org.depromeet.clog.server.infrastructure.notification
 
+import org.depromeet.clog.server.domain.notification.NotificationType
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -10,6 +11,13 @@ interface NotificationJpaRepository : JpaRepository<NotificationEntity, Long> {
 
     fun findByReceiverIdAndCreatedAtAfterOrderByCreatedAtDesc(
         receiverId: Long,
+        createdAt: LocalDateTime,
+        pageable: Pageable
+    ): List<NotificationEntity>
+
+    fun findByReceiverIdAndTypeAndCreatedAtAfterOrderByCreatedAtDesc(
+        receiverId: Long,
+        type: NotificationType,
         createdAt: LocalDateTime,
         pageable: Pageable
     ): List<NotificationEntity>

@@ -2,6 +2,7 @@ package org.depromeet.clog.server.infrastructure.notification
 
 import org.depromeet.clog.server.domain.notification.NotificationQuery
 import org.depromeet.clog.server.domain.notification.NotificationRepository
+import org.depromeet.clog.server.domain.notification.NotificationType
 import org.depromeet.clog.server.infrastructure.mappers.NotificationMapper
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
@@ -20,12 +21,33 @@ class NotificationAdapter(
         size: Int
     ): List<NotificationQuery> {
         val pageable = PageRequest.of(page, size)
-        return notificationJpaRepository.findByReceiverIdAndCreatedAtAfterOrderByCreatedAtDesc(
-            userId,
-            from,
-            pageable
-        )
-            .map { notificationMapper.toDomain(it) }
+        return notificationJpaRepository
+            .findByReceiverIdAndCreatedAtAfterOrderByCreatedAtDesc(
+                userId,
+                from,
+                pageable
+            ).map {
+                notificationMapper.toDomain(it)
+            }
+    }
+
+    override fun findByUserIdAndType(
+        userId: Long,
+        type: NotificationType,
+        from: LocalDateTime,
+        page: Int,
+        size: Int
+    ): List<NotificationQuery> {
+        val pageable = PageRequest.of(page, size)
+        return notificationJpaRepository
+            .findByReceiverIdAndTypeAndCreatedAtAfterOrderByCreatedAtDesc(
+                userId,
+                type,
+                from,
+                pageable
+            ).map {
+                notificationMapper.toDomain(it)
+            }
     }
 
     override fun clearNewFlags(userId: Long) {

@@ -10,5 +10,14 @@ interface NotificationRepository {
         size: Int
     ): List<NotificationQuery>
 
+    @Suppress("LongParameterList")
+    fun findByUserIdAndType(
+        userId: Long,
+        type: NotificationType,
+        from: LocalDateTime,
+        page: Int,
+        size: Int
+    ): List<NotificationQuery>
+
     fun clearNewFlags(userId: Long)
 }
