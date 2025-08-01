@@ -61,4 +61,8 @@ class NotificationAdapter(
     override fun existsUnreadByUserId(userId: Long): Boolean {
         return notificationJpaRepository.existsByReceiverIdAndIsNewFlagClearedFalse(userId)
     }
+
+    override fun markAsRead(userId: Long, notificationId: Long): Int {
+        return notificationJpaRepository.markAsRead(notificationId, userId)
+    }
 }

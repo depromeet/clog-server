@@ -24,4 +24,6 @@ interface NotificationRepository {
     fun deleteByIdAndUserId(notificationId: Long, userId: Long): Int
 
     fun existsUnreadByUserId(userId: Long): Boolean
+
+    fun markAsRead(userId: Long, notificationId: Long): Int
 }

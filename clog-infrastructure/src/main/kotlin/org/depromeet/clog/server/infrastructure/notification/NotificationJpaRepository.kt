@@ -37,4 +37,18 @@ interface NotificationJpaRepository : JpaRepository<NotificationEntity, Long> {
     fun deleteByIdAndReceiverId(notificationId: Long, userId: Long): Int
 
     fun existsByReceiverIdAndIsNewFlagClearedFalse(receiverId: Long): Boolean
+
+    @Modifying
+    @Query(
+        """
+    UPDATE NotificationEntity n
+    SET n.isRead = true,
+        n.readAt = CURRENT_TIMESTAMP,
+        n.isNewFlagCleared = true
+    WHERE n.id = :notificationId
+      AND n.receiver.id = :userId
+      AND (n.isRead = false OR n.isNewFlagCleared = false)
+      """
+    )
+    fun markAsRead(notificationId: Long, userId: Long): Int
 }
