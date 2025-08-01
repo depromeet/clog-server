@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 data class NotificationResponse(
     @Schema(description = "알림 ID") val id: Long,
     @Schema(description = "알림 타입(FOLLOW / EVENT)") val type: String,
+    @Schema(description = "대상 리디렉션 ID") val targetId: Long,
     @Schema(description = "제목") val title: String,
     @Schema(description = "메시지") val message: String,
     @Schema(description = "읽음 여부") val isRead: Boolean,
@@ -18,6 +19,7 @@ data class NotificationResponse(
             return NotificationResponse(
                 id = notificationQuery.id,
                 type = notificationQuery.type.name,
+                targetId = notificationQuery.targetId,
                 title = notificationQuery.title,
                 message = notificationQuery.message,
                 isRead = notificationQuery.isRead,
