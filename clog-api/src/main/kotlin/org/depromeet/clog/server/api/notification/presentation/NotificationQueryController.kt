@@ -40,7 +40,7 @@ class NotificationQueryController(
     }
 
     @Operation(
-        summary = "새 알림 존재 여부 조회(알림 아이콘 레드닷에 표시에 사용)",
+        summary = "새 알림 존재 여부 조회(앱 뱃지와 레드닷 표시에 사용)",
         description = "새 알림이 하나라도 있으면 true, 아니면 false 반환"
     )
     @GetMapping("/has-unread")
