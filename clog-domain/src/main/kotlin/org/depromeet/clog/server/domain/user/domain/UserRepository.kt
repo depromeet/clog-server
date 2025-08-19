@@ -8,4 +8,19 @@ interface UserRepository {
     fun findByIdAndIsDeletedFalse(id: Long): User?
 
     fun findAllActiveUsers(): List<User>
+
+    fun findAllActiveUsersByQuery(
+        requestedUserId: Long,
+        query: UserQuery,
+    ): List<OtherUser>
+
+    fun addFollowing(
+        requestedUserId: Long,
+        targetUserId: Long,
+    )
+
+    fun deleteFollowing(
+        requestedUserId: Long,
+        targetUserId: Long,
+    )
 }
